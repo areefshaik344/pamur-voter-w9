@@ -34,8 +34,8 @@ tr.sel td{background:var(--sel)}.tag{background:var(--card);border:1px solid var
 .hcard div.m{padding:4px 8px;border-top:1px solid var(--bd);display:flex;flex-direction:column;align-items:flex-start;gap:3px}
 .mline{display:flex;align-items:center;gap:6px}
 .mline.sub{gap:8px}
-.gall{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--mut);cursor:pointer;margin-left:8px}
-.gall input{accent-color:var(--ac);width:16px;height:16px}
+.gall{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--fg);cursor:pointer}
+.gall input{accent-color:var(--ac);width:20px;height:20px;flex:0 0 auto}
 #bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bd);box-shadow:0 -4px 16px rgba(16,36,26,.08);padding:8px;display:none;flex-direction:column;align-items:stretch;gap:6px}
 .br{display:flex;gap:6px;flex-wrap:wrap;align-items:center;width:100%}
 .br input,.br select{flex:1;min-width:130px}
@@ -160,7 +160,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <select id="fam"><option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option></select>
 <select id="view"><option value="v">Voters</option><option value="h">By house</option><option value="f">By family</option></select></div>
 <div class="row strow"><span class="stats" id="st"></span></div>
-<div class="row" id="chipsb"><button id="sall">Select all</button><button id="csv">Export</button><button id="exp">Save data</button><button id="imp">Load data</button><button id="clr">Clear</button><button id="lo" title="Logout" aria-label="Logout"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M18.4 6.4a8 8 0 11-12.8 0"/></svg></button></div></header>
+<div class="row" id="chipsb"><button id="sall">Select all</button><button id="csv">Export</button><button id="exp">Save data</button><button id="imp">Load data</button><button id="shd">Share data</button><button id="clr">Clear</button><button id="lo" title="Logout" aria-label="Logout"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M18.4 6.4a8 8 0 11-12.8 0"/></svg></button></div></header>
 <div class="wrap" id="out"></div>
 <div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar"><div class="br"><span id="sc"></span>
@@ -217,9 +217,9 @@ let h='';
 if(v==='v'){if(isMob){h=rows.map(mcard).join('')}else{h=`<table><thead><tr><th title="Select all shown"><input type="checkbox" id="all"></th><th data-k="s">#</th><th data-k="n">Name</th><th data-k="rn">Relative</th><th data-k="a">Age</th><th data-k="g">G</th><th data-k="h">House</th><th data-k="e">Voter ID</th><th>Family / Party</th></tr></thead><tbody>${rows.map(row).join('')}</tbody></table>`}}
 else{const key=v==='h'?(r=>r.h||'(none)'):(r=>fams[r.s]||'(ungrouped)');const m={};rows.forEach(r=>(m[key(r)]??=[]).push(r));
 const ks=Object.keys(m).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
-h=ks.map(x=>{const gm=m[x];const allCk=gm.length>0&&gm.every(r=>sel.has(r.s));const ind=!allCk&&gm.some(r=>sel.has(r.s));const head=`<div class="hcard"><h3><span>${v==='h'?'House ':'Family: '}${esc(x)}</span><span class="stats">${gm.length} voters <label class="gall" data-gsel="${esc(x)}"><input type="checkbox"${allCk?' checked':''}${ind?' indeterminate':''}> select all</label></span></h3>`;const body=gm.map(r=>{const pc=partyChip(r.s);const fc=flagChips(r.s);const mb=mob[r.s]?esc(mob[r.s]):'';const sub=(pc+fc)+(mb?((pc||fc)?' · '+mb:mb):'');return `<div class="m" data-s="${r.s}" style="${sel.has(r.s)?'background:var(--sel)':''}"><span class="mline"><input type="checkbox" ${sel.has(r.s)?'checked':''}> <img class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt="">${esc(r.n)} · ${r.a??''}${r.g}</span>${sub?'<span class="mline sub">'+sub+'</span>':''}</div>`}).join('');return head+body+'</div>'}).join('')}
+h=ks.map(x=>{const gm=m[x];const allCk=gm.length>0&&gm.every(r=>sel.has(r.s));const ind=!allCk&&gm.some(r=>sel.has(r.s));const head=`<div class="hcard"><h3><label class="gall" data-gsel="${esc(x)}"><input type="checkbox" data-ind="${ind?1:0}"${allCk?' checked':''}> ${v==='h'?'House ':'Family: '}${esc(x)}</label><span class="stats">${gm.length} voters</span></h3>`;const body=gm.map(r=>{const pc=partyChip(r.s);const fc=flagChips(r.s);const mb=mob[r.s]?esc(mob[r.s]):'';const sub=(pc+fc)+(mb?((pc||fc)?' · '+mb:mb):'');return `<div class="m" data-s="${r.s}" style="${sel.has(r.s)?'background:var(--sel)':''}"><span class="mline"><input type="checkbox" ${sel.has(r.s)?'checked':''}> <img class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt="">${esc(r.n)} · ${r.a??''}${r.g}</span>${sub?'<span class="mline sub">'+sub+'</span>':''}</div>`}).join('');return head+body+'</div>'}).join('')}
 if(!rows.length)h='<div class="empty">No voters match the current filters.<br><button class="mb" id="rstf">Reset filters</button></div>';
-$('out').innerHTML=h;bar();hh();
+$('out').innerHTML=h;document.querySelectorAll('input[data-ind="1"]').forEach(i=>i.indeterminate=true);bar();hh();
 const _al=$('all');if(_al){_al.checked=rows.length>0&&rows.every(r=>sel.has(r.s));_al.indeterminate=rows.some(r=>sel.has(r.s))&&!_al.checked;_al.addEventListener('change',e=>{const on=e.target.checked;rows.forEach(r=>on?sel.add(r.s):sel.delete(r.s));render()});}
 const _rf=$('rstf');if(_rf)_rf.onclick=clearFilters;
 }
@@ -255,6 +255,19 @@ $('clr').onclick=()=>{sel.clear();render()};
 function dl(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click()}
 $('csv').onclick=()=>{const rows=filt();const c=['SNo,Name,RelationType,Relative,Age,Gender,House,VoterID,Family,Party,Flags,Mobile'];rows.forEach(r=>{const m=flg[r.s]||{};const fl=[m.d?'Dead':'',m.u?'Duplicate':'',m.o?'Out of station':''].filter(Boolean).join(',');c.push([r.s,r.n,r.rt,r.rn,r.a,r.g,r.h,r.e,fams[r.s]||'',pty[r.s]||'',fl,mob[r.s]||''].map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(','))});dl('pamur-ward9.csv','\ufeff'+c.join('\n'),'text/csv')};
 $('exp').onclick=()=>dl('pamur-ward9-data.json',JSON.stringify({fams,flg,pty,mob}),'application/json');
+const enc=s=>btoa(unescape(encodeURIComponent(s)));const dec=b=>decodeURIComponent(escape(atob(b)));
+$('shd').onclick=()=>{
+  const s=JSON.stringify({fams,flg,pty,mob});
+  const url=location.origin+location.pathname+'#d='+enc(s);
+  const wa='https://wa.me/?text='+encodeURIComponent('Pamur Ward 9 voter list (with saved marks). Open in Safari/Chrome, enter the access password, marks load automatically: '+url);
+  window.open(wa,'_blank');
+  if(url.length>3000)alert('Heads up: your marks are large, so WhatsApp may show the link as plain text instead of a tap-to-open link. Still works - the receiver copies the long link into their browser address bar and opens it. Marks load automatically on their phone.');
+};
+try{const hm=location.hash.match(/^#d=(.+)$/);
+if(hm){const o=JSON.parse(dec(hm[1]));
+Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{});
+save();flgSave();ptySave();mobSave();
+setTimeout(()=>alert('Loaded shared marks - now saved on this phone: '+Object.keys(pty).length+' parties, '+Object.keys(mob).length+' mobile numbers, '+Object.keys(fams).length+' family links, '+Object.keys(flg).length+' flagged voters.'),400)}}catch(e){}
 $('imp').onclick=()=>$('file').click();
 $('file').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o&&o.fams!==undefined){Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{})}else{Object.assign(fams,o||{})}save();flgSave();ptySave();mobSave();refreshFam();render()}catch(x){alert('Invalid file')}})};
 $('lb').onclick=()=>$('lb').style.display='none';addEventListener('resize',hh);addEventListener('scroll',()=>{document.querySelector('header').classList.toggle('sc',scrollY>4)},{passive:true});refreshFam();render();
