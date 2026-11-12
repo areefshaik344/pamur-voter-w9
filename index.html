@@ -4,24 +4,25 @@
 <meta name="apple-mobile-web-app-title" content="Pamur W9 YCP">
 <title>YCP · Pamur Ward 9 Voter App</title>
 <style>
-:root{--bg:#fbfdfc;--fg:#15241c;--mut:#5c6f64;--bd:#d9e2dc;--ac:#0d7a4a;--card:#f2f7f4;--sel:#d8efe2}
-@media(prefers-color-scheme:dark){:root{--bg:#0e1411;--fg:#e6efe9;--mut:#8ba394;--bd:#2b3a30;--ac:#37d18a;--card:#152019;--sel:#16382a}}
+:root{--bg:#f4f8f5;--fg:#10241a;--mut:#5f7166;--bd:#d3ded7;--ac:#0d7a4a;--card:#ffffff;--sel:#dff0e5}
+/* dark mode off - always clean light YCP theme */
 *{box-sizing:border-box}body{margin:0;font:14px/1.4 system-ui,"Noto Sans Telugu","Nirmala UI",sans-serif;background:var(--bg);color:var(--fg);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-header{position:static;background:var(--bg);border-bottom:1px solid var(--bd);padding:8px;z-index:5}
-h1{font-size:16px;margin:0 0 6px}.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
+header{position:static;background:#fff;border-top:4px solid var(--ac);border-bottom:1px solid var(--bd);padding:10px 12px;z-index:5;box-shadow:0 1px 6px rgba(16,36,26,.06)}
+h1{font-size:16px;margin:0 0 8px;font-weight:800;color:#0e2418}.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
 input,select,button{font:inherit;padding:6px 8px;border:1px solid var(--bd);border-radius:6px;background:var(--card);color:var(--fg)}
 input[type=search]{flex:1;min-width:140px}input.n{width:64px}button{cursor:pointer}button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
 .stats{color:var(--mut);font-size:12px}
 .wrap{overflow-x:auto;padding:0 8px 80px}table{border-collapse:collapse;width:100%;min-width:640px}
 th,td{padding:6px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}th{background:var(--bg);cursor:pointer;font-size:12px;color:var(--mut)}th{user-select:none}input[type=checkbox]{width:18px;height:18px;accent-color:var(--ac);cursor:pointer;flex:none}:focus-visible{outline:2px solid var(--ac);outline-offset:2px}.empty{padding:24px 12px;color:var(--mut);text-align:center;font-size:14px;line-height:1.7}
-@media (max-width:720px){header{position:sticky;top:0;z-index:15}
+@media (max-width:720px){ /* v6mobile */
+header{position:sticky;top:0;z-index:15}
 h1{font-size:15px;margin-bottom:8px}
-.row{flex-direction:column;align-items:stretch;gap:6px}
-input[type=search],.row select{width:100%;min-width:0}
-.stats{flex-basis:100%}
+#chipsf,#chipsb{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#chipsf::-webkit-scrollbar,#chipsb::-webkit-scrollbar{display:none}
+#chipsf>*,#chipsb>*{flex:0 0 auto}
 table{min-width:560px;font-size:12.5px}
 th,td{padding:5px 6px}
-.av{width:30px;height:30px}
+.av{width:52px;height:52px}
 .wrap{padding:0 8px 300px}
 .hcard div.m{flex-direction:column;align-items:flex-start;gap:2px;padding:8px}
 #bar{flex-direction:column;align-items:stretch;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
@@ -32,7 +33,7 @@ tr.sel td{background:var(--sel)}.tag{background:var(--card);border:1px solid var
 .hcard{border:1px solid var(--bd);border-radius:8px;margin:8px 0;background:var(--card)}.hcard h3{margin:0;padding:8px;font-size:14px;display:flex;justify-content:space-between}
 .hcard div.m{padding:4px 8px;border-top:1px solid var(--bd);display:flex;justify-content:space-between;gap:8px}
 #bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--bd);padding:8px;display:none;gap:6px;flex-wrap:wrap;align-items:center}
-.av{width:38px;height:38px;border-radius:50%;object-fit:cover;vertical-align:middle;border:2px solid var(--bd);cursor:zoom-in;background:var(--card)}.av.s{width:30px;height:30px;margin-right:6px}#lb{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:20;flex-direction:column;color:#fff;gap:10px}#lb img{width:min(70vw,300px);height:min(70vw,300px);border-radius:50%;object-fit:cover;border:3px solid #fff}.fl{border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:11px;margin-left:4px;white-space:nowrap;display:inline-block}
+.av{width:52px;height:52px;border-radius:50%;object-fit:cover;vertical-align:middle;border:2px solid var(--bd);cursor:zoom-in;background:var(--card)}.av.s{width:44px;height:44px;margin-right:10px}#lb{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:20;flex-direction:column;color:#fff;gap:10px}#lb img{width:min(88vw,440px);height:min(88vw,440px);border-radius:50%;object-fit:cover;border:3px solid #fff}.fl{border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:11px;margin-left:4px;white-space:nowrap;display:inline-block}
 .fl.d{background:#ffe3e3;color:#b00020;border-color:#f0b8b8}.fl.u{background:#fff3c0;color:#8a5b00;border-color:#e8d18a}.fl.o{background:#d4edff;color:#084f8a;border-color:#9fd0f0}
 button.mb{font-size:12px;padding:4px 8px}
 .pt{display:inline-block;border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:11px;margin-left:4px;white-space:nowrap;font-weight:600}
@@ -76,6 +77,15 @@ html.locked,html.locked body{overflow:hidden}
 .gdev{font-size:12px;font-weight:600;color:#0d7a4a;margin-top:18px;letter-spacing:.3px;opacity:.9}
 .devby{font-size:12px;font-weight:500;color:var(--mut);margin-left:8px;vertical-align:middle}
 .mobsub{display:block;font-size:11px;color:var(--mut);font-weight:400;margin-top:1px}.mcard{display:flex;align-items:flex-start;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px;margin-bottom:8px;cursor:pointer;animation:cardIn .16s ease both;transition:background .12s,outline .12s}.mcard.sel{outline:2px solid var(--ac);outline-offset:-2px;background:var(--sel)}.mcard .mcol{flex:1;min-width:0}.mcard .mi{font-weight:600;font-size:15px;line-height:1.25;word-break:break-word}.mcard .ms{font-size:12px;color:var(--mut);margin-top:2px;line-height:1.6}.mcard .mc{margin-top:6px}.mcard .av.s{margin-top:2px}@media (max-width:720px){#gate .gcard{padding:26px 20px 20px;border-radius:18px}.xsm-hide{display:none!important}}
+/* v6polish */
+.qonly{margin-bottom:2px}
+#q{flex:1 1 100%;height:44px;padding:0 16px;border-radius:999px;background:#fff}
+select{border-radius:999px;padding:8px 12px;font-size:13px}
+header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600}
+#sall{background:var(--ac);color:#fff;border-color:var(--ac)}
+.strow{margin-bottom:2px}
+.stats{font-size:12.5px}
+@media (min-width:721px){#chipsf,#chipsb{overflow-x:visible;flex-wrap:wrap}}
 </style></head>
 <body>
 <div id="gate"><div class="gcard"><div class="glogo">YCP</div><h2>Pamur Ward 9 — Voter App</h2><p>Enter the access password to open</p><form id="gform" onsubmit="return gateSubmit(event)" action="javascript:void(0);"><div class="gin"><input type="password" id="gpin" placeholder="Access password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" oninput="gateInput()" onkeydown="gateKey(event)" aria-label="Access password"><button type="button" id="gshow" class="gshow" onclick="togglePw()" aria-label="Show password" title="Show password"><svg class="i-open" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg><svg class="i-slash" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.9 9.9 0 0 1 12 4c7 0 11 8 11 8a18.45 18.45 0 0 1-2.16 2.94M14.08 9.91a3 3 0 1 1-4.24 4.24M1 1l22 22"></path></svg></button></div><button type="button" id="gok" onclick="checkPw()">Open list</button><div id="gerr">Wrong password</div><div id="jswarn"><b>Screen not responding? Open it in Safari.</b> This viewer is not running the page (JavaScript is blocked). On iPhone: <b>tap the download icon in WhatsApp → Save to Files → open the file → tap &ldquo;Open in&rdquo; → Safari</b>. It works normally in Safari or Chrome. The eye icon and login both need a real browser.</div><noscript><div class="gdev">JavaScript is off in this viewer. On iPhone: open the file in Safari (Share the file, choose "Open in Safari" — not the quick preview). On Android: open with Chrome.</div></noscript><div class="gdev">Developed by Areef Shaik · v5</div></form></div></div>
@@ -126,14 +136,16 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 })();
 </script>
 <header><h1>Pamur Ward 9 — YCP Voter App <span class="devby">· Developed by Areef Shaik</span></h1>
-<div class="row"><input type="search" id="q" placeholder="Search name / relative / house / voter ID">
+<div class="row qonly"><input type="search" id="q" placeholder="Search name / house / voter ID / mobile"></div>
+<div class="row" id="chipsf">
 <select id="g"><option value="">All genders</option><option value="M">Male</option><option value="F">Female</option></select>
 <select id="mkf"><option value="">All statuses</option><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="any">Any marked</option><option value="none">Unmarked only</option></select>
 
 <select id="pf"><option value="">All parties</option><option value="YCP">YCP</option><option value="TDP">TDP</option><option value="JSP">JSP</option><option value="Others">Others</option><option value="any">Has a party</option><option value="none">No party yet</option></select>
 <select id="fam"><option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option></select>
 <select id="view"><option value="v">Voters</option><option value="h">By house</option><option value="f">By family</option></select></div>
-<div class="row"><span class="stats" id="st"></span><button id="sall" title="Select all voters currently shown">Select all shown</button><button id="csv">Export CSV</button><button id="exp">Save data</button><button id="imp">Load data</button><button id="clr">Clear selection</button></div></header>
+<div class="row strow"><span class="stats" id="st"></span></div>
+<div class="row" id="chipsb"><button id="sall">Select all</button><button id="csv">Export</button><button id="exp">Save data</button><button id="imp">Load data</button><button id="clr">Clear</button></div></header>
 <div class="wrap" id="out"></div>
 <div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar"><span id="sc"></span><input id="fname" placeholder="Family name" list="fl"><datalist id="fl"></datalist>
