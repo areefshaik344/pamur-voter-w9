@@ -31,7 +31,11 @@ th,td{padding:5px 6px}
 #fname{width:100%;min-width:0}}
 tr.sel td{background:var(--sel)}.tag{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:1px 8px;font-size:12px}
 .hcard{border:1px solid var(--bd);border-radius:8px;margin:8px 0;background:var(--card)}.hcard h3{margin:0;padding:8px;font-size:14px;display:flex;justify-content:space-between}
-.hcard div.m{padding:4px 8px;border-top:1px solid var(--bd);display:flex;justify-content:space-between;gap:8px}
+.hcard div.m{padding:4px 8px;border-top:1px solid var(--bd);display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.mline{display:flex;align-items:center;gap:6px}
+.mline.sub{gap:8px}
+.gall{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--mut);cursor:pointer;margin-left:8px}
+.gall input{accent-color:var(--ac);width:16px;height:16px}
 #bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bd);box-shadow:0 -4px 16px rgba(16,36,26,.08);padding:8px;display:none;flex-direction:column;align-items:stretch;gap:6px}
 .br{display:flex;gap:6px;flex-wrap:wrap;align-items:center;width:100%}
 .br input,.br select{flex:1;min-width:130px}
@@ -213,7 +217,7 @@ let h='';
 if(v==='v'){if(isMob){h=rows.map(mcard).join('')}else{h=`<table><thead><tr><th title="Select all shown"><input type="checkbox" id="all"></th><th data-k="s">#</th><th data-k="n">Name</th><th data-k="rn">Relative</th><th data-k="a">Age</th><th data-k="g">G</th><th data-k="h">House</th><th data-k="e">Voter ID</th><th>Family / Party</th></tr></thead><tbody>${rows.map(row).join('')}</tbody></table>`}}
 else{const key=v==='h'?(r=>r.h||'(none)'):(r=>fams[r.s]||'(ungrouped)');const m={};rows.forEach(r=>(m[key(r)]??=[]).push(r));
 const ks=Object.keys(m).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
-h=ks.map(x=>`<div class="hcard"><h3><span>${v==='h'?'House ':'Family: '}${esc(x)}</span><span class="stats">${m[x].length} voters</span></h3>${m[x].map(r=>`<div class="m" data-s="${r.s}" style="${sel.has(r.s)?'background:var(--sel)':''}"><span><input type="checkbox" ${sel.has(r.s)?'checked':''}> <img class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt="">${esc(r.n)} · ${r.a??''}${r.g}</span><span class="stats">${partyChip(r.s)}${flagChips(r.s)}${mob[r.s]?' · '+mob[r.s]:''}</span></span></div>`).join('')}</div>`).join('')}
+h=ks.map(x=>{const gm=m[x];const allCk=gm.length>0&&gm.every(r=>sel.has(r.s));const ind=!allCk&&gm.some(r=>sel.has(r.s));const head=`<div class="hcard"><h3><span>${v==='h'?'House ':'Family: '}${esc(x)}</span><span class="stats">${gm.length} voters <label class="gall" data-gsel="${esc(x)}"><input type="checkbox"${allCk?' checked':''}${ind?' indeterminate':''}> select all</label></span></h3>`;const body=gm.map(r=>{const pc=partyChip(r.s);const fc=flagChips(r.s);const mb=mob[r.s]?esc(mob[r.s]):'';const sub=(pc+fc)+(mb?((pc||fc)?' · '+mb:mb):'');return `<div class="m" data-s="${r.s}" style="${sel.has(r.s)?'background:var(--sel)':''}"><span class="mline"><input type="checkbox" ${sel.has(r.s)?'checked':''}> <img class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt="">${esc(r.n)} · ${r.a??''}${r.g}</span>${sub?'<span class="mline sub">'+sub+'</span>':''}</div>`}).join('');return head+body+'</div>'}).join('')}
 if(!rows.length)h='<div class="empty">No voters match the current filters.<br><button class="mb" id="rstf">Reset filters</button></div>';
 $('out').innerHTML=h;bar();hh();
 const _al=$('all');if(_al){_al.checked=rows.length>0&&rows.every(r=>sel.has(r.s));_al.indeterminate=rows.some(r=>sel.has(r.s))&&!_al.checked;_al.addEventListener('change',e=>{const on=e.target.checked;rows.forEach(r=>on?sel.add(r.s):sel.delete(r.s));render()});}
@@ -227,6 +231,9 @@ $('out').addEventListener('click',e=>{const av=e.target.closest('[data-ph]');if(
 const th=e.target.closest('th[data-k]');if(th){const k=th.dataset.k;sortD=sortK===k?-sortD:1;sortK=k;render()}});
 let _rt;['q','g','fam','view','mkf','pf'].forEach(i=>$(i).addEventListener('input',()=>{clearTimeout(_rt);_rt=setTimeout(render,180)}));
 document.querySelectorAll('.gseg button').forEach(b=>b.onclick=()=>{$('g').value=$('g').value===b.dataset.g?'':b.dataset.g;syncGseg();render()});
+document.addEventListener('change',e=>{const box=e.target.closest('label[data-gsel] input');if(!box)return;const key=e.target.closest('label[data-gsel]').dataset.gsel;const on=e.target.checked;const vk=$('view').value==='h'?'h':'f';
+const ids=D.filter(r=>(vk==='h'?(r.h||'(none)'):(fams[r.s]||'(ungrouped)'))===key&&filt().some(f=>f.s===r.s)).map(r=>r.s);
+ids.forEach(s=>on?sel.add(s):sel.delete(s));render()});
 $('lo').onclick=()=>{try{sessionStorage.removeItem('pamur9unlocked')}catch(e){}location.reload()};
 function clearFilters(){$('q').value='';$('g').value='';$('mkf').value='';$('pf').value='';$('fam').value='';$('view').value='v';render()}
 $('sall').onclick=()=>{const rows=filt();if(!rows.length)return alert('Nothing is shown to select');rows.forEach(r=>sel.add(r.s));render();}
