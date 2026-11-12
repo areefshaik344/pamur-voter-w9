@@ -203,7 +203,7 @@ function mcard(r){
 const ck=sel.has(r.s)?'checked':'';
 const mobm=mob[r.s]?esc(mob[r.s]):'';
 const famm=fams[r.s]?esc(fams[r.s]):'';
-const meta=[r.e?'ID '+esc(r.e):'',mobm,famm].filter(Boolean).join('\u00b7');
+const meta=[r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'',r.h?'House '+esc(r.h):'',r.e?'ID '+esc(r.e):'',mobm,famm].filter(Boolean).join('\u00b7');
 return `<div class="mcard${sel.has(r.s)?' sel':''}" data-s="${r.s}"><input type="checkbox" ${ck}><div class="phcol"><img loading="lazy" class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt=""><span class="sr">${r.s}</span></div><div class="mcol"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag">'+r.a+'</span>':''}</div><div class="ms">${meta}</div><div class="mc">${partyChip(r.s)}${flagChips(r.s)}</div></div></div>`}
 function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="${PH(r.s)}" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${mob[r.s]}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${esc(r.h)}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
 function render(){const rows=filt(),v=$('view').value;
