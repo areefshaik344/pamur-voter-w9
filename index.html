@@ -154,8 +154,9 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <header>
 <div class="row qonly"><input type="search" id="q" placeholder="Search name / house / voter ID / mobile"></div>
 <div class="row" id="chipsf">
-<input type="hidden" id="g" value=""><span class="gseg" role="group" aria-label="Gender filter"><button type="button" data-g="M">Male</button><button type="button" data-g="F">Female</button></span>
+<input type="hidden" id="g" value="">
 <select id="mkf"><option value="">All statuses</option><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="any">Any marked</option><option value="none">Unmarked only</option></select>
+<span class="gseg" role="group" aria-label="Gender filter"><button type="button" data-g="M">Male</button><button type="button" data-g="F">Female</button></span>
 
 <select id="pf"><option value="">All parties</option><option value="YCP">YCP</option><option value="TDP">TDP</option><option value="JSP">JSP</option><option value="Others">Others</option><option value="any">Has a party</option><option value="none">No party yet</option></select>
 <select id="fam"><option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option></select>
