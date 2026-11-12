@@ -19,7 +19,7 @@ header{position:sticky;top:0;z-index:15}
 h1{font-size:15px;margin-bottom:8px}
 #chipsf,#chipsb{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
 #chipsf>*,#chipsb>*{flex:0 0 auto;scroll-snap-align:start}
-#chipsf select,#chipsf .gseg button,#chipsb button{min-height:44px;display:flex;align-items:center}
+#chipsf select,#chipsb button{min-height:44px;display:flex;align-items:center}
 table{min-width:560px;font-size:12.5px}
 th,td{padding:5px 6px}
 .av{width:52px;height:52px}
@@ -43,7 +43,6 @@ tr.sel td{background:var(--sel)}.tag{background:var(--card);border:1px solid var
 .mbic{min-width:44px;min-height:44px;padding:6px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .mbic svg,#lo svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 #lo{min-height:40px;display:flex;align-items:center;justify-content:center;padding:6px 12px;color:#c0392b;border:1px solid #eac6c2;background:#fff5f4}
-.gseg{display:inline-flex;gap:4px;flex:0 0 auto}.gseg button{min-height:40px;padding:6px 12px;border-radius:999px;font-weight:600;font-size:13px;background:var(--card);border:1px solid var(--bd);color:var(--fg);cursor:pointer}.gseg button.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .av{width:52px;height:52px;border-radius:50%;object-fit:cover;vertical-align:middle;border:2px solid var(--bd);cursor:zoom-in;background:var(--card)}.av.s{width:44px;height:44px;margin-right:10px}#lb{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:20;flex-direction:column;color:#fff;gap:10px}#lb img{width:min(88vw,440px);height:min(88vw,440px);border-radius:50%;object-fit:cover;border:3px solid #fff}.fl{border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:12px;margin-left:4px;white-space:nowrap;display:inline-block}
 .fl.d{background:#ffe3e3;color:#b00020;border-color:#f0b8b8}.fl.u{background:#fff3c0;color:#8a5b00;border-color:#e8d18a}.fl.o{background:#d4edff;color:#084f8a;border-color:#9fd0f0}
 button.mb{font-size:12px;padding:4px 8px}
@@ -154,9 +153,8 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <header>
 <div class="row qonly"><input type="search" id="q" placeholder="Search name / house / voter ID / mobile"></div>
 <div class="row" id="chipsf">
-<input type="hidden" id="g" value="">
 <select id="mkf"><option value="">All statuses</option><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="any">Any marked</option><option value="none">Unmarked only</option></select>
-<span class="gseg" role="group" aria-label="Gender filter"><button type="button" data-g="M">Male</button><button type="button" data-g="F">Female</button></span>
+<select id="g"><option value="">All genders</option><option value="M">Male</option><option value="F">Female</option></select>
 
 <select id="pf"><option value="">All parties</option><option value="YCP">YCP</option><option value="TDP">TDP</option><option value="JSP">JSP</option><option value="Others">Others</option><option value="any">Has a party</option><option value="none">No party yet</option></select>
 <select id="fam"><option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option></select>
@@ -225,14 +223,12 @@ $('out').innerHTML=h;document.querySelectorAll('input[data-ind="1"]').forEach(i=
 const _al=$('all');if(_al){_al.checked=rows.length>0&&rows.every(r=>sel.has(r.s));_al.indeterminate=rows.some(r=>sel.has(r.s))&&!_al.checked;_al.addEventListener('change',e=>{const on=e.target.checked;rows.forEach(r=>on?sel.add(r.s):sel.delete(r.s));render()});}
 const _rf=$('rstf');if(_rf)_rf.onclick=clearFilters;
 }
-function bar(){const b=$('bar');b.style.display=sel.size?'flex':'none';if(sel.size){b.classList.remove('anim');void b.offsetWidth;b.classList.add('anim')}$('sc').textContent=sel.size+' selected';bb();syncGseg()}
-function syncGseg(){document.querySelectorAll('.gseg button').forEach(b=>b.classList.toggle('on',b.dataset.g===$('g').value&&$('g').value!==''))}
+function bar(){const b=$('bar');b.style.display=sel.size?'flex':'none';if(sel.size){b.classList.remove('anim');void b.offsetWidth;b.classList.add('anim')}$('sc').textContent=sel.size+' selected';bb()}
 function hh(){document.documentElement.style.setProperty('--hh',document.querySelector('header').offsetHeight+'px')}
 function bb(){const b=$('bar');if(!b)return;const w=document.querySelector('.wrap');if(!w)return;w.style.paddingBottom=(b.style.display==='none'||!sel.size)?'':(b.offsetHeight+24)+'px'}
 $('out').addEventListener('click',e=>{const av=e.target.closest('[data-ph]');if(av){const s=+av.dataset.ph,r=D.find(x=>x.s===s);$('lbi').src=PH(s);$('lbt').textContent=r.n+' · '+(r.a??'')+r.g+' · House '+r.h;$('lb').style.display='flex';return}const t=e.target.closest('[data-s]');if(t){const s=+t.dataset.s;sel.has(s)?sel.delete(s):sel.add(s);if(isMob&&$('view').value==='v'){const on=sel.has(s);t.classList.toggle('sel',on);const cb=t.querySelector('input[type=checkbox]');if(cb)cb.checked=on;bar()}else{render()}return}
 const th=e.target.closest('th[data-k]');if(th){const k=th.dataset.k;sortD=sortK===k?-sortD:1;sortK=k;render()}});
 let _rt;['q','g','fam','view','mkf','pf'].forEach(i=>$(i).addEventListener('input',()=>{clearTimeout(_rt);_rt=setTimeout(render,180)}));
-document.querySelectorAll('.gseg button').forEach(b=>b.onclick=()=>{$('g').value=$('g').value===b.dataset.g?'':b.dataset.g;syncGseg();render()});
 document.addEventListener('change',e=>{const box=e.target.closest('label[data-gsel] input');if(!box)return;const key=e.target.closest('label[data-gsel]').dataset.gsel;const on=e.target.checked;const vk=$('view').value==='h'?'h':'f';
 const ids=D.filter(r=>(vk==='h'?(r.h||'(none)'):(fams[r.s]||'(ungrouped)'))===key&&filt().some(f=>f.s===r.s)).map(r=>r.s);
 ids.forEach(s=>on?sel.add(s):sel.delete(s));render()});
