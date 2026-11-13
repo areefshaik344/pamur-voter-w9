@@ -94,7 +94,7 @@ html.locked,html.locked body{overflow:hidden}
 .mcard .av.s{margin-top:2px}@media (max-width:720px){#gate .gcard{padding:26px 20px 20px;border-radius:18px}.xsm-hide{display:none!important}}
 /* v6polish */
 .qonly{margin-bottom:10px}
-#q{flex:1 1 100%;height:44px;padding:0 16px;border-radius:999px;background:#fff}
+.qonly{display:flex;align-items:center;gap:8px;margin-bottom:10px;width:100%}.qwrap{position:relative;flex:1;min-width:0;display:flex;align-items:center}#q{width:100%;height:44px;padding:0 40px 0 16px;border-radius:999px;background:#fff;border:1px solid var(--bd);box-sizing:border-box}#q::-webkit-search-cancel-button,#q::-webkit-search-decoration{-webkit-appearance:none;display:none}#qclr{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:none;background:#eef4f0;color:#2c4033;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:2;padding:0}#qclr svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}#qclr:hover,#qclr:active{background:#dbe8e0;color:#0e2418}#lo{width:44px;height:44px;min-height:44px;border-radius:50%;padding:0;background:#fff5f4;border:1px solid #eac6c2;color:#c0392b;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}#lo svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}#lo:hover,#lo:active{background:#fdeeee;border-color:#e4aba5}
 select{border-radius:999px;padding:8px 12px;font-size:13px}
 header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600}
 #sall{background:var(--ac);color:#fff;border-color:var(--ac)}
@@ -194,16 +194,13 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 })();
 </script>
 <header>
-<div class="row qonly"><input type="search" id="q" placeholder="Search name / house / voter ID / mobile"></div>
+<div class="row qonly"><div class="qwrap"><input type="search" id="q" placeholder="Search name / house / voter ID / mobile"><button type="button" id="qclr" aria-label="Clear search" title="Clear search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><button id="lo" title="Logout" aria-label="Logout"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button></div>
 <div class="row" id="chipsf">
-<select id="mkf"><option value="">All statuses</option><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="any">Any marked</option><option value="none">Unmarked only</option></select>
-<select id="g"><option value="">All genders</option><option value="M">Male</option><option value="F">Female</option></select>
-
-<select id="pf"><option value="">All parties</option><option value="YCP">YCP</option><option value="TDP">TDP</option><option value="JSP">JSP</option><option value="Others">Others</option><option value="any">Has a party</option><option value="none">No party yet</option></select>
+<select id="view"><option value="v">Voters</option><option value="h">By house</option><option value="f">By family</option></select>
 <select id="fam"><option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option></select>
-<select id="view"><option value="v">Voters</option><option value="h">By house</option><option value="f">By family</option></select></div>
+<select id="mkf"><option value="">All statuses</option><optgroup label="Status"><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="any">Any marked</option><option value="none">Unmarked only</option></optgroup><optgroup label="Party"><option value="p">All parties</option><option value="pYCP">YCP</option><option value="pTDP">TDP</option><option value="pJSP">JSP</option><option value="pOthers">Others</option><option value="pHas">Has a party</option><option value="pNone">No party yet</option></optgroup></select></div>
 <div class="row strow"><span class="stats" id="st"></span></div>
-<div class="row" id="chipsb"><button id="sall">Select all</button><button id="csv">Export</button><button id="exp">Save data</button><button id="imp">Load data</button><button id="shd">Share data</button><button id="clr">Clear</button><button id="lo" title="Logout">Logout</button></div></header>
+<div class="row" id="chipsb"><button id="sall">Select all</button><button id="csv">Export</button><button id="exp">Save data</button><button id="imp">Load data</button><button id="shd">Share data</button><button id="clr">Clear</button></div></header>
 <div class="wrap" id="out"></div>
 <div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar">
@@ -253,10 +250,10 @@ const save=()=>{try{localStorage.setItem('pamur9fams',JSON.stringify(fams))}catc
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function names(){return [...new Set(Object.values(fams))].sort()}
 function refreshFam(){const cur=$('fam').value;$('fam').innerHTML='<option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option>'+names().map(n=>`<option>${esc(n)}</option>`).join('');$('fam').value=cur;$('fl').innerHTML=names().map(n=>`<option value="${esc(n)}">`).join('')}
-function filt(){const q=$('q').value.trim().toLowerCase(),g=$('g').value,f=$('fam').value,vv=$('mkf').value;
-return D.filter(r=>{if(g&&r.g!==g)return false;
+function filt(){const q=$('q').value.trim().toLowerCase(),f=$('fam').value,vv=$('mkf').value;
+return D.filter(r=>{
 const m=flg[r.s]||{};if(vv==='d'&&!m.d)return false;if(vv==='u'&&!m.u)return false;if(vv==='o'&&!m.o)return false;if(vv==='any'&&!(m.d||m.u||m.o))return false;if(vv==='none'&&(m.d||m.u||m.o))return false;
-const pp=$('pf').value,pv=pty[r.s];if(pp==='any'&&!pv)return false;if(pp==='none'&&pv)return false;if(pp&&pp!=='any'&&pp!=='none'&&pv!==pp)return false;
+const pv=pty[r.s];if(vv[0]==='p'){if(vv==='pHas'&&!pv)return false;if(vv==='pNone'&&pv)return false;if(vv!=='p'&&vv!=='pHas'&&vv!=='pNone'&&pv!==vv.slice(1))return false;}
 const fm=fams[r.s];if(f==='__none'&&fm)return false;if(f==='__any'&&!fm)return false;if(f&&f[0]!=='_'&&fm!==f)return false;
 if(q&&!(r.s+' '+r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')).toLowerCase().includes(q))return false;return true})}
 function mcard(r){
@@ -284,12 +281,12 @@ function hh(){document.documentElement.style.setProperty('--hh',document.querySe
 function bb(){const b=$('bar');if(!b)return;const w=document.querySelector('.wrap');if(!w)return;w.style.paddingBottom=(b.style.display==='none'||!sel.size)?'':(b.offsetHeight+24)+'px'}
 $('out').addEventListener('click',e=>{const av=e.target.closest('[data-ph]');if(av){const s=+av.dataset.ph,r=D.find(x=>x.s===s);$('lbi').src=PH(s);$('lbt').textContent=r.n+' · '+(r.a??'')+r.g+' · House '+r.h;$('lb').style.display='flex';return}const t=e.target.closest('[data-s]');if(t){const s=+t.dataset.s;sel.has(s)?sel.delete(s):sel.add(s);if(isMob&&$('view').value==='v'){const on=sel.has(s);t.classList.toggle('sel',on);const cb=t.querySelector('input[type=checkbox]');if(cb)cb.checked=on;bar()}else{render()}return}
 const th=e.target.closest('th[data-k]');if(th){const k=th.dataset.k;sortD=sortK===k?-sortD:1;sortK=k;render()}});
-let _rt;['q','g','fam','view','mkf','pf'].forEach(i=>$(i).addEventListener('input',()=>{clearTimeout(_rt);_rt=setTimeout(render,180)}));
+let _rt;['q','fam','view','mkf'].forEach(i=>$(i).addEventListener('input',()=>{clearTimeout(_rt);_rt=setTimeout(render,180)}));$('q').addEventListener('input',()=>{$('qclr').style.display=$('q').value?'flex':'none'});$('qclr').onclick=()=>{$('q').value='';$('qclr').style.display='none';render();$('q').focus();};
 document.addEventListener('change',e=>{const box=e.target.closest('label[data-gsel] input');if(!box)return;const key=e.target.closest('label[data-gsel]').dataset.gsel;const on=e.target.checked;const vk=$('view').value==='h'?'h':'f';
 const ids=D.filter(r=>(vk==='h'?(r.h||'(none)'):(fams[r.s]||'(ungrouped)'))===key&&filt().some(f=>f.s===r.s)).map(r=>r.s);
 ids.forEach(s=>on?sel.add(s):sel.delete(s));render()});
 $('lo').onclick=()=>{try{sessionStorage.removeItem('pamur9unlocked')}catch(e){}location.reload()};
-function clearFilters(){$('q').value='';$('g').value='';$('mkf').value='';$('pf').value='';$('fam').value='';$('view').value='v';render()}
+function clearFilters(){$('q').value='';$('mkf').value='';$('fam').value='';$('view').value='v';$('qclr').style.display='none';render()}
 $('sall').onclick=()=>{const rows=filt();if(!rows.length)return alert('Nothing is shown to select');rows.forEach(r=>sel.add(r.s));render();}
 function setFlag(k){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{const m=flg[s]||(flg[s]={});m[k]=1});flgSave();render()}
 function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s];delete oos[s]});flgSave();oosSave();render()}
