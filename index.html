@@ -144,6 +144,20 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 #bar .mbi{min-width:46px;min-height:44px;padding:6px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;cursor:pointer}
 #oos{flex:1;min-width:0;min-height:44px}
 </style>
+
+<style>
+/* v8.18 kebab menu */
+#chipsf{overflow:visible!important;flex-wrap:wrap!important}
+.kwrap{position:relative;flex:0 0 auto;display:inline-flex}
+#kb{width:42px;height:42px;min-height:42px;border-radius:50%;padding:0;background:var(--card);border:1px solid var(--bd);color:var(--fg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
+#kb svg{width:20px;height:20px;fill:currentColor}
+#kb:hover,#kb:active{background:#eef4f0;border-color:var(--ac);color:var(--ac)}
+.kmenu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--bd);border-radius:12px;box-shadow:0 8px 24px rgba(16,36,26,.18);padding:4px;min-width:150px;z-index:100;display:flex;flex-direction:column;gap:2px}
+.kmenu button{width:100%;height:38px;min-height:38px;padding:0 12px;border:none;background:transparent;color:var(--fg);font:600 13px/1 system-ui,sans-serif;border-radius:8px;text-align:left;display:flex;align-items:center;cursor:pointer;white-space:nowrap}
+.kmenu button:hover,.kmenu button:active{background:#f0f5f2;color:var(--ac)}
+.kmenu button#sall{color:var(--ac);font-weight:700}
+.kmenu button#clr{color:#c0392b}
+</style>
 </head>
 <body>
 <div id="gate"><div class="gcard"><div class="glogo">YCP</div><h2>Pamur Ward 9 — Voter App</h2><p>Enter the access password to open</p><form id="gform" onsubmit="return gateSubmit(event)" action="javascript:void(0);"><div class="gin"><input type="password" id="gpin" placeholder="Access password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" oninput="gateInput()" onkeydown="gateKey(event)" aria-label="Access password"><button type="button" id="gshow" class="gshow" onclick="togglePw()" aria-label="Show password" title="Show password"><svg class="i-open" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg><svg class="i-slash" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.9 9.9 0 0 1 12 4c7 0 11 8 11 8a18.45 18.45 0 0 1-2.16 2.94M14.08 9.91a3 3 0 1 1-4.24 4.24M1 1l22 22"></path></svg></button></div><button type="button" id="gok" onclick="checkPw()">Open list</button><div id="gerr">Wrong password</div><div id="jswarn"><b>Screen not responding? Open it in Safari.</b> This viewer is not running the page (JavaScript is blocked). On iPhone: <b>tap the download icon in WhatsApp → Save to Files → open the file → tap &ldquo;Open in&rdquo; → Safari</b>. It works normally in Safari or Chrome. The eye icon and login both need a real browser.</div><noscript><div class="gdev">JavaScript is off in this viewer. On iPhone: open the file in Safari (Share the file, choose "Open in Safari" — not the quick preview). On Android: open with Chrome.</div></noscript><div class="gdev">Developed by Areef Shaik · v8</div></form></div></div>
@@ -198,9 +212,20 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <div class="row" id="chipsf">
 <select id="view"><option value="v">Voters</option><option value="h">By house</option><option value="f">By family</option></select>
 <select id="fam"><option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option></select>
-<select id="mkf"><option value="">All statuses</option><optgroup label="Status"><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="any">Any marked</option><option value="none">Unmarked only</option></optgroup><optgroup label="Party"><option value="p">All parties</option><option value="pYCP">YCP</option><option value="pTDP">TDP</option><option value="pJSP">JSP</option><option value="pOthers">Others</option><option value="pHas">Has a party</option><option value="pNone">No party yet</option></optgroup></select></div>
+<select id="mkf"><option value="">All statuses</option><optgroup label="Status"><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="any">Any marked</option><option value="none">Unmarked only</option></optgroup><optgroup label="Party"><option value="p">All parties</option><option value="pYCP">YCP</option><option value="pTDP">TDP</option><option value="pJSP">JSP</option><option value="pOthers">Others</option><option value="pHas">Has a party</option><option value="pNone">No party yet</option></optgroup></select>
+<div class="kwrap">
+<button type="button" id="kb" aria-label="More actions" title="More actions"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg></button>
+<div id="kmenu" class="kmenu" style="display:none">
+<button type="button" id="sall">Select all</button>
+<button type="button" id="csv">Export CSV</button>
+<button type="button" id="exp">Save data</button>
+<button type="button" id="imp">Load data</button>
+<button type="button" id="shd">Share data</button>
+<button type="button" id="clr">Clear</button>
+</div>
+</div></div>
 <div class="row strow"><span class="stats" id="st"></span></div>
-<div class="row" id="chipsb"><button id="sall">Select all</button><button id="csv">Export</button><button id="exp">Save data</button><button id="imp">Load data</button><button id="shd">Share data</button><button id="clr">Clear</button></div></header>
+</header>
 <div class="wrap" id="out"></div>
 <div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar">
@@ -320,4 +345,9 @@ setTimeout(()=>alert('Loaded shared marks - now saved on this phone: '+Object.ke
 $('imp').onclick=()=>$('file').click();
 $('file').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o&&o.fams!==undefined){Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{});Object.assign(oos,o.oos||{})}else{Object.assign(fams,o||{})}save();flgSave();ptySave();mobSave();oosSave();refreshFam();render()}catch(x){alert('Invalid file')}})};
 $('lb').onclick=()=>$('lb').style.display='none';addEventListener('resize',hh);addEventListener('scroll',()=>{document.querySelector('header').classList.toggle('sc',scrollY>4)},{passive:true});refreshFam();render();
+
+$('kb').onclick=e=>{e.stopPropagation();const m=$('kmenu');m.style.display=m.style.display==='none'?'flex':'none'};
+document.addEventListener('click',e=>{const m=$('kmenu');if(m&&!e.target.closest('.kwrap'))m.style.display='none'});
+$('kmenu').addEventListener('click',()=>{$('kmenu').style.display='none'});
+
 </script></body></html>
