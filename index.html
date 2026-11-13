@@ -47,7 +47,7 @@ tr.sel td{background:var(--sel)}.tag{background:var(--card);border:1px solid var
 .fl.d{background:#ffe3e3;color:#b00020;border-color:#f0b8b8}.fl.u{background:#fff3c0;color:#8a5b00;border-color:#e8d18a}.fl.o{background:#d4edff;color:#084f8a;border-color:#9fd0f0}
 button.mb{font-size:12px;padding:4px 8px}
 .pt{display:inline-block;border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:12px;margin-left:4px;white-space:nowrap;font-weight:600}
-.pt.YCP{background:#d9f5e3;color:#0a6b34;border-color:#93d8ab}.pt.TDP{background:#d5ecff;color:#0a4f8a;border-color:#a0d0f0}.pt.Congress{background:#ffe9d1;color:#9a4b00;border-color:#f3c79a}.pt.TRS{background:#e9dcff;color:#5b2ea6;border-color:#c9a8f0}.pt.JSP{background:#ffe0f0;color:#a3155b;border-color:#f5a8cf}.pt.Other{background:var(--card);color:var(--mut)}
+.pt.YCP{background:#d9f5e3;color:#0a6b34;border-color:#93d8ab}.pt.TDP{background:#fff3c0;color:#7a5800;border-color:#e8cf7a}.pt.Congress{background:#ffe9d1;color:#9a4b00;border-color:#f3c79a}.pt.TRS{background:#e9dcff;color:#5b2ea6;border-color:#c9a8f0}.pt.JSP{background:#ffe0f0;color:#a3155b;border-color:#f5a8cf}.pt.Other{background:var(--card);color:var(--mut)}
 @keyframes cardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes barIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
@@ -116,7 +116,6 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 #md{background:#b3261e;color:#fff;border-color:#b3261e}
 #mu{background:#b45309;color:#fff;border-color:#b45309}
 #mo{background:#1d4ed8;color:#fff;border-color:#1d4ed8}
-#mdo{background:#14532d;color:#fff;border-color:#14532d}
 #um{background:var(--card);color:var(--fg);border:1.5px dashed var(--bd)}
 #lo{min-height:36px;font-weight:600}
 @media (min-width:721px){#bar .bflags .mb{flex:1 1 0}#sc{align-self:flex-start}}
@@ -127,8 +126,11 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 @media (max-width:720px){
 #bar .bglab.mhide{display:none}
 #bar .bflags .mb{flex:1 1 calc(25% - 6px);min-width:0;font-size:10.5px;padding:4px 2px;line-height:1.15;white-space:normal}
-#bar .brow #mnum{flex:0 1 180px;min-width:120px}
-#bar .brow #msave{min-width:56px}
+/* v8.12 bar fixes */
+#bar .brow #pname{flex:0 1 150px;min-width:110px}
+#bar .brow #pa,#bar .brow #pc{min-width:56px}
+#bar .brow #mnum{flex:1 1 150px;min-width:0}
+#bar .brow #msave{flex:1 1 90px;min-width:84px}
 }
 </style>
 </head>
@@ -199,7 +201,6 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <button class="mb mbic bfl" id="md">Dead</button>
 <button class="mb mbic bfl" id="mu">Duplicate</button>
 <button class="mb mbic bfl" id="mo">Out of station</button>
-<button class="mb mbic bfl" id="mdo">All three</button>
 <button class="mb mbic bfl" id="um">Clear marks</button>
 </div></div>
 <div class="bgroup"><div class="bglab">Family</div><div class="brow">
@@ -276,12 +277,10 @@ $('lo').onclick=()=>{try{sessionStorage.removeItem('pamur9unlocked')}catch(e){}l
 function clearFilters(){$('q').value='';$('g').value='';$('mkf').value='';$('pf').value='';$('fam').value='';$('view').value='v';render()}
 $('sall').onclick=()=>{const rows=filt();if(!rows.length)return alert('Nothing is shown to select');rows.forEach(r=>sel.add(r.s));render();}
 function setFlag(k){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{const m=flg[s]||(flg[s]={});m[k]=1});flgSave();render()}
-function setAll3(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{flg[s]={d:1,u:1,o:1}});flgSave();render()}
 function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s]});flgSave();render()}
 $('md').onclick=()=>setFlag('d');
 $('mu').onclick=()=>setFlag('u');
 $('mo').onclick=()=>setFlag('o');
-$('mdo').onclick=()=>setAll3();
 $('um').onclick=()=>clearFlg();
 $('pa').onclick=()=>{if(!sel.size)return alert('Select voters first');const v=$('pcust').value.trim()||$('pname').value;if(!v)return alert('Pick or type a party name');sel.forEach(s=>{pty[s]=v});ptySave();render();};
 $('pc').onclick=()=>{if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete pty[s]});ptySave();render();};
