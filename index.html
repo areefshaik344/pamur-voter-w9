@@ -258,7 +258,7 @@ return D.filter(r=>{if(g&&r.g!==g)return false;
 const m=flg[r.s]||{};if(vv==='d'&&!m.d)return false;if(vv==='u'&&!m.u)return false;if(vv==='o'&&!m.o)return false;if(vv==='any'&&!(m.d||m.u||m.o))return false;if(vv==='none'&&(m.d||m.u||m.o))return false;
 const pp=$('pf').value,pv=pty[r.s];if(pp==='any'&&!pv)return false;if(pp==='none'&&pv)return false;if(pp&&pp!=='any'&&pp!=='none'&&pv!==pp)return false;
 const fm=fams[r.s];if(f==='__none'&&fm)return false;if(f==='__any'&&!fm)return false;if(f&&f[0]!=='_'&&fm!==f)return false;
-if(q&&!(r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')).toLowerCase().includes(q))return false;return true})}
+if(q&&!(r.s+' '+r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')).toLowerCase().includes(q))return false;return true})}
 function mcard(r){
 const ck=sel.has(r.s)?'checked':'';
 const mobm=mob[r.s]?esc(mob[r.s]):'';
