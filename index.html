@@ -150,12 +150,12 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 #chipsf{overflow:visible!important;flex-wrap:nowrap!important;display:flex!important;align-items:center!important;gap:4px!important;width:100%!important}
 #chipsf select{height:38px!important;min-height:38px!important;font-size:12px!important;font-weight:600!important;border-radius:999px!important;padding:0 4px!important;min-width:0!important;text-overflow:ellipsis!important;white-space:nowrap!important;overflow:hidden!important}
 #chipsf #view{flex:0 0 auto!important}
-#chipsf #fam{flex:0 1 auto!important;max-width:32%!important}
-#chipsf #mkf{flex:0 1 auto!important;max-width:32%!important}
+#chipsf #fam{flex:1 1 0!important;min-width:0!important}
+#chipsf #mkf{flex:1 1 0!important;min-width:0!important}
 .kwrap{position:relative;flex:0 0 38px!important;display:inline-flex}
 #kb{width:38px!important;height:38px!important;min-height:38px!important;border-radius:50%;padding:0;background:var(--card);border:1px solid var(--bd);color:var(--fg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
 #kb svg{width:18px;height:18px;fill:currentColor}
-#kb:hover,#kb:active{background:#eef4f0;border-color:var(--ac);color:var(--ac)}
+#kb:hover,#kb:active{background:#eef4f0;border-color:var(--ac);color:var(--ac)}#frst{width:38px!important;height:38px!important;min-height:38px!important;border-radius:50%;padding:0;background:var(--card);border:1px solid var(--bd);color:var(--fg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}#frst svg{width:18px;height:18px}#frst:hover,#frst:active{background:#eef4f0;border-color:var(--ac);color:var(--ac)}
 .kmenu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--bd);border-radius:12px;box-shadow:0 8px 24px rgba(16,36,26,.18);padding:4px;min-width:150px;z-index:100;display:flex;flex-direction:column;gap:2px}
 .kmenu button{width:100%;height:38px;min-height:38px;padding:0 12px;border:none;background:transparent;color:var(--fg);font:600 13px/1 system-ui,sans-serif;border-radius:8px;text-align:left;display:flex;align-items:center;cursor:pointer;white-space:nowrap}
 .kmenu button:hover,.kmenu button:active{background:#f0f5f2;color:var(--ac)}
@@ -217,6 +217,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <select id="view"><option value="v">Voters</option><option value="h">By house</option><option value="f">By family</option></select>
 <select id="fam"><option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option></select>
 <select id="mkf"><option value="">All statuses</option><optgroup label="Status"><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="any">Any marked</option><option value="none">Unmarked only</option></optgroup><optgroup label="Party"><option value="p">All parties</option><option value="pYCP">YCP</option><option value="pTDP">TDP</option><option value="pJSP">JSP</option><option value="pOthers">Others</option><option value="pHas">Has a party</option><option value="pNone">No party yet</option></optgroup></select>
+<button type="button" id="frst" aria-label="Reset filters" title="Reset filters"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></button>
 <div class="kwrap">
 <button type="button" id="kb" aria-label="More actions" title="More actions"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg></button>
 <div id="kmenu" class="kmenu" style="display:none">
@@ -316,6 +317,7 @@ const ids=D.filter(r=>(vk==='h'?(r.h||'(none)'):(fams[r.s]||'(ungrouped)'))===ke
 ids.forEach(s=>on?sel.add(s):sel.delete(s));render()});
 $('lo').onclick=()=>{try{sessionStorage.removeItem('pamur9unlocked')}catch(e){}location.reload()};
 function clearFilters(){$('q').value='';$('mkf').value='';$('fam').value='';$('view').value='v';$('qclr').style.display='none';render()}
+const _frst=$('frst');if(_frst)_frst.onclick=()=>{$('view').value='v';$('fam').value='';$('mkf').value='';$('qclr').style.display='none';render()};
 $('sall').onclick=()=>{const rows=filt();if(!rows.length)return alert('Nothing is shown to select');rows.forEach(r=>sel.add(r.s));render();}
 function setFlag(k){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{const m=flg[s]||(flg[s]={});m[k]=1});flgSave();render()}
 function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s];delete oos[s]});flgSave();oosSave();render()}
