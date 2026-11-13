@@ -121,6 +121,16 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 #lo{min-height:36px;font-weight:600}
 @media (min-width:721px){#bar .bflags .mb{flex:1 1 0}#sc{align-self:flex-start}}
 </style>
+<style>
+/* v8.11b mobile bar tweaks */
+#sc{position:sticky;top:0;z-index:3;background:#fff;padding-bottom:6px}
+@media (max-width:720px){
+#bar .bglab.mhide{display:none}
+#bar .bflags .mb{flex:1 1 calc(25% - 6px);min-width:0;font-size:10.5px;padding:4px 2px;line-height:1.15;white-space:normal}
+#bar .brow #mnum{flex:0 1 180px;min-width:120px}
+#bar .brow #msave{min-width:56px}
+}
+</style>
 </head>
 <body>
 <div id="gate"><div class="gcard"><div class="glogo">YCP</div><h2>Pamur Ward 9 — Voter App</h2><p>Enter the access password to open</p><form id="gform" onsubmit="return gateSubmit(event)" action="javascript:void(0);"><div class="gin"><input type="password" id="gpin" placeholder="Access password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" oninput="gateInput()" onkeydown="gateKey(event)" aria-label="Access password"><button type="button" id="gshow" class="gshow" onclick="togglePw()" aria-label="Show password" title="Show password"><svg class="i-open" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg><svg class="i-slash" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.9 9.9 0 0 1 12 4c7 0 11 8 11 8a18.45 18.45 0 0 1-2.16 2.94M14.08 9.91a3 3 0 1 1-4.24 4.24M1 1l22 22"></path></svg></button></div><button type="button" id="gok" onclick="checkPw()">Open list</button><div id="gerr">Wrong password</div><div id="jswarn"><b>Screen not responding? Open it in Safari.</b> This viewer is not running the page (JavaScript is blocked). On iPhone: <b>tap the download icon in WhatsApp → Save to Files → open the file → tap &ldquo;Open in&rdquo; → Safari</b>. It works normally in Safari or Chrome. The eye icon and login both need a real browser.</div><noscript><div class="gdev">JavaScript is off in this viewer. On iPhone: open the file in Safari (Share the file, choose "Open in Safari" — not the quick preview). On Android: open with Chrome.</div></noscript><div class="gdev">Developed by Areef Shaik · v8</div></form></div></div>
@@ -185,11 +195,11 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar">
 <span id="sc"></span>
-<div class="bgroup"><div class="bglab">Marks</div><div class="brow bflags">
+<div class="bgroup"><div class="bglab mhide">Marks</div><div class="brow bflags">
 <button class="mb mbic bfl" id="md">Dead</button>
 <button class="mb mbic bfl" id="mu">Duplicate</button>
 <button class="mb mbic bfl" id="mo">Out of station</button>
-<button class="mb mbic bfl xsm-hide" id="mdo">All three</button>
+<button class="mb mbic bfl" id="mdo">All three</button>
 <button class="mb mbic bfl" id="um">Clear marks</button>
 </div></div>
 <div class="bgroup"><div class="bglab">Family</div><div class="brow">
