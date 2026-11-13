@@ -16,6 +16,7 @@ input[type=search]{flex:1;min-width:140px}input.n{width:64px}button{cursor:point
 th,td{padding:6px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}th{background:var(--bg);cursor:pointer;font-size:12px;color:var(--mut)}th{user-select:none}input[type=checkbox]{width:18px;height:18px;accent-color:var(--ac);cursor:pointer;flex:none}:focus-visible{outline:2px solid var(--ac);outline-offset:2px}.empty{padding:24px 12px;color:var(--mut);text-align:center;font-size:14px;line-height:1.7}
 @media (max-width:720px){ /* v8mobile */
 header{position:sticky;top:0;z-index:15}
+.stats{white-space:pre-line;text-align:center}
 h1{font-size:15px;margin-bottom:8px}
 #chipsf,#chipsb{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
 #chipsf>*,#chipsb>*{flex:0 0 auto;scroll-snap-align:start}
@@ -294,7 +295,8 @@ const meta=[r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'',[r.h?'<svg class="hico" viewBo
 return `<div class="mcard${sel.has(r.s)?' sel':''}" data-s="${r.s}"><input type="checkbox" ${ck}><div class="phcol"><img loading="lazy" class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt=""><span class="sr">${r.s}</span></div><div class="mcol"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag">'+r.a+'</span>':''}</div><div class="ms">${meta.map(x=>'<div class="ml">' + x + '</div>').join("")}</div><div class="mc">${partyChip(r.s)}${flagChips(r.s)}</div></div></div>`}
 function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="${PH(r.s)}" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${esc(mob[r.s])}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${esc(r.h)}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
 function render(){const rows=filt(),v=$('view').value;
-$('st').textContent=`${rows.length} of ${D.length} voters · ${rows.filter(r=>r.g==='M').length}M ${rows.filter(r=>r.g==='F').length}F · ${names().length} families · ${rows.filter(r=>{const m=flg[r.s]||{};return m.d||m.u||m.o}).length} marked · ${(()=>{const pc={};rows.forEach(r=>{const p=pty[r.s];if(p)pc[p]=(pc[p]||0)+1});const a=Object.entries(pc).sort((x,y)=>y[1]-x[1]).slice(0,4).map(([k,v])=>esc(k)+' '+v);return a.length?'Party: '+a.join(' · '):''})()}`;
+$('st').textContent=`${rows.length} of ${D.length} voters · ${rows.filter(r=>r.g==='M').length}M ${rows.filter(r=>r.g==='F').length}F
+${names().length} families · ${rows.filter(r=>{const m=flg[r.s]||{};return m.d||m.u||m.o}).length} marked · ${(()=>{const pc={};rows.forEach(r=>{const p=pty[r.s];if(p)pc[p]=(pc[p]||0)+1});const a=Object.entries(pc).sort((x,y)=>y[1]-x[1]).slice(0,4).map(([k,v])=>esc(k)+' '+v);return a.length?'Party: '+a.join(' · '):''})()}`;
 const k=sortK;rows.sort((x,y)=>((x[k]>y[k])-(x[k]<y[k]))*sortD);
 let h='';
 if(v==='v'){if(isMob){h=rows.map(mcard).join('')}else{h=`<table><thead><tr><th title="Select all shown"><input type="checkbox" id="all"></th><th data-k="s">#</th><th data-k="n">Name</th><th data-k="rn">Relative</th><th data-k="a">Age</th><th data-k="g">G</th><th data-k="h">House</th><th data-k="e">Voter ID</th><th>Family / Party</th></tr></thead><tbody>${rows.map(row).join('')}</tbody></table>`}}
