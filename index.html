@@ -250,7 +250,7 @@ function partyChip(s){const p=pty[s];if(!p)return'';const cls=['YCP','TDP','JSP'
 function flagChips(s){const m=flg[s];if(!m)return'';let t='';if(m.d)t+='<span class="fl d">Dead</span>';if(m.u)t+='<span class="fl u">Dup</span>';if(m.o)t+='<span class="fl o">OOS'+(oos[s]?' · '+esc(oos[s]):'')+'</span>';return t}
 const $=id=>document.getElementById(id);
 const save=()=>{try{localStorage.setItem('pamur9fams',JSON.stringify(fams))}catch(e){}};
-const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function names(){return [...new Set(Object.values(fams))].sort()}
 function refreshFam(){const cur=$('fam').value;$('fam').innerHTML='<option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option>'+names().map(n=>`<option>${esc(n)}</option>`).join('');$('fam').value=cur;$('fl').innerHTML=names().map(n=>`<option value="${esc(n)}">`).join('')}
 function filt(){const q=$('q').value.trim().toLowerCase(),g=$('g').value,f=$('fam').value,vv=$('mkf').value;
@@ -265,7 +265,7 @@ const mobm=mob[r.s]?esc(mob[r.s]):'';
 const famm=fams[r.s]?esc(fams[r.s]):'';
 const meta=[r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'',r.h?'House '+esc(r.h):'',r.e?'ID '+esc(r.e):'',mobm,famm].filter(Boolean).join('\u00b7');
 return `<div class="mcard${sel.has(r.s)?' sel':''}" data-s="${r.s}"><input type="checkbox" ${ck}><div class="phcol"><img loading="lazy" class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt=""><span class="sr">${r.s}</span></div><div class="mcol"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag">'+r.a+'</span>':''}</div><div class="ms">${meta}</div><div class="mc">${partyChip(r.s)}${flagChips(r.s)}</div></div></div>`}
-function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="${PH(r.s)}" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${mob[r.s]}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${esc(r.h)}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
+function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="${PH(r.s)}" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${esc(mob[r.s])}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${esc(r.h)}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
 function render(){const rows=filt(),v=$('view').value;
 $('st').textContent=`${rows.length} of ${D.length} voters · ${rows.filter(r=>r.g==='M').length}M ${rows.filter(r=>r.g==='F').length}F · ${names().length} families · ${rows.filter(r=>{const m=flg[r.s]||{};return m.d||m.u||m.o}).length} marked · ${(()=>{const pc={};rows.forEach(r=>{const p=pty[r.s];if(p)pc[p]=(pc[p]||0)+1});const a=Object.entries(pc).sort((x,y)=>y[1]-x[1]).slice(0,4).map(([k,v])=>esc(k)+' '+v);return a.length?'Party: '+a.join(' · '):''})()}`;
 const k=sortK;rows.sort((x,y)=>((x[k]>y[k])-(x[k]<y[k]))*sortD);
