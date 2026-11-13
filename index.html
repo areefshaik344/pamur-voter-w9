@@ -133,6 +133,17 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 #bar .brow #msave{flex:1 1 90px;min-width:84px}
 }
 </style>
+<style>
+/* v8.13 icon flag buttons + OOS place field */
+#bar .bfl svg,#bar .mbi svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#bar .bflags .mb{display:inline-flex;align-items:center;justify-content:center;padding:6px}
+#md{background:#fdeeee;color:#b3261e;border-color:#f0b8b8}
+#mu{background:#fff4e0;color:#b45309;border-color:#f3d9a4}
+#mo{background:#e8f0fe;color:#1d4ed8;border-color:#a8c5f0}
+#um,#ug,#pc{background:var(--card);color:#b3261e;border:1.5px solid #f0b8b8}
+#bar .mbi{min-width:46px;min-height:44px;padding:6px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;cursor:pointer}
+#oos{flex:1;min-width:0;min-height:44px}
+</style>
 </head>
 <body>
 <div id="gate"><div class="gcard"><div class="glogo">YCP</div><h2>Pamur Ward 9 — Voter App</h2><p>Enter the access password to open</p><form id="gform" onsubmit="return gateSubmit(event)" action="javascript:void(0);"><div class="gin"><input type="password" id="gpin" placeholder="Access password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" oninput="gateInput()" onkeydown="gateKey(event)" aria-label="Access password"><button type="button" id="gshow" class="gshow" onclick="togglePw()" aria-label="Show password" title="Show password"><svg class="i-open" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg><svg class="i-slash" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.9 9.9 0 0 1 12 4c7 0 11 8 11 8a18.45 18.45 0 0 1-2.16 2.94M14.08 9.91a3 3 0 1 1-4.24 4.24M1 1l22 22"></path></svg></button></div><button type="button" id="gok" onclick="checkPw()">Open list</button><div id="gerr">Wrong password</div><div id="jswarn"><b>Screen not responding? Open it in Safari.</b> This viewer is not running the page (JavaScript is blocked). On iPhone: <b>tap the download icon in WhatsApp → Save to Files → open the file → tap &ldquo;Open in&rdquo; → Safari</b>. It works normally in Safari or Chrome. The eye icon and login both need a real browser.</div><noscript><div class="gdev">JavaScript is off in this viewer. On iPhone: open the file in Safari (Share the file, choose "Open in Safari" — not the quick preview). On Android: open with Chrome.</div></noscript><div class="gdev">Developed by Areef Shaik · v8</div></form></div></div>
@@ -197,22 +208,24 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar">
 <span id="sc"></span>
-<div class="bgroup"><div class="bglab mhide">Marks</div><div class="brow bflags">
-<button class="mb mbic bfl" id="md">Dead</button>
-<button class="mb mbic bfl" id="mu">Duplicate</button>
-<button class="mb mbic bfl" id="mo">Out of station</button>
-<button class="mb mbic bfl" id="um">Clear marks</button>
-</div></div>
-<div class="bgroup"><div class="bglab">Family</div><div class="brow">
+<div class="bgroup"><div class="brow bflags">
+<button class="mb mbic bfl" id="md" title="Dead" aria-label="Mark Dead"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="14" r="5.5"/><path d="M14 10L20 4M14.5 4H20v5.5"/></svg></button>
+<button class="mb mbic bfl" id="mu" title="Duplicate" aria-label="Mark Duplicate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M3 19.5c.7-3.4 3.2-5 6-5s5.3 1.6 6 5"/><path d="M15.5 5.6a3.4 3.4 0 010 6.3M17.8 15.2c2 .6 3.6 2.2 4.2 4.8"/></svg></button>
+<button class="mb mbic bfl" id="mo" title="Out of station" aria-label="Mark Out of station"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg></button>
+<button class="mb mbic bfl" id="um" title="Clear marks" aria-label="Clear marks"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9.5 4h5M8 7l.7 13.5h6.6L16 7M10.5 11v5M13.5 11v5"/></svg></button>
+</div>
+<div class="brow"><input id="oos" type="search" placeholder="OOS place - city/area where voter stays"></div>
+</div>
+<div class="bgroup"><div class="brow">
 <input id="fname" placeholder="Family name" list="fl"><datalist id="fl"></datalist>
-<button class="p" id="mk">Group</button><button id="ug">Remove</button>
+<button class="p" id="mk">Group</button><button class="mbi" id="ug" title="Remove family group" aria-label="Remove family group"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9.5 4h5M8 7l.7 13.5h6.6L16 7M10.5 11v5M13.5 11v5"/></svg></button>
 </div></div>
-<div class="bgroup"><div class="bglab">Party</div><div class="brow">
+<div class="bgroup"><div class="brow">
 <select id="pname"><option value="" disabled selected>Pick party…</option><option>YCP</option><option>TDP</option><option>JSP</option><option>Others</option></select>
 <input id="pcust" class="xsm-hide" placeholder="or type custom name">
-<button class="mb" id="pa">Assign</button><button class="mb" id="pc">Remove</button>
+<button class="mb" id="pa">Assign</button><button class="mbi" id="pc" title="Remove party" aria-label="Remove party"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9.5 4h5M8 7l.7 13.5h6.6L16 7M10.5 11v5M13.5 11v5"/></svg></button>
 </div></div>
-<div class="bgroup"><div class="bglab">Mobile</div><div class="brow">
+<div class="bgroup"><div class="brow">
 <input id="mnum" type="tel" inputmode="tel" placeholder="Mobile number · empty clears">
 <button class="mb" id="msave">Save</button>
 </div></div>
@@ -225,6 +238,8 @@ const PH=s=>'data:image/jpeg;base64,'+IMG[s-7353];
 let fams={},sel=new Set(),sortK='s',sortD=1;
 try{fams=JSON.parse(localStorage.getItem('pamur9fams')||'{}')}catch(e){}
 let flg={};try{flg=JSON.parse(localStorage.getItem('pamur9flags')||'{}')}catch(e){}
+let oos={};try{oos=JSON.parse(localStorage.getItem('pamur9oos')||'{}')}catch(e){}
+const oosSave=()=>{try{localStorage.setItem('pamur9oos',JSON.stringify(oos))}catch(e){}};
 const flgSave=()=>{try{localStorage.setItem('pamur9flags',JSON.stringify(flg))}catch(e){}};
 let pty={};try{pty=JSON.parse(localStorage.getItem('pamur9pty')||'{}')}catch(e){}
 const ptySave=()=>{try{localStorage.setItem('pamur9pty',JSON.stringify(pty))}catch(e){}};
@@ -232,7 +247,7 @@ let mob={};try{mob=JSON.parse(localStorage.getItem('pamur9mob')||'{}')}catch(e){
 const mobSave=()=>{try{localStorage.setItem('pamur9mob',JSON.stringify(mob))}catch(e){}};
 const mqq=matchMedia('(max-width:720px)');let isMob=mqq.matches;mqq.addEventListener('change',()=>{isMob=mqq.matches;if($('view').value==='v')render()});
 function partyChip(s){const p=pty[s];if(!p)return'';const cls=['YCP','TDP','JSP'].includes(p)?p:'Other';return '<span class="pt '+cls+'">'+esc(p)+'</span>'}
-function flagChips(s){const m=flg[s];if(!m)return'';let t='';if(m.d)t+='<span class="fl d">Dead</span>';if(m.u)t+='<span class="fl u">Dup</span>';if(m.o)t+='<span class="fl o">OOS</span>';return t}
+function flagChips(s){const m=flg[s];if(!m)return'';let t='';if(m.d)t+='<span class="fl d">Dead</span>';if(m.u)t+='<span class="fl u">Dup</span>';if(m.o)t+='<span class="fl o">OOS'+(oos[s]?' · '+esc(oos[s]):'')+'</span>';return t}
 const $=id=>document.getElementById(id);
 const save=()=>{try{localStorage.setItem('pamur9fams',JSON.stringify(fams))}catch(e){}};
 const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -277,10 +292,10 @@ $('lo').onclick=()=>{try{sessionStorage.removeItem('pamur9unlocked')}catch(e){}l
 function clearFilters(){$('q').value='';$('g').value='';$('mkf').value='';$('pf').value='';$('fam').value='';$('view').value='v';render()}
 $('sall').onclick=()=>{const rows=filt();if(!rows.length)return alert('Nothing is shown to select');rows.forEach(r=>sel.add(r.s));render();}
 function setFlag(k){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{const m=flg[s]||(flg[s]={});m[k]=1});flgSave();render()}
-function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s]});flgSave();render()}
+function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s];delete oos[s]});flgSave();oosSave();render()}
 $('md').onclick=()=>setFlag('d');
 $('mu').onclick=()=>setFlag('u');
-$('mo').onclick=()=>setFlag('o');
+$('mo').onclick=()=>{const v=$('oos').value.trim();sel.forEach(s=>{if(v)oos[s]=v;else delete oos[s]});oosSave();setFlag('o')};
 $('um').onclick=()=>clearFlg();
 $('pa').onclick=()=>{if(!sel.size)return alert('Select voters first');const v=$('pcust').value.trim()||$('pname').value;if(!v)return alert('Pick or type a party name');sel.forEach(s=>{pty[s]=v});ptySave();render();};
 $('pc').onclick=()=>{if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete pty[s]});ptySave();render();};
@@ -290,11 +305,11 @@ $('mk').onclick=()=>{const n=$('fname').value.trim();if(!n)return $('fname').foc
 $('ug').onclick=()=>{sel.forEach(s=>delete fams[s]);sel.clear();save();refreshFam();render()};
 $('clr').onclick=()=>{sel.clear();render()};
 function dl(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click()}
-$('csv').onclick=()=>{const rows=filt();const c=['SNo,Name,RelationType,Relative,Age,Gender,House,VoterID,Family,Party,Flags,Mobile'];rows.forEach(r=>{const m=flg[r.s]||{};const fl=[m.d?'Dead':'',m.u?'Duplicate':'',m.o?'Out of station':''].filter(Boolean).join(',');c.push([r.s,r.n,r.rt,r.rn,r.a,r.g,r.h,r.e,fams[r.s]||'',pty[r.s]||'',fl,mob[r.s]||''].map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(','))});dl('pamur-ward9.csv','\ufeff'+c.join('\n'),'text/csv')};
-$('exp').onclick=()=>dl('pamur-ward9-data.json',JSON.stringify({fams,flg,pty,mob}),'application/json');
+$('csv').onclick=()=>{const rows=filt();const c=['SNo,Name,RelationType,Relative,Age,Gender,House,VoterID,Family,Party,Flags,OOSPlace,Mobile'];rows.forEach(r=>{const m=flg[r.s]||{};const fl=[m.d?'Dead':'',m.u?'Duplicate':'',m.o?'Out of station':''].filter(Boolean).join(',');c.push([r.s,r.n,r.rt,r.rn,r.a,r.g,r.h,r.e,fams[r.s]||'',pty[r.s]||'',fl,oos[r.s]||'',mob[r.s]||''].map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(','))});dl('pamur-ward9.csv','\ufeff'+c.join('\n'),'text/csv')};
+$('exp').onclick=()=>dl('pamur-ward9-data.json',JSON.stringify({fams,flg,pty,mob,oos}),'application/json');
 const enc=s=>btoa(unescape(encodeURIComponent(s)));const dec=b=>decodeURIComponent(escape(atob(b)));
 $('shd').onclick=()=>{
-  const s=JSON.stringify({fams,flg,pty,mob});
+  const s=JSON.stringify({fams,flg,pty,mob,oos});
   const url=location.origin+location.pathname+'#d='+enc(s);
   const wa='https://wa.me/?text='+encodeURIComponent('Pamur Ward 9 voter list (with saved marks). Open in Safari/Chrome, enter the access password, marks load automatically: '+url);
   window.open(wa,'_blank');
@@ -302,10 +317,10 @@ $('shd').onclick=()=>{
 };
 try{const hm=location.hash.match(/^#d=(.+)$/);
 if(hm){const o=JSON.parse(dec(hm[1]));
-Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{});
-save();flgSave();ptySave();mobSave();
+Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{});Object.assign(oos,o.oos||{});
+save();flgSave();ptySave();mobSave();oosSave();
 setTimeout(()=>alert('Loaded shared marks - now saved on this phone: '+Object.keys(pty).length+' parties, '+Object.keys(mob).length+' mobile numbers, '+Object.keys(fams).length+' family links, '+Object.keys(flg).length+' flagged voters.'),400)}}catch(e){}
 $('imp').onclick=()=>$('file').click();
-$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o&&o.fams!==undefined){Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{})}else{Object.assign(fams,o||{})}save();flgSave();ptySave();mobSave();refreshFam();render()}catch(x){alert('Invalid file')}})};
+$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o&&o.fams!==undefined){Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{});Object.assign(oos,o.oos||{})}else{Object.assign(fams,o||{})}save();flgSave();ptySave();mobSave();oosSave();refreshFam();render()}catch(x){alert('Invalid file')}})};
 $('lb').onclick=()=>$('lb').style.display='none';addEventListener('resize',hh);addEventListener('scroll',()=>{document.querySelector('header').classList.toggle('sc',scrollY>4)},{passive:true});refreshFam();render();
 </script></body></html>
