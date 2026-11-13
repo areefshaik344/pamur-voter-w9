@@ -149,9 +149,9 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 /* v8.19 single row filters + kebab menu */
 #chipsf{overflow:visible!important;flex-wrap:nowrap!important;display:flex!important;align-items:center!important;gap:4px!important;width:100%!important}
 #chipsf select{height:38px!important;min-height:38px!important;font-size:12px!important;font-weight:600!important;border-radius:999px!important;padding:0 4px!important;min-width:0!important;text-overflow:ellipsis!important;white-space:nowrap!important;overflow:hidden!important}
-#chipsf #view{flex:0 0 76px!important}
-#chipsf #fam{flex:1 1 0!important}
-#chipsf #mkf{flex:1.1 1 0!important}
+#chipsf #view{flex:0 0 auto!important}
+#chipsf #fam{flex:0 1 auto!important;max-width:32%!important}
+#chipsf #mkf{flex:0 1 auto!important;max-width:32%!important}
 .kwrap{position:relative;flex:0 0 38px!important;display:inline-flex}
 #kb{width:38px!important;height:38px!important;min-height:38px!important;border-radius:50%;padding:0;background:var(--card);border:1px solid var(--bd);color:var(--fg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
 #kb svg{width:18px;height:18px;fill:currentColor}
@@ -159,7 +159,7 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 .kmenu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--bd);border-radius:12px;box-shadow:0 8px 24px rgba(16,36,26,.18);padding:4px;min-width:150px;z-index:100;display:flex;flex-direction:column;gap:2px}
 .kmenu button{width:100%;height:38px;min-height:38px;padding:0 12px;border:none;background:transparent;color:var(--fg);font:600 13px/1 system-ui,sans-serif;border-radius:8px;text-align:left;display:flex;align-items:center;cursor:pointer;white-space:nowrap}
 .kmenu button:hover,.kmenu button:active{background:#f0f5f2;color:var(--ac)}
-.kmenu button#sall{color:var(--ac);font-weight:700}
+.kmenu button#sall{background:transparent!important;color:var(--ac)!important;font-weight:700!important;border-color:transparent!important}
 .kmenu button#clr{color:#c0392b}
 </style>
 </head>
