@@ -94,7 +94,7 @@ html.locked,html.locked body{overflow:hidden}
 .mcard .av.s{margin-top:2px}@media (max-width:720px){#gate .gcard{padding:26px 20px 20px;border-radius:18px}.xsm-hide{display:none!important}}
 /* v6polish */
 .qonly{margin-bottom:10px}
-#q{flex:1 1 100%;height:44px;padding:0 16px;border-radius:999px;background:#fff}
+.qonly{display:flex;align-items:center;gap:8px;margin-bottom:10px;width:100%}.qwrap{position:relative;flex:1;min-width:0;display:flex;align-items:center}#q{width:100%;height:44px;padding:0 40px 0 16px;border-radius:999px;background:#fff;border:1px solid var(--bd);box-sizing:border-box}#q::-webkit-search-cancel-button,#q::-webkit-search-decoration{-webkit-appearance:none;display:none}#qclr{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:none;background:#eef4f0;color:#2c4033;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:2;padding:0}#qclr svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}#qclr:hover,#qclr:active{background:#dbe8e0;color:#0e2418}#lo{width:44px;height:44px;min-height:44px;border-radius:50%;padding:0;background:#fff5f4;border:1px solid #eac6c2;color:#c0392b;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}#lo svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}#lo:hover,#lo:active{background:#fdeeee;border-color:#e4aba5}
 select{border-radius:999px;padding:8px 12px;font-size:13px}
 header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600}
 #sall{background:var(--ac);color:#fff;border-color:var(--ac)}
@@ -143,6 +143,24 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 #um,#ug,#pc{background:var(--card);color:#b3261e;border:1.5px solid #f0b8b8}
 #bar .mbi{min-width:46px;min-height:44px;padding:6px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;cursor:pointer}
 #oos{flex:1;min-width:0;min-height:44px}
+</style>
+
+<style>
+/* v8.19 single row filters + kebab menu */
+#chipsf{overflow:visible!important;flex-wrap:nowrap!important;display:flex!important;align-items:center!important;gap:4px!important;width:100%!important}
+#chipsf select{height:38px!important;min-height:38px!important;font-size:12px!important;font-weight:600!important;border-radius:999px!important;padding:0 4px!important;min-width:0!important;text-overflow:ellipsis!important;white-space:nowrap!important;overflow:hidden!important}
+#chipsf #view{flex:0 0 auto!important}
+#chipsf #fam{flex:1 1 0!important;min-width:0!important}
+#chipsf #mkf{flex:1 1 0!important;min-width:0!important}
+.kwrap{position:relative;flex:0 0 38px!important;display:inline-flex}
+#kb{width:38px!important;height:38px!important;min-height:38px!important;border-radius:50%;padding:0;background:var(--card);border:1px solid var(--bd);color:var(--fg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
+#kb svg{width:18px;height:18px;fill:currentColor}
+#kb:hover,#kb:active{background:#eef4f0;border-color:var(--ac);color:var(--ac)}#frst{width:38px!important;height:38px!important;min-height:38px!important;border-radius:50%;padding:0;background:var(--card);border:1px solid var(--bd);color:var(--fg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}#frst svg{width:18px;height:18px}#frst:hover,#frst:active{background:#eef4f0;border-color:var(--ac);color:var(--ac)}
+.kmenu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--bd);border-radius:12px;box-shadow:0 8px 24px rgba(16,36,26,.18);padding:4px;min-width:150px;z-index:100;display:flex;flex-direction:column;gap:2px}
+.kmenu button{width:100%;height:38px;min-height:38px;padding:0 12px;border:none;background:transparent;color:var(--fg);font:600 13px/1 system-ui,sans-serif;border-radius:8px;text-align:left;display:flex;align-items:center;cursor:pointer;white-space:nowrap}
+.kmenu button:hover,.kmenu button:active{background:#f0f5f2;color:var(--ac)}
+.kmenu button#sall{background:transparent!important;color:var(--ac)!important;font-weight:700!important;border-color:transparent!important}
+.kmenu button#clr{color:#c0392b}
 </style>
 </head>
 <body>
@@ -194,16 +212,25 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 })();
 </script>
 <header>
-<div class="row qonly"><input type="search" id="q" placeholder="Search name / house / voter ID / mobile"></div>
+<div class="row qonly"><div class="qwrap"><input type="search" id="q" placeholder="Search name / house / voter ID / mobile"><button type="button" id="qclr" aria-label="Clear search" title="Clear search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><button id="lo" title="Logout" aria-label="Logout"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M18.4 6.4a8 8 0 11-12.8 0"/></svg></button></div>
 <div class="row" id="chipsf">
-<select id="mkf"><option value="">All statuses</option><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="any">Any marked</option><option value="none">Unmarked only</option></select>
-<select id="g"><option value="">All genders</option><option value="M">Male</option><option value="F">Female</option></select>
-
-<select id="pf"><option value="">All parties</option><option value="YCP">YCP</option><option value="TDP">TDP</option><option value="JSP">JSP</option><option value="Others">Others</option><option value="any">Has a party</option><option value="none">No party yet</option></select>
+<select id="view"><option value="v">Voters</option><option value="h">By house</option><option value="f">By family</option></select>
 <select id="fam"><option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option></select>
-<select id="view"><option value="v">Voters</option><option value="h">By house</option><option value="f">By family</option></select></div>
+<select id="mkf"><option value="">All statuses</option><optgroup label="Status"><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="any">Any marked</option><option value="none">Unmarked only</option></optgroup><optgroup label="Party"><option value="p">All parties</option><option value="pYCP">YCP</option><option value="pTDP">TDP</option><option value="pJSP">JSP</option><option value="pOthers">Others</option><option value="pHas">Has a party</option><option value="pNone">No party yet</option></optgroup></select>
+<button type="button" id="frst" aria-label="Reset filters" title="Reset filters"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></button>
+<div class="kwrap">
+<button type="button" id="kb" aria-label="More actions" title="More actions"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg></button>
+<div id="kmenu" class="kmenu" style="display:none">
+<button type="button" id="sall">Select all</button>
+<button type="button" id="csv">Export CSV</button>
+<button type="button" id="exp">Save data</button>
+<button type="button" id="imp">Load data</button>
+<button type="button" id="shd">Share data</button>
+<button type="button" id="clr">Clear</button>
+</div>
+</div></div>
 <div class="row strow"><span class="stats" id="st"></span></div>
-<div class="row" id="chipsb"><button id="sall">Select all</button><button id="csv">Export</button><button id="exp">Save data</button><button id="imp">Load data</button><button id="shd">Share data</button><button id="clr">Clear</button><button id="lo" title="Logout">Logout</button></div></header>
+</header>
 <div class="wrap" id="out"></div>
 <div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar">
@@ -253,22 +280,22 @@ function partyChip(s){const p=pty[s];if(!p)return'';const cls=['YCP','TDP','JSP'
 function flagChips(s){const m=flg[s];if(!m)return'';let t='';if(m.d)t+='<span class="fl d">Dead</span>';if(m.u)t+='<span class="fl u">Dup</span>';if(m.o)t+='<span class="fl o">OOS'+(oos[s]?' · '+esc(oos[s]):'')+'</span>';return t}
 const $=id=>document.getElementById(id);
 const save=()=>{try{localStorage.setItem('pamur9fams',JSON.stringify(fams))}catch(e){}};
-const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function names(){return [...new Set(Object.values(fams))].sort()}
 function refreshFam(){const cur=$('fam').value;$('fam').innerHTML='<option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option>'+names().map(n=>`<option>${esc(n)}</option>`).join('');$('fam').value=cur;$('fl').innerHTML=names().map(n=>`<option value="${esc(n)}">`).join('')}
-function filt(){const q=$('q').value.trim().toLowerCase(),g=$('g').value,f=$('fam').value,vv=$('mkf').value;
-return D.filter(r=>{if(g&&r.g!==g)return false;
+function filt(){const q=$('q').value.trim().toLowerCase(),f=$('fam').value,vv=$('mkf').value;
+return D.filter(r=>{
 const m=flg[r.s]||{};if(vv==='d'&&!m.d)return false;if(vv==='u'&&!m.u)return false;if(vv==='o'&&!m.o)return false;if(vv==='any'&&!(m.d||m.u||m.o))return false;if(vv==='none'&&(m.d||m.u||m.o))return false;
-const pp=$('pf').value,pv=pty[r.s];if(pp==='any'&&!pv)return false;if(pp==='none'&&pv)return false;if(pp&&pp!=='any'&&pp!=='none'&&pv!==pp)return false;
+const pv=pty[r.s];if(vv[0]==='p'){if(vv==='pHas'&&!pv)return false;if(vv==='pNone'&&pv)return false;if(vv!=='p'&&vv!=='pHas'&&vv!=='pNone'&&pv!==vv.slice(1))return false;}
 const fm=fams[r.s];if(f==='__none'&&fm)return false;if(f==='__any'&&!fm)return false;if(f&&f[0]!=='_'&&fm!==f)return false;
-if(q&&!(r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')).toLowerCase().includes(q))return false;return true})}
+if(q&&!(r.s+' '+r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')).toLowerCase().includes(q))return false;return true})}
 function mcard(r){
 const ck=sel.has(r.s)?'checked':'';
 const mobm=mob[r.s]?esc(mob[r.s]):'';
 const famm=fams[r.s]?esc(fams[r.s]):'';
 const meta=[r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'',r.h?'House '+esc(r.h):'',r.e?'ID '+esc(r.e):'',mobm,famm].filter(Boolean).join('\u00b7');
 return `<div class="mcard${sel.has(r.s)?' sel':''}" data-s="${r.s}"><input type="checkbox" ${ck}><div class="phcol"><img loading="lazy" class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt=""><span class="sr">${r.s}</span></div><div class="mcol"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag">'+r.a+'</span>':''}</div><div class="ms">${meta}</div><div class="mc">${partyChip(r.s)}${flagChips(r.s)}</div></div></div>`}
-function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="${PH(r.s)}" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${mob[r.s]}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${esc(r.h)}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
+function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="${PH(r.s)}" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${esc(mob[r.s])}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${esc(r.h)}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
 function render(){const rows=filt(),v=$('view').value;
 $('st').textContent=`${rows.length} of ${D.length} voters · ${rows.filter(r=>r.g==='M').length}M ${rows.filter(r=>r.g==='F').length}F · ${names().length} families · ${rows.filter(r=>{const m=flg[r.s]||{};return m.d||m.u||m.o}).length} marked · ${(()=>{const pc={};rows.forEach(r=>{const p=pty[r.s];if(p)pc[p]=(pc[p]||0)+1});const a=Object.entries(pc).sort((x,y)=>y[1]-x[1]).slice(0,4).map(([k,v])=>esc(k)+' '+v);return a.length?'Party: '+a.join(' · '):''})()}`;
 const k=sortK;rows.sort((x,y)=>((x[k]>y[k])-(x[k]<y[k]))*sortD);
@@ -287,12 +314,13 @@ function hh(){document.documentElement.style.setProperty('--hh',document.querySe
 function bb(){const b=$('bar');if(!b)return;const w=document.querySelector('.wrap');if(!w)return;w.style.paddingBottom=(b.style.display==='none'||!sel.size)?'':(b.offsetHeight+24)+'px'}
 $('out').addEventListener('click',e=>{const av=e.target.closest('[data-ph]');if(av){const s=+av.dataset.ph,r=D.find(x=>x.s===s);$('lbi').src=PH(s);$('lbt').textContent=r.n+' · '+(r.a??'')+r.g+' · House '+r.h;$('lb').style.display='flex';return}const t=e.target.closest('[data-s]');if(t){const s=+t.dataset.s;sel.has(s)?sel.delete(s):sel.add(s);if(isMob&&$('view').value==='v'){const on=sel.has(s);t.classList.toggle('sel',on);const cb=t.querySelector('input[type=checkbox]');if(cb)cb.checked=on;bar()}else{render()}return}
 const th=e.target.closest('th[data-k]');if(th){const k=th.dataset.k;sortD=sortK===k?-sortD:1;sortK=k;render()}});
-let _rt;['q','g','fam','view','mkf','pf'].forEach(i=>$(i).addEventListener('input',()=>{clearTimeout(_rt);_rt=setTimeout(render,180)}));
+let _rt;['q','fam','view','mkf'].forEach(i=>$(i).addEventListener('input',()=>{clearTimeout(_rt);_rt=setTimeout(render,180)}));$('q').addEventListener('input',()=>{$('qclr').style.display=$('q').value?'flex':'none'});$('qclr').onclick=()=>{$('q').value='';$('qclr').style.display='none';render();$('q').focus();};
 document.addEventListener('change',e=>{const box=e.target.closest('label[data-gsel] input');if(!box)return;const key=e.target.closest('label[data-gsel]').dataset.gsel;const on=e.target.checked;const vk=$('view').value==='h'?'h':'f';
 const ids=D.filter(r=>(vk==='h'?(r.h||'(none)'):(fams[r.s]||'(ungrouped)'))===key&&filt().some(f=>f.s===r.s)).map(r=>r.s);
 ids.forEach(s=>on?sel.add(s):sel.delete(s));render()});
 $('lo').onclick=()=>{try{sessionStorage.removeItem('pamur9unlocked')}catch(e){}location.reload()};
-function clearFilters(){$('q').value='';$('g').value='';$('mkf').value='';$('pf').value='';$('fam').value='';$('view').value='v';render()}
+function clearFilters(){$('q').value='';$('mkf').value='';$('fam').value='';$('view').value='v';$('qclr').style.display='none';render()}
+const _frst=$('frst');if(_frst)_frst.onclick=()=>{$('view').value='v';$('fam').value='';$('mkf').value='';$('qclr').style.display='none';render()};
 $('sall').onclick=()=>{const rows=filt();if(!rows.length)return alert('Nothing is shown to select');rows.forEach(r=>sel.add(r.s));render();}
 function setFlag(k){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{const m=flg[s]||(flg[s]={});m[k]=1});flgSave();render()}
 function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s];delete oos[s]});flgSave();oosSave();render()}
@@ -326,4 +354,9 @@ setTimeout(()=>alert('Loaded shared marks - now saved on this phone: '+Object.ke
 $('imp').onclick=()=>$('file').click();
 $('file').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o&&o.fams!==undefined){Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{});Object.assign(oos,o.oos||{})}else{Object.assign(fams,o||{})}save();flgSave();ptySave();mobSave();oosSave();refreshFam();render()}catch(x){alert('Invalid file')}})};
 $('lb').onclick=()=>$('lb').style.display='none';addEventListener('resize',hh);addEventListener('scroll',()=>{document.querySelector('header').classList.toggle('sc',scrollY>4)},{passive:true});refreshFam();render();
+
+$('kb').onclick=e=>{e.stopPropagation();const m=$('kmenu');m.style.display=m.style.display==='none'?'flex':'none'};
+document.addEventListener('click',e=>{const m=$('kmenu');if(m&&!e.target.closest('.kwrap'))m.style.display='none'});
+$('kmenu').addEventListener('click',()=>{$('kmenu').style.display='none'});
+
 </script></body></html>
