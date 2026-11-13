@@ -43,7 +43,7 @@ tr.sel td{background:var(--sel)}.tag{background:var(--card);border:1px solid var
 .mbic{min-width:44px;min-height:44px;padding:6px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .mbic svg,#lo svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 #lo{min-height:40px;display:flex;align-items:center;justify-content:center;padding:6px 12px;color:#c0392b;border:1px solid #eac6c2;background:#fff5f4}
-.av{width:52px;height:52px;border-radius:50%;object-fit:cover;vertical-align:middle;border:2px solid var(--bd);cursor:zoom-in;background:var(--card)}.av.s{width:44px;height:44px;margin-right:10px}#lb{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:20;flex-direction:column;color:#fff;gap:10px}#lb img{width:min(88vw,440px);height:min(88vw,440px);border-radius:50%;object-fit:cover;border:3px solid #fff}.fl{border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:12px;margin-left:4px;white-space:nowrap;display:inline-block}
+.av{width:52px;height:52px;border-radius:50%;object-fit:cover;vertical-align:middle;border:2px solid var(--bd);cursor:zoom-in;background:var(--card)}.av.s{width:56px;height:56px;margin-right:10px}#lb{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:20;flex-direction:column;color:#fff;gap:10px}#lb img{width:min(88vw,440px);height:min(88vw,440px);border-radius:50%;object-fit:cover;border:3px solid #fff}.fl{border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:12px;margin-left:4px;white-space:nowrap;display:inline-block}
 .fl.d{background:#ffe3e3;color:#b00020;border-color:#f0b8b8}.fl.u{background:#fff3c0;color:#8a5b00;border-color:#e8d18a}.fl.o{background:#d4edff;color:#084f8a;border-color:#9fd0f0}
 button.mb{font-size:12px;padding:4px 8px}
 .pt{display:inline-block;border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:12px;margin-left:4px;white-space:nowrap;font-weight:600}
@@ -86,10 +86,10 @@ html.locked,html.locked body{overflow:hidden}
 
 .gdev{font-size:12px;font-weight:600;color:#0d7a4a;margin-top:18px;letter-spacing:.3px;opacity:.9}
 .devby{font-size:12px;font-weight:500;color:var(--mut);margin-left:8px;vertical-align:middle}
-.mobsub{display:block;font-size:12px;color:var(--mut);font-weight:400;margin-top:1px}.mcard{display:flex;align-items:flex-start;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px;margin-bottom:8px;cursor:pointer;animation:cardIn .16s ease both;transition:background .12s,outline .12s}.mcard.sel{outline:2px solid var(--ac);outline-offset:-2px;background:var(--sel)}.mcard .mcol{flex:1;min-width:0}.mcard .mi{font-weight:600;font-size:15px;line-height:1.25;word-break:break-word}.mcard .ms{font-size:12px;color:var(--mut);margin-top:2px;line-height:1.6}.mcard .mc{margin-top:6px}
+.mobsub{display:block;font-size:12px;color:var(--mut);font-weight:400;margin-top:1px}.mcard{position:relative;display:flex;align-items:flex-start;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px;margin-bottom:8px;cursor:pointer;animation:cardIn .16s ease both;transition:background .12s,outline .12s}.mcard.sel{outline:2px solid var(--ac);outline-offset:-2px;background:var(--sel)}.mcard .mcol{flex:1;min-width:0}.mcard .mi{padding-right:44px}.mcard .mi{font-weight:600;font-size:15px;line-height:1.25;word-break:break-word}.mcard .ms{font-size:12px;color:var(--mut);margin-top:2px;line-height:1.6}.mcard .mc{margin-top:6px}
 .phcol{display:flex;flex-direction:column;align-items:center;flex:none;margin-right:2px}
 .phcol img{margin-right:0}
-.sr{font-size:11px;color:var(--mut);line-height:1;margin-top:3px;font-weight:500}
+.sr{position:absolute;top:10px;right:12px;font-size:12px;color:var(--mut);line-height:1;font-weight:700;letter-spacing:.3px;background:var(--card);border-radius:6px;padding:1px 4px}
 .mcard .ag{font-weight:400;font-size:12px;color:var(--mut);margin-left:6px}
 .mcard .av.s{margin-top:2px}@media (max-width:720px){#gate .gcard{padding:26px 20px 20px;border-radius:18px}.xsm-hide{display:none!important}}
 /* v6polish */
