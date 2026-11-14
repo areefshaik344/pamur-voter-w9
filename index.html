@@ -354,7 +354,7 @@ function clearFilters(){$('q').value='';$('mkf').value='';$('fam').value='';$('v
 const _frst=$('frst');if(_frst)_frst.onclick=()=>{$('view').value='v';$('fam').value='';$('mkf').value='';$('qclr').style.display='none';render()};
 $('sall').onclick=()=>{const rows=filt();if(!rows.length)return alert('Nothing is shown to select');rows.forEach(r=>sel.add(r.s));render();}
 function setFlag(k){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{const m=flg[s]||(flg[s]={});m[k]=1});flgSave();render()}
-function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s];delete oos[s]});flgSave();oosSave();render()}
+function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s];delete oos[s]});flgSave();oosSave();sel.clear();render()}
 $('md').onclick=()=>setFlag('d');
 $('mu').onclick=()=>setFlag('u');
 $('mo').onclick=()=>{const v=$('oos').value.trim();sel.forEach(s=>{if(v)oos[s]=v;else delete oos[s]});oosSave();setFlag('o')};
