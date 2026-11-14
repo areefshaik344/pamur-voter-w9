@@ -136,7 +136,7 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 </style>
 <style>
 /* v8.13 icon flag buttons + OOS place field */
-#bar .bfl svg,#bar .mbi svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#bar .bfl svg,#bar .mbi svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#bar .bartop{display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px}#bar #sc{font-weight:800;font-size:13px;color:var(--ac)}#bar .bclear{border:1px solid var(--bd);background:var(--card);border-radius:9px;min-height:36px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--mut);cursor:pointer}#bar .btabs{display:flex;gap:4px;width:100%}#bar .btab{flex:1;min-height:40px;border:1px solid var(--bd);background:var(--card);border-radius:10px;font-size:12px;font-weight:700;color:var(--mut);cursor:pointer}#bar .btab.on{background:var(--ac);color:#fff;border-color:var(--ac)}#bar .bpanel{display:none;flex-wrap:wrap;gap:6px;align-items:center;width:100%}#bar .bpanel.on{display:flex}#bar .bchip{flex:0 0 auto;border:1px solid var(--bd);background:var(--card);border-radius:10px;min-height:40px;padding:6px 12px;font-size:12.5px;font-weight:700;cursor:pointer}#bar .bchip:active{background:var(--sel)}#bar .bpanel input{flex:1 1 100%;min-width:0;min-height:40px}
 #bar .bflags .mb{display:inline-flex;align-items:center;justify-content:center;padding:6px}
 #md{background:#fdeeee;color:#b3261e;border-color:#f0b8b8}
 #mu{background:#fff4e0;color:#b45309;border-color:#f3d9a4}
@@ -235,28 +235,36 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <div class="wrap" id="out"></div>
 <div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar">
-<span id="sc"></span>
-<div class="bgroup"><div class="brow bflags">
-<button class="mb mbic bfl" id="md" title="Dead" aria-label="Mark Dead"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="14" r="5.5"/><path d="M14 10L20 4M14.5 4H20v5.5"/></svg></button>
-<button class="mb mbic bfl" id="mu" title="Duplicate" aria-label="Mark Duplicate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M3 19.5c.7-3.4 3.2-5 6-5s5.3 1.6 6 5"/><path d="M15.5 5.6a3.4 3.4 0 010 6.3M17.8 15.2c2 .6 3.6 2.2 4.2 4.8"/></svg></button>
-<button class="mb mbic bfl" id="mo" title="Out of station" aria-label="Mark Out of station"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg></button>
-<button class="mb mbic bfl" id="um" title="Clear marks" aria-label="Clear marks"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9.5 4h5M8 7l.7 13.5h6.6L16 7M10.5 11v5M13.5 11v5"/></svg></button>
+<div class="bartop"><span id="sc"></span><button class="bclear" id="um">Clear marks</button></div>
+<div class="btabs">
+<button class="btab on" data-tab="status">Status</button>
+<button class="btab" data-tab="party">Party</button>
+<button class="btab" data-tab="family">Family</button>
+<button class="btab" data-tab="phone">Phone</button>
 </div>
-<div class="brow"><input id="oos" type="search" placeholder="OOS place - city/area where voter stays"></div>
+<div class="bpanel on" data-tab="status">
+<button class="bchip" id="md">Dead</button>
+<button class="bchip" id="mu">Duplicate</button>
+<button class="bchip" id="mo">Out of station</button>
+<input id="oos" type="search" placeholder="OOS place - city/area">
 </div>
-<div class="bgroup"><div class="brow">
-<input id="fname" placeholder="Family name" list="fl"><datalist id="fl"></datalist>
-<button class="p" id="mk">Group</button><button class="mbi" id="ug" title="Remove family group" aria-label="Remove family group"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9.5 4h5M8 7l.7 13.5h6.6L16 7M10.5 11v5M13.5 11v5"/></svg></button>
-</div></div>
-<div class="bgroup"><div class="brow">
-<select id="pname"><option value="" disabled selected>Pick party…</option><option>YCP</option><option>TDP</option><option>JSP</option><option>Others</option></select>
-<input id="pcust" class="xsm-hide" placeholder="or type custom name">
-<button class="mb" id="pa">Assign</button><button class="mbi" id="pc" title="Remove party" aria-label="Remove party"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9.5 4h5M8 7l.7 13.5h6.6L16 7M10.5 11v5M13.5 11v5"/></svg></button>
-</div></div>
-<div class="bgroup"><div class="brow">
-<input id="mnum" type="tel" inputmode="tel" placeholder="Mobile number · empty clears">
-<button class="mb" id="msave">Save</button>
-</div></div>
+<div class="bpanel" data-tab="party">
+<button class="bchip" data-p="YCP">YCP</button>
+<button class="bchip" data-p="TDP">TDP</button>
+<button class="bchip" data-p="JSP">JSP</button>
+<button class="bchip" data-p="Others">Others</button>
+<button class="bchip" id="pcrem">Remove</button>
+<input id="pcust" type="text" placeholder="or type party name">
+</div>
+<div class="bpanel" data-tab="family">
+<input id="fname" type="text" placeholder="Family name" list="fl"><datalist id="fl"></datalist>
+<button class="bchip" id="mk">Group</button>
+<button class="bchip" id="ug">Remove</button>
+</div>
+<div class="bpanel" data-tab="phone">
+<input id="mnum" type="tel" inputmode="tel" placeholder="Mobile number - empty clears">
+<button class="bchip" id="msave">Save</button>
+</div>
 </div>
 <input type="file" id="file" accept=".json" style="display:none">
 <script>
@@ -330,10 +338,10 @@ $('md').onclick=()=>setFlag('d');
 $('mu').onclick=()=>setFlag('u');
 $('mo').onclick=()=>{const v=$('oos').value.trim();sel.forEach(s=>{if(v)oos[s]=v;else delete oos[s]});oosSave();setFlag('o')};
 $('um').onclick=()=>clearFlg();
-$('pa').onclick=()=>{if(!sel.size)return alert('Select voters first');const v=$('pcust').value.trim()||$('pname').value;if(!v)return alert('Pick or type a party name');sel.forEach(s=>{pty[s]=v});ptySave();render();};
-$('pc').onclick=()=>{if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete pty[s]});ptySave();render();};
+document.querySelectorAll('#bar .bchip[data-p]').forEach(b=>{b.onclick=()=>{if(!sel.size)return alert('Select voters first');sel.forEach(s=>{pty[s]=b.dataset.p});ptySave();render()}});$('pcust').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=$('pcust').value.trim();if(!v||!sel.size)return alert(v?'Select voters first':'Type a party name');sel.forEach(s=>{pty[s]=v});ptySave();render();$('pcust').value=''}});
+$('pcrem').onclick=()=>{if(!sel.size)return;sel.forEach(s=>{delete pty[s]});ptySave();render()};
 $('msave').onclick=()=>{if(!sel.size)return alert('Select voters first');const v=$('mnum').value.trim();const d=v.replace(/\D/g,'');if(v&&d.length<10){alert('Enter a full 10-digit mobile number, or leave empty to clear');return}sel.forEach(s=>{if(v)mob[s]=v;else delete mob[s]});mobSave();$('mnum').value='';render()};
-$('pname').addEventListener('change',()=>{$('pcust').value=''});
+(function(){const tabs=document.querySelectorAll('#bar .btab');const panels=document.querySelectorAll('#bar .bpanel');tabs.forEach(x=>{x.onclick=()=>{tabs.forEach(y=>y.classList.toggle('on',y.dataset.tab===x.dataset.tab));panels.forEach(p=>p.classList.toggle('on',p.dataset.tab===x.dataset.tab))}})})();
 $('mk').onclick=()=>{const n=$('fname').value.trim();if(!n)return $('fname').focus();sel.forEach(s=>fams[s]=n);sel.clear();$('fname').value='';save();refreshFam();render()};
 $('ug').onclick=()=>{sel.forEach(s=>delete fams[s]);sel.clear();save();refreshFam();render()};
 $('clr').onclick=()=>{sel.clear();render()};
