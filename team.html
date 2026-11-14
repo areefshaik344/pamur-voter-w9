@@ -49,6 +49,13 @@ tr.sel td{background:var(--sel)}.tag{background:var(--card);border:1px solid var
 button.mb{font-size:12px;padding:4px 8px}
 .pt{display:inline-block;border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:12px;margin-left:4px;white-space:nowrap;font-weight:600}
 .pt.YCP{background:#d9f5e3;color:#0a6b34;border-color:#93d8ab}.pt.TDP{background:#fff3c0;color:#7a5800;border-color:#e8cf7a}.pt.Congress{background:#ffe9d1;color:#9a4b00;border-color:#f3c79a}.pt.TRS{background:#e9dcff;color:#5b2ea6;border-color:#c9a8f0}.pt.JSP{background:#ffe0f0;color:#a3155b;border-color:#f5a8cf}.pt.Other{background:var(--card);color:var(--mut)}
+.ct{display:inline-block;border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:12px;margin-left:4px;white-space:nowrap;font-weight:600}
+.ct.Hindu{background:#e8f4ff;color:#0a4f8a;border-color:#a8d0f0}.ct.Muslim{background:#e6f7ec;color:#0a6b34;border-color:#93d8ab}.ct.Christian{background:#f3e8ff;color:#5b2ea6;border-color:#c9a8f0}.ct.Other{background:var(--card);color:var(--mut)}
+.iwrap{position:relative;flex:1;min-width:130px}#bar .iwrap{min-width:110px}
+.iwrap input{width:100%;padding-right:34px}
+.ixc{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:30px;height:30px;border:none;background:#eef4f0;color:var(--mut);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;z-index:2}
+.ixc:active{transform:translateY(-50%) scale(.9)}
+.lmt{font-size:12px;color:var(--mut)}.lms{font-size:12px;color:var(--mut);margin-top:2px}
 @keyframes cardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes barIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
@@ -240,13 +247,14 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <button class="btab on" data-tab="status">Status</button>
 <button class="btab" data-tab="party">Party</button>
 <button class="btab" data-tab="family">Family</button>
+<button class="btab" data-tab="caste">Caste</button>
 <button class="btab" data-tab="phone">Phone</button>
 </div>
 <div class="bpanel on" data-tab="status">
 <button class="bchip" id="md">Dead</button>
 <button class="bchip" id="mu">Duplicate</button>
 <button class="bchip" id="mo">Out of station</button>
-<input id="oos" type="search" placeholder="OOS place - city/area">
+<div class="iwrap"><input id="oos" type="search" placeholder="OOS place - city/area"><button type="button" class="ixc" aria-label="Clear" title="Clear"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
 </div>
 <div class="bpanel" data-tab="party">
 <button class="bchip" data-p="YCP">YCP</button>
@@ -254,12 +262,22 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <button class="bchip" data-p="JSP">JSP</button>
 <button class="bchip" data-p="Others">Others</button>
 <button class="bchip" id="pcrem">Remove</button>
-<input id="pcust" type="text" placeholder="or type party name">
+<div class="iwrap"><input id="pcust" type="text" placeholder="or type party name"><button type="button" class="ixc" aria-label="Clear" title="Clear"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
 </div>
 <div class="bpanel" data-tab="family">
-<input id="fname" type="text" placeholder="Family name" list="fl"><datalist id="fl"></datalist>
+<div class="iwrap"><input id="fname" type="text" placeholder="Family name" list="fl"><datalist id="fl"></datalist><button type="button" class="ixc" aria-label="Clear" title="Clear"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
 <button class="bchip" id="mk">Group</button>
 <button class="bchip" id="ug">Remove</button>
+<div class="iwrap"><input id="lmk" type="text" placeholder="House landmark - spot/gate/marker"><button type="button" class="ixc" aria-label="Clear" title="Clear"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+<button class="bchip" id="lmsave">Save landmark</button>
+</div>
+<div class="bpanel" data-tab="caste">
+<button class="bchip" data-c="Hindu">Hindu</button>
+<button class="bchip" data-c="Muslim">Muslim</button>
+<button class="bchip" data-c="Christian">Christian</button>
+<button class="bchip" data-c="Other">Other</button>
+<button class="bchip" id="cclrem">Remove</button>
+<div class="iwrap"><input id="ccust" type="text" placeholder="or type caste name"><button type="button" class="ixc" aria-label="Clear" title="Clear"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
 </div>
 <div class="bpanel" data-tab="phone">
 <input id="mnum" type="tel" inputmode="tel" placeholder="Mobile number - empty clears">
@@ -284,8 +302,13 @@ const SEEDTEAM={"fams":{"7353":"Areef","7354":"Areef","7355":"Areef","7357":"Ram
 (function(){const S=SEEDTEAM;for(const k in S.fams)if(!(k in fams))fams[k]=S.fams[k];for(const k in S.pty)if(!(k in pty))pty[k]=S.pty[k];for(const k in S.mob)if(!(k in mob))mob[k]=S.mob[k];for(const k in S.oos)if(!(k in oos))oos[k]=S.oos[k];for(const k in S.flg)if(!(k in flg))flg[k]=Object.assign({},S.flg[k]);})();
 
 const mobSave=()=>{try{localStorage.setItem('pamur9mob',JSON.stringify(mob))}catch(e){}};
+let cst={};try{cst=JSON.parse(localStorage.getItem('pamur9cst')||'{}')}catch(e){}
+let lmk={};try{lmk=JSON.parse(localStorage.getItem('pamur9lmk')||'{}')}catch(e){}
+const cstSave=()=>{try{localStorage.setItem('pamur9cst',JSON.stringify(cst))}catch(e){}};
+const lmkSave=()=>{try{localStorage.setItem('pamur9lmk',JSON.stringify(lmk))}catch(e){}};
 const mqq=matchMedia('(max-width:720px)');let isMob=mqq.matches;mqq.addEventListener('change',()=>{isMob=mqq.matches;if($('view').value==='v')render()});
 function partyChip(s){const p=pty[s];if(!p)return'';const cls=['YCP','TDP','JSP'].includes(p)?p:'Other';return '<span class="pt '+cls+'">'+esc(p)+'</span>'}
+function casteChip(s){const c=cst[s];if(!c)return'';const cls=['Hindu','Muslim','Christian'].includes(c)?c:'Other';return '<span class="ct '+cls+'">'+esc(c)+'</span>'}
 function flagChips(s){const m=flg[s];if(!m)return'';let t='';if(m.d)t+='<span class="fl d">Dead</span>';if(m.u)t+='<span class="fl u">Dup</span>';if(m.o)t+='<span class="fl o">OOS'+(oos[s]?' · '+esc(oos[s]):'')+'</span>';return t}
 const $=id=>document.getElementById(id);
 const save=()=>{try{localStorage.setItem('pamur9fams',JSON.stringify(fams))}catch(e){}};
@@ -297,14 +320,15 @@ return D.filter(r=>{
 const m=flg[r.s]||{};if(vv==='d'&&!m.d)return false;if(vv==='u'&&!m.u)return false;if(vv==='o'&&!m.o)return false;if(vv==='any'&&!(m.d||m.u||m.o))return false;if(vv==='none'&&(m.d||m.u||m.o))return false;
 const pv=pty[r.s];if(vv[0]==='p'){if(vv==='pHas'&&!pv)return false;if(vv==='pNone'&&pv)return false;if(vv!=='p'&&vv!=='pHas'&&vv!=='pNone'&&pv!==vv.slice(1))return false;}
 const fm=fams[r.s];if(f==='__none'&&fm)return false;if(f==='__any'&&!fm)return false;if(f&&f[0]!=='_'&&fm!==f)return false;
-if(q&&!(r.s+' '+r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')).toLowerCase().includes(q))return false;return true})}
+if(q&&!(r.s+' '+r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')+' '+(lmk[r.s]||'')+' '+(cst[r.s]||'')).toLowerCase().includes(q))return false;return true})}
 function mcard(r){
 const ck=sel.has(r.s)?'checked':'';
 const mobm=mob[r.s]?'<svg class="mico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> '+esc(mob[r.s]):'';
 const famm=fams[r.s]?esc(fams[r.s]):'';
-const meta=[r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'',[r.h?'<svg class="hico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg> '+esc(r.h):'',famm].filter(Boolean).join('\u00a0\u00a0'),[r.e?esc(r.e):'',mobm].filter(Boolean).join('\u00a0\u00a0')].filter(Boolean);
-return `<div class="mcard${sel.has(r.s)?' sel':''}" data-s="${r.s}"><input type="checkbox" ${ck}><div class="phcol"><img loading="lazy" class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt=""><span class="sr">${r.s}</span></div><div class="mcol"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag">'+r.a+'</span>':''}</div><div class="ms">${meta.map(x=>'<div class="ml">' + x + '</div>').join("")}</div><div class="mc">${partyChip(r.s)}${flagChips(r.s)}</div></div></div>`}
-function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="${PH(r.s)}" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${esc(mob[r.s])}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${esc(r.h)}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
+const lmm=lmk[r.s]?'<span class="lmt">📍 '+esc(lmk[r.s])+'</span>':'';
+const meta=[r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'',[r.h?'<svg class="hico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg> '+esc(r.h):'',famm,lmm].filter(Boolean).join('\u00a0\u00a0'),[r.e?esc(r.e):'',mobm].filter(Boolean).join('\u00a0\u00a0')].filter(Boolean);
+return `<div class="mcard${sel.has(r.s)?' sel':''}" data-s="${r.s}"><input type="checkbox" ${ck}><div class="phcol"><img loading="lazy" class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt=""><span class="sr">${r.s}</span></div><div class="mcol"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag">'+r.a+'</span>':''}</div><div class="ms">${meta.map(x=>'<div class="ml">' + x + '</div>').join("")}</div><div class="mc">${partyChip(r.s)}${casteChip(r.s)}${flagChips(r.s)}</div></div></div>`}
+function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="${PH(r.s)}" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${esc(mob[r.s])}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${esc(r.h)}${lmk[r.s]?'<div class="lms">📍 '+esc(lmk[r.s])+'</div>':''}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${casteChip(r.s)}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
 function render(){const rows=filt(),v=$('view').value;
 $('st').textContent=`${rows.length} of ${D.length} voters · ${rows.filter(r=>r.g==='M').length}M ${rows.filter(r=>r.g==='F').length}F
 ${names().length} families · ${rows.filter(r=>{const m=flg[r.s]||{};return m.d||m.u||m.o}).length} marked · ${(()=>{const pc={};rows.forEach(r=>{const p=pty[r.s];if(p)pc[p]=(pc[p]||0)+1});const a=Object.entries(pc).sort((x,y)=>y[1]-x[1]).slice(0,4).map(([k,v])=>esc(k)+' '+v);return a.length?'Party: '+a.join(' · '):''})()}`;
@@ -313,7 +337,7 @@ let h='';
 if(v==='v'){if(isMob){h=rows.map(mcard).join('')}else{h=`<table><thead><tr><th title="Select all shown"><input type="checkbox" id="all"></th><th data-k="s">#</th><th data-k="n">Name</th><th data-k="rn">Relative</th><th data-k="a">Age</th><th data-k="g">G</th><th data-k="h">House</th><th data-k="e">Voter ID</th><th>Family / Party</th></tr></thead><tbody>${rows.map(row).join('')}</tbody></table>`}}
 else{const key=v==='h'?(r=>r.h||'(none)'):(r=>fams[r.s]||'(ungrouped)');const m={};rows.forEach(r=>(m[key(r)]??=[]).push(r));
 const ks=Object.keys(m).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
-h=ks.map(x=>{const gm=m[x];const allCk=gm.length>0&&gm.every(r=>sel.has(r.s));const ind=!allCk&&gm.some(r=>sel.has(r.s));const head=`<div class="hcard"><h3><label class="gall" data-gsel="${esc(x)}"><input type="checkbox" data-ind="${ind?1:0}"${allCk?' checked':''}> ${v==='h'?'House ':'Family: '}${esc(x)}</label><span class="stats">${gm.length} voters</span></h3>`;const body=gm.map(r=>{const pc=partyChip(r.s);const rel=r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'';const door=r.h?'<svg class="hico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg> '+esc(r.h):'';const fc=flagChips(r.s);const mb=mob[r.s]?'<svg class="mico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> ' +esc(mob[r.s]):'';const doorLine=[door,mb].filter(Boolean).join('\u00a0\u00a0');const sub=pc+fc;return `<div class="m" data-s="${r.s}" style="${sel.has(r.s)?'background:var(--sel)':''}"><input type="checkbox" ${sel.has(r.s)?'checked':''}><img class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt=""><div class="mtxt"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag">'+r.a+'</span>':''}</div>${rel?'<div class="mrel">'+rel+'</div>':''}${doorLine?'<div class="mdoor">'+doorLine+'</div>':''}${sub?'<div class="msub">'+sub+'</div>':''}</div></div>`}).join('');return head+body+'</div>'}).join('')}
+h=ks.map(x=>{const gm=m[x];const allCk=gm.length>0&&gm.every(r=>sel.has(r.s));const ind=!allCk&&gm.some(r=>sel.has(r.s));const head=`<div class="hcard"><h3><label class="gall" data-gsel="${esc(x)}"><input type="checkbox" data-ind="${ind?1:0}"${allCk?' checked':''}> ${v==='h'?'House ':'Family: '}${esc(x)}</label><span class="stats">${gm.length} voters</span></h3>`;const body=gm.map(r=>{const pc=partyChip(r.s);const rel=r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'';const door=r.h?'<svg class="hico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg> '+esc(r.h):'';const fc=flagChips(r.s);const mb=mob[r.s]?'<svg class="mico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> ' +esc(mob[r.s]):'';const doorLine=[door,lmk[r.s]?'📍 '+esc(lmk[r.s]):'',mb].filter(Boolean).join('\u00a0\u00a0');const sub=pc+fc;return `<div class="m" data-s="${r.s}" style="${sel.has(r.s)?'background:var(--sel)':''}"><input type="checkbox" ${sel.has(r.s)?'checked':''}><img class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt=""><div class="mtxt"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag">'+r.a+'</span>':''}</div>${rel?'<div class="mrel">'+rel+'</div>':''}${doorLine?'<div class="mdoor">'+doorLine+'</div>':''}${sub?'<div class="msub">'+sub+'</div>':''}</div></div>`}).join('');return head+body+'</div>'}).join('')}
 if(!rows.length)h='<div class="empty">No voters match the current filters.<br><button class="mb" id="rstf">Reset filters</button></div>';
 $('out').innerHTML=h;document.querySelectorAll('input[data-ind="1"]').forEach(i=>i.indeterminate=true);bar();hh();
 const _al=$('all');if(_al){_al.checked=rows.length>0&&rows.every(r=>sel.has(r.s));_al.indeterminate=rows.some(r=>sel.has(r.s))&&!_al.checked;_al.addEventListener('change',e=>{const on=e.target.checked;rows.forEach(r=>on?sel.add(r.s):sel.delete(r.s));render()});}
@@ -340,17 +364,20 @@ $('mo').onclick=()=>{const v=$('oos').value.trim();sel.forEach(s=>{if(v)oos[s]=v
 $('um').onclick=()=>clearFlg();
 document.querySelectorAll('#bar .bchip[data-p]').forEach(b=>{b.onclick=()=>{if(!sel.size)return alert('Select voters first');sel.forEach(s=>{pty[s]=b.dataset.p});ptySave();render()}});$('pcust').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=$('pcust').value.trim();if(!v||!sel.size)return alert(v?'Select voters first':'Type a party name');sel.forEach(s=>{pty[s]=v});ptySave();render();$('pcust').value=''}});
 $('pcrem').onclick=()=>{if(!sel.size)return;sel.forEach(s=>{delete pty[s]});ptySave();render()};
+document.querySelectorAll('#bar .bchip[data-c]').forEach(b=>{b.onclick=()=>{if(!sel.size)return alert('Select voters first');sel.forEach(s=>{cst[s]=b.dataset.c});cstSave();render()}});$('ccust').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=$('ccust').value.trim();if(!v||!sel.size)return alert(v?'Select voters first':'Type a caste name');sel.forEach(s=>{cst[s]=v});cstSave();render();$('ccust').value=''}});$('cclrem').onclick=()=>{if(!sel.size)return;sel.forEach(s=>{delete cst[s]});cstSave();render()};
+$('lmsave').onclick=()=>{if(!sel.size)return alert('Select voters first');const v=$('lmk').value.trim();sel.forEach(s=>{if(v)lmk[s]=v;else delete lmk[s]});lmkSave();$('lmk').value='';render()};
+document.querySelectorAll('.ixc').forEach(b=>{b.onclick=()=>{const i=b.parentElement.querySelector('input');if(!i)return;i.value='';i.dispatchEvent(new Event('input',{bubbles:true}));i.focus()}});
 $('msave').onclick=()=>{if(!sel.size)return alert('Select voters first');const v=$('mnum').value.trim();const d=v.replace(/\D/g,'');if(v&&d.length<10){alert('Enter a full 10-digit mobile number, or leave empty to clear');return}sel.forEach(s=>{if(v)mob[s]=v;else delete mob[s]});mobSave();$('mnum').value='';render()};
 (function(){const tabs=document.querySelectorAll('#bar .btab');const panels=document.querySelectorAll('#bar .bpanel');tabs.forEach(x=>{x.onclick=()=>{tabs.forEach(y=>y.classList.toggle('on',y.dataset.tab===x.dataset.tab));panels.forEach(p=>p.classList.toggle('on',p.dataset.tab===x.dataset.tab))}})})();
 $('mk').onclick=()=>{const n=$('fname').value.trim();if(!n)return $('fname').focus();sel.forEach(s=>fams[s]=n);sel.clear();$('fname').value='';save();refreshFam();render()};
 $('ug').onclick=()=>{sel.forEach(s=>delete fams[s]);sel.clear();save();refreshFam();render()};
 $('clr').onclick=()=>{sel.clear();render()};
 function dl(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click()}
-$('csv').onclick=()=>{const rows=filt();const c=['SNo,Name,RelationType,Relative,Age,Gender,House,VoterID,Family,Party,Flags,OOSPlace,Mobile'];rows.forEach(r=>{const m=flg[r.s]||{};const fl=[m.d?'Dead':'',m.u?'Duplicate':'',m.o?'Out of station':''].filter(Boolean).join(',');c.push([r.s,r.n,r.rt,r.rn,r.a,r.g,r.h,r.e,fams[r.s]||'',pty[r.s]||'',fl,oos[r.s]||'',mob[r.s]||''].map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(','))});dl('pamur-ward9.csv','\ufeff'+c.join('\n'),'text/csv')};
-$('exp').onclick=()=>dl('pamur-ward9-data.json',JSON.stringify({fams,flg,pty,mob,oos}),'application/json');
+$('csv').onclick=()=>{const rows=filt();const c=['SNo,Name,RelationType,Relative,Age,Gender,House,VoterID,Family,Party,Caste,Flags,OOSPlace,Mobile,HouseLandmark'];rows.forEach(r=>{const m=flg[r.s]||{};const fl=[m.d?'Dead':'',m.u?'Duplicate':'',m.o?'Out of station':''].filter(Boolean).join(',');c.push([r.s,r.n,r.rt,r.rn,r.a,r.g,r.h,r.e,fams[r.s]||'',pty[r.s]||'',cst[r.s]||'',fl,oos[r.s]||'',mob[r.s]||'',lmk[r.s]||''].map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(','))});dl('pamur-ward9.csv','\ufeff'+c.join('\n'),'text/csv')};
+$('exp').onclick=()=>dl('pamur-ward9-data.json',JSON.stringify({fams,flg,pty,mob,oos,cst,lmk}),'application/json');
 const enc=s=>btoa(unescape(encodeURIComponent(s)));const dec=b=>decodeURIComponent(escape(atob(b)));
 $('shd').onclick=()=>{
-  const s=JSON.stringify({fams,flg,pty,mob,oos});
+  const s=JSON.stringify({fams,flg,pty,mob,oos,cst,lmk});
   const url=location.origin+location.pathname+'#d='+enc(s);
   const wa='https://wa.me/?text='+encodeURIComponent('Pamur Ward 9 voter list (with saved marks). Open in Safari/Chrome, enter the access password, marks load automatically: '+url);
   window.open(wa,'_blank');
@@ -358,11 +385,11 @@ $('shd').onclick=()=>{
 };
 try{const hm=location.hash.match(/^#d=(.+)$/);
 if(hm){const o=JSON.parse(dec(hm[1]));
-Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{});Object.assign(oos,o.oos||{});
-save();flgSave();ptySave();mobSave();oosSave();
+Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{});Object.assign(oos,o.oos||{});Object.assign(cst,o.cst||{});Object.assign(lmk,o.lmk||{});
+save();flgSave();ptySave();mobSave();oosSave();cstSave();lmkSave();
 setTimeout(()=>alert('Loaded shared marks - now saved on this phone: '+Object.keys(pty).length+' parties, '+Object.keys(mob).length+' mobile numbers, '+Object.keys(fams).length+' family links, '+Object.keys(flg).length+' flagged voters.'),400)}}catch(e){}
 $('imp').onclick=()=>$('file').click();
-$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o&&o.fams!==undefined){Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{});Object.assign(oos,o.oos||{})}else{Object.assign(fams,o||{})}save();flgSave();ptySave();mobSave();oosSave();refreshFam();render()}catch(x){alert('Invalid file')}})};
+$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o&&o.fams!==undefined){Object.assign(fams,o.fams||{});Object.assign(flg,o.flg||{});Object.assign(pty,o.pty||{});Object.assign(mob,o.mob||{});Object.assign(oos,o.oos||{});Object.assign(cst,o.cst||{});Object.assign(lmk,o.lmk||{})}else{Object.assign(fams,o||{})}save();flgSave();ptySave();mobSave();oosSave();cstSave();lmkSave();refreshFam();render()}catch(x){alert('Invalid file')}})};
 $('lb').onclick=()=>$('lb').style.display='none';addEventListener('resize',hh);addEventListener('scroll',()=>{document.querySelector('header').classList.toggle('sc',scrollY>4)},{passive:true});refreshFam();render();
 
 $('kb').onclick=e=>{e.stopPropagation();const m=$('kmenu');m.style.display=m.style.display==='none'?'flex':'none'};
