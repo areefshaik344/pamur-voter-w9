@@ -173,7 +173,7 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 .kmenu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--bd);border-radius:12px;box-shadow:0 8px 24px rgba(16,36,26,.18);padding:4px;min-width:150px;z-index:100;display:flex;flex-direction:column;gap:2px}
 .kmenu button{width:100%;height:38px;min-height:38px;padding:0 12px;border:none;background:transparent;color:var(--fg);font:600 13px/1 system-ui,sans-serif;border-radius:8px;text-align:left;display:flex;align-items:center;cursor:pointer;white-space:nowrap}
 .kmenu button:hover,.kmenu button:active{background:#f0f5f2;color:var(--ac)}
-.kmenu button#sall{background:transparent!important;color:var(--ac)!important;font-weight:700!important;border-color:transparent!important}
+.kmenu button#sall{background:transparent!important;color:var(--ac)!important;font-weight:700!important;border-color:transparent!important}.kmenu button#sallm{background:transparent!important;color:var(--ac)!important;font-weight:700!important;border-color:transparent!important}
 .kmenu button#clr{color:#c0392b}
 </style>
 </head>
@@ -236,6 +236,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <button type="button" id="kb" aria-label="More actions" title="More actions"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg></button>
 <div id="kmenu" class="kmenu" style="display:none">
 <button type="button" id="sall">Select all</button>
+<button type="button" id="sallm">Search select all</button>
 <button type="button" id="csv">Export CSV</button>
 <button type="button" id="exp">Save data</button>
 <button type="button" id="imp">Load data</button>
@@ -361,7 +362,8 @@ ids.forEach(s=>on?sel.add(s):sel.delete(s));render()});
 $('lo').onclick=()=>{try{sessionStorage.removeItem('pamur9unlocked')}catch(e){}location.reload()};
 function clearFilters(){$('q').value='';$('mkf').value='';$('fam').value='';$('view').value='v';$('qclr').style.display='none';render()}
 const _frst=$('frst');if(_frst)_frst.onclick=()=>{$('view').value='v';$('fam').value='';$('mkf').value='';$('qclr').style.display='none';render()};
-$('sall').onclick=()=>{const rows=filt();if(!rows.length)return alert('Nothing is shown to select');rows.forEach(r=>sel.add(r.s));render();}
+$('sall').onclick=()=>{D.forEach(r=>sel.add(r.s));render();}
+$('sallm').onclick=()=>{const rows=filt();if(!rows.length)return alert('Nothing matches the search');rows.forEach(r=>sel.add(r.s));render();}
 function setFlag(k){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{const m=flg[s]||(flg[s]={});m[k]=1});flgSave();render()}
 function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s];delete oos[s]});flgSave();oosSave();sel.clear();render()}
 $('md').onclick=()=>setFlag('d');
