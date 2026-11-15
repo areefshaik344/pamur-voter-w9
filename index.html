@@ -56,7 +56,10 @@ button.mb{font-size:12px;padding:4px 8px}
 .pt.YCP .pt.TDP 
 
 .ct{display:inline-block;border:1px solid var(--bd);border-radius:9px;padding:0 6px;font-size:12px;margin-left:4px;white-space:nowrap;font-weight:600}
-.ct.Hindu{background:#e8f4ff;color:#0a4f8a;border-color:#a8d0f0}.ct.Muslim{background:#e6f7ec;color:#0a6b34;border-color:#93d8ab}.ct.Christian{background:#f3e8ff;color:#5b2ea6;border-color:#c9a8f0}.ct.Other{background:var(--card);color:var(--mut)}.ag.agm{display:inline-block;background:#e6f7ec;color:#0a6b34!important;font-size:8px!important;font-weight:700;border:1px solid #93d8ab;border-radius:999px;padding:0 6px;margin-left:5px;margin-top:-8px;line-height:14px;vertical-align:middle;text-align:center}.ag.agh{display:inline-block;background:#fff3cd;color:#8a6d0a!important;font-size:8px!important;font-weight:700;border:1px solid #ecd9a0;border-radius:999px;padding:0 6px;margin-left:5px;margin-top:-8px;line-height:14px;vertical-align:middle;text-align:center}
+.ct.Hindu{background:#e8f4ff;color:#0a4f8a;border-color:#a8d0f0}.ct.Muslim{background:#e6f7ec;color:#0a6b34;border-color:#93d8ab}.ct.Christian{background:#f3e8ff;color:#5b2ea6;border-color:#c9a8f0}.ct.Other{background:var(--card);color:var(--mut)}.ag.agm.stm{display:inline-block;background:#e6f7ec;color:#0a6b34!important;font-size:11px!important;font-weight:700;border:1px solid #93d8ab;border-radius:999px;padding:0 7px;margin-left:4px;margin-top:-1px;line-height:16px;vertical-align:middle;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ag.agm.stm:active{transform:scale(.95)}
+.ag.agm.stm.active{background:#0a6b34;color:#fff!important;border-color:#0a6b34}
+.ag.agm{display:inline-block;background:#e6f7ec;color:#0a6b34!important;font-size:8px!important;font-weight:700;border:1px solid #93d8ab;border-radius:999px;padding:0 6px;margin-left:5px;margin-top:-8px;line-height:14px;vertical-align:middle;text-align:center}.ag.agh{display:inline-block;background:#fff3cd;color:#8a6d0a!important;font-size:8px!important;font-weight:700;border:1px solid #ecd9a0;border-radius:999px;padding:0 6px;margin-left:5px;margin-top:-8px;line-height:14px;vertical-align:middle;text-align:center}
 .iwrap{position:relative;flex:1;min-width:130px}#bar .iwrap{min-width:110px}
 .iwrap input{width:100%;padding-right:34px}
 .ixc{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:30px;height:30px;border:none;background:#eef4f0;color:var(--mut);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;z-index:2}
@@ -113,9 +116,7 @@ select{border-radius:999px;padding:8px 12px;font-size:13px}
 header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600}
 #sall{background:var(--ac);color:#fff;border-color:var(--ac)}
 .strow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:2px}
-.mbadge{display:inline-flex;align-items:center;gap:4px;background:#e6f7ec;color:#0a6b34!important;border:1px solid #93d8ab;border-radius:999px;padding:2px 8px!important;font-size:11px!important;font-weight:700!important;line-height:16px;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
-.mbadge:active{transform:scale(.95)}
-.mbadge.active{background:#0a6b34;color:#fff!important;border-color:#0a6b34}
+
 .stats{font-size:12.5px}
 @media (min-width:721px){#chipsf,#chipsb{overflow-x:visible;flex-wrap:wrap}}
 </style>
@@ -246,7 +247,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <button type="button" id="clr">Clear</button>
 </div>
 </div></div>
-<div class="row strow"><span class="stats" id="st"></span><button type="button" class="mbadge" id="mbadge" title="Click to filter Muslim voters">Muslim <b id="mbc">0</b></button></div>
+<div class="row strow"><span class="stats" id="st"></span></div>
 </header>
 <div class="wrap" id="out"></div>
 <div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
@@ -336,9 +337,10 @@ const meta=[r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'',[r.h?'<svg class="hico" viewBo
 return `<div class="mcard${sel.has(r.s)?' sel':''}" data-s="${r.s}"><input type="checkbox" ${ck}><div class="phcol"><img loading="lazy" class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt=""><span class="sr">${r.s}</span></div><div class="mcol"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag'+(cst[r.s]==='Muslim'?' agm':cst[r.s]==='Hindu'?' agh':'')+'">'+r.a+'</span>':''}</div><div class="ms">${meta.map(x=>'<div class="ml">' + x + '</div>').join("")}</div><div class="mc">${partyChip(r.s)}${flagChips(r.s)}</div></div></div>`}
 function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="${PH(r.s)}" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${esc(mob[r.s])}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${esc(r.h)}${lmk[r.s]?'<div class="lms">📍 '+esc(lmk[r.s])+'</div>':''}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${casteChip(r.s)}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
 function render(){const rows=filt(),v=$('view').value;
-$('st').textContent=`${rows.length} of ${D.length} voters · ${rows.filter(r=>r.g==='M').length}M ${rows.filter(r=>r.g==='F').length}F
-${names().length} families · ${rows.filter(r=>{const m=flg[r.s]||{};return m.d||m.u||m.o}).length} marked · ${(()=>{const pc={};rows.forEach(r=>{const p=pty[r.s];if(p)pc[p]=(pc[p]||0)+1});const a=Object.entries(pc).sort((x,y)=>y[1]-x[1]).slice(0,4).map(([k,v])=>esc(k)+' '+v);return a.length?'Party: '+a.join(' · '):''})()}`;
-const _mc=rows.filter(r=>cst[r.s]==='Muslim').length,_tm=D.filter(r=>cst[r.s]==='Muslim').length;const _elB=$('mbadge'),_elBc=$('mbc');if(_elB&&_elBc){_elBc.textContent=rows.length===D.length?_tm:(_mc+'/'+_tm);_elB.classList.toggle('active',$('mkf').value==='cMuslim')};
+const _mc=rows.filter(r=>cst[r.s]==='Muslim').length,_tm=D.filter(r=>cst[r.s]==='Muslim').length;
+const _mPill=_tm>0?' · <button type="button" class="ag agm stm'+($('mkf').value==='cMuslim'?' active':'')+'" id="mbadge" title="Filter">'+(rows.length===D.length?_tm:(_mc+'/'+_tm))+'</button>':'';
+$('st').innerHTML='<div class="st-line">'+rows.length+' of '+D.length+' voters · '+rows.filter(r=>r.g==='M').length+'M '+rows.filter(r=>r.g==='F').length+'F'+_mPill+'</div><div class="st-line">'+names().length+' families · '+rows.filter(r=>{const m=flg[r.s]||{};return m.d||m.u||m.o}).length+' marked · '+(()=>{const pc={};rows.forEach(r=>{const p=pty[r.s];if(p)pc[p]=(pc[p]||0)+1});const a=Object.entries(pc).sort((x,y)=>y[1]-x[1]).slice(0,4).map(([k,v])=>esc(k)+' '+v);return a.length?'Party: '+a.join(' · '):''})()+'</div>';
+const _mbBtn=$('mbadge');if(_mbBtn)_mbBtn.onclick=()=>{const f=$('mkf');f.value=f.value==='cMuslim'?'':'cMuslim';render()};
 const k=sortK;rows.sort((x,y)=>((x[k]>y[k])-(x[k]<y[k]))*sortD);
 let h='';
 if(v==='v'){if(isMob){h=rows.map(mcard).join('')}else{h=`<table><thead><tr><th title="Select all shown"><input type="checkbox" id="all"></th><th data-k="s">#</th><th data-k="n">Name</th><th data-k="rn">Relative</th><th data-k="a">Age</th><th data-k="g">G</th><th data-k="h">House</th><th data-k="e">Voter ID</th><th>Family / Party</th></tr></thead><tbody>${rows.map(row).join('')}</tbody></table>`}}
