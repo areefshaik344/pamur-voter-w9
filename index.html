@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0d7a4a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Pamur W9 YCP">
@@ -264,6 +264,10 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
       background: #f59e0b !important;
       border-color: #f59e0b !important;
     }
+    /* Prevent iOS Safari auto-zoom by ensuring all mobile inputs are 16px */
+    #bar input, #bar select, input[type="search"], input[type="tel"], input[type="text"] {
+      font-size: 16px !important;
+    }
     /* Card tap + color change is the selection indicator; the legacy
        checkbox column is removed so cards use the full width. */
     .mcard input[type="checkbox"] {
@@ -272,7 +276,7 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
     .mcard .phcol {
       margin-left: 0 !important;
     }
-    /* OOS place field shows only while Out of station is active */
+    /* OOS place field shows only while Out of station is active, on its own clean full-width row */
     .bpanel[data-tab="status"] .iwrap {
       display: none !important;
     }
@@ -280,15 +284,17 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
       display: flex !important;
       align-items: center !important;
       gap: 6px !important;
+      flex: 0 0 100% !important;
       width: 100% !important;
-      min-width: 0 !important;
-      flex-wrap: nowrap !important;
-      margin-top: 4px !important;
+      min-width: 100% !important;
+      margin-top: 6px !important;
+      box-sizing: border-box !important;
     }
     .bpanel[data-tab="status"].show-oos .iwrap input {
       flex: 1 1 0 !important;
       min-width: 0 !important;
       height: 31px !important;
+      box-sizing: border-box !important;
     }
 </style>
 <style>
