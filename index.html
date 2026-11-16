@@ -544,7 +544,7 @@ function clearFilters(){$('q').value='';$('mkf').value='';$('fam').value='';$('v
 const _frst=$('frst');if(_frst)_frst.onclick=()=>{$('view').value='v';$('fam').value='';$('mkf').value='';$('qclr').style.display='none';render()};
 const _mbBtn=$('mbadge');if(_mbBtn)_mbBtn.onclick=()=>{const f=$('mkf');f.value=f.value==='cMuslim'?'':'cMuslim';render()};
 $('sall').onclick=()=>{const q=$('q').value.trim();const rows=q?filt():D;if(!rows.length)return alert('Nothing matches the search');rows.forEach(r=>sel.add(r.s));render();}
-function setFlag(k){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{const m=flg[s]||(flg[s]={});m[k]=1});flgSave();render()}
+function setFlag(k){if(!sel.size)return alert('Select voters first');const allHas=Array.from(sel).every(s=>flg[s]&&flg[s][k]);sel.forEach(s=>{const m=flg[s]||(flg[s]={});if(allHas){delete m[k];if(k==='o')delete oos[s];if(Object.keys(m).length===0)delete flg[s]}else{m[k]=1}});flgSave();if(k==='o')oosSave();render()}
 function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s];delete oos[s]});flgSave();oosSave();sel.clear();render()}
 $('md').onclick=()=>setFlag('d');
 $('mu').onclick=()=>setFlag('u');
