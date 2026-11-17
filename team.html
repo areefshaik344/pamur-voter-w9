@@ -626,14 +626,16 @@ $('msave').onclick=()=>{if(!sel.size)return alert('Select voters first');const v
 $('mk').onclick=()=>{const n=$('fname').value.trim();if(!n)return $('fname').focus();sel.forEach(s=>fams[s]=n);sel.clear();$('fname').value='';save();refreshFam();render()};
 $('ug').onclick=()=>{sel.forEach(s=>delete fams[s]);sel.clear();save();refreshFam();render()};
 $('clr').onclick=()=>{sel.clear();render()};
-function dl(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click()}
+function dl(name,txt,type){const b=new Blob([txt],{type});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();setTimeout(()=>{try{a.remove();URL.revokeObjectURL(u)}catch(e){}},1200)}
 const ccols=[["s","SNo",r=>r.s],["n","Name",r=>r.n],["rt","RelationType",r=>r.rt||""],["rn","Relative",r=>r.rn||""],["a","Age",r=>r.a],["g","Gender",r=>r.g],["h","House",r=>r.h],["e","VoterID",r=>r.e],["fam","Family",r=>fams[r.s]||""],["pty","Party",r=>pty[r.s]||""],["cst","Caste",r=>cst[r.s]||""],["flg","Flags",r=>{const m=flg[r.s]||{};return[m.d?"Dead":"",m.u?"Duplicate":"",m.o?"Out of station":"",m.t?"Teacher":""].filter(Boolean).join(",")}],["tch","Teacher",r=>(flg[r.s]||{}).t?"Teacher":""],["oos","OOSPlace",r=>oos[r.s]||""],["mob","Mobile",r=>mob[r.s]||""],["lmk","HouseLandmark",r=>lmk[r.s]||""]];
 const csvm=$('csvm');
 function csvmSaveCols(){try{const a=[];document.querySelectorAll('#csvgrid input').forEach((b,i)=>{if(b.checked)a.push(ccols[i][0])});localStorage.setItem('pamur_csvcols',JSON.stringify(a))}catch(e){}}
 function csvmLoadCols(){try{const s=localStorage.getItem('pamur_csvcols');if(!s)return null;const a=JSON.parse(s);return Array.isArray(a)?new Set(a):null}catch(e){return null}}
 function csvmSync(){const n=document.querySelectorAll('#csvgrid input:checked').length;$('csvcnt').textContent=n+' of '+ccols.length;$('csvgo').disabled=n===0;csvmSaveCols()}
 function csvmClose(){csvm.style.display='none'}
-function csvmOpen(){
+function csvmOpen(e){
+  if(e&&e.stopPropagation)e.stopPropagation();
+  if(e&&e.preventDefault)e.preventDefault();
   $('kmenu').style.display='none';
   const scBox=$('csvscope');
   if(sel&&sel.size>0){
@@ -652,12 +654,12 @@ function csvmOpen(){
     document.querySelectorAll('#csvgrid input').forEach(b=>b.checked=true);
   }
   csvmSync();
-  csvm.style.display='flex';
+  setTimeout(()=>{csvm.style.display='flex'},40);
 }
 function csvmApplySet(keys){document.querySelectorAll('#csvgrid input').forEach((b,i)=>{b.checked=keys.includes(ccols[i][0])});csvmSync()}
 function csvmBuild(){const g=$('csvgrid');g.innerHTML='';ccols.forEach(c=>{const l=document.createElement('label');l.className='csvrow';const i=document.createElement('input');i.type='checkbox';i.checked=true;i.onchange=csvmSync;l.appendChild(i);l.appendChild(document.createTextNode(c[1]));g.appendChild(l)})}
 csvmBuild();
-$('csv').onclick=csvmOpen;
+$('csv').onclick=e=>csvmOpen(e);
 $('csvall').onclick=()=>{document.querySelectorAll('#csvgrid input').forEach(i=>i.checked=true);csvmSync()};
 $('csvnone').onclick=()=>{document.querySelectorAll('#csvgrid input').forEach(i=>i.checked=false);csvmSync()};
 $('csvcontacts').onclick=()=>csvmApplySet(['s','n','h','mob','fam']);
@@ -673,7 +675,7 @@ $('csvgo').onclick=()=>{
   const lines=[pick.map(c=>'"'+c[1]+'"').join(',')];
   targetRows.forEach(r=>{lines.push(pick.map(c=>'"'+String(c[2](r)??'').replace(/"/g,'""')+'"').join(','))});
   dl('pamur-ward'+9+(isSel?'-selected':'')+'.csv','\ufeff'+lines.join('\n'),'text/csv');
-  csvmClose();
+  setTimeout(csvmClose,150);
 };
 $('exp').onclick=()=>dl('pamur-ward9-data.json',JSON.stringify({fams,flg,pty,mob,oos,cst,lmk}),'application/json');
 const enc=s=>btoa(unescape(encodeURIComponent(s)));const dec=b=>decodeURIComponent(escape(atob(b)));
