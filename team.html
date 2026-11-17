@@ -129,10 +129,13 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 .csvtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .csvtop b{font-size:16px;color:#0e2418}
 #csvmx{width:34px;height:34px;border:none;background:#eef4f0;border-radius:50%;font-size:18px;line-height:1;color:#5f7166;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.csvquick{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.csvquick button{height:31px;min-height:31px;padding:0 14px;border:1px solid #d3ded7;background:#fff;color:#0d7a4a;font:700 12px/1 system-ui,sans-serif;border-radius:999px;cursor:pointer}
+.csvquick{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.csvquick button{height:30px;min-height:30px;padding:0 12px;border:1px solid #d3ded7;background:#fff;color:#0d7a4a;font:700 12px/1 system-ui,sans-serif;border-radius:999px;cursor:pointer}
 .csvquick button:active{transform:scale(.96)}
 #csvcnt{margin-left:auto;font-size:12px;font-weight:600;color:#5f7166}
+.csvscope{display:none;background:#f0f5f2;border:1px solid #d3ded7;border-radius:10px;padding:6px 10px;margin-bottom:10px;font-size:13px;font-weight:600;color:#0e2418;align-items:center;gap:12px}
+.csvscope label{display:flex;align-items:center;gap:5px;cursor:pointer}
+.csvscope input{accent-color:#0d7a4a;width:16px;height:16px}
 .csvgrid{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin-bottom:14px}
 .csvrow{display:flex;align-items:center;gap:8px;min-height:40px;padding:4px 8px;border-radius:10px;font-size:16px;color:#10241a;cursor:pointer;user-select:none}
 .csvrow:active{background:#eef4f0}
@@ -140,6 +143,8 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 #csvgo{width:100%;height:44px;min-height:44px;border:none;background:linear-gradient(135deg,#12925a,#0a6b41);color:#fff;font:700 14px/1 system-ui,sans-serif;border-radius:12px;cursor:pointer;box-shadow:0 8px 20px rgba(18,146,90,.35)}
 #csvgo:disabled{background:#c9d6cf;box-shadow:none;cursor:not-allowed}
 #csvgo:active:not(:disabled){transform:scale(.97)}
+.moblink{color:inherit !important;text-decoration:none !important;display:inline-flex;align-items:center;gap:4px}
+.moblink:active{opacity:.6}
 @media (max-width:480px){.csvgrid{grid-template-columns:1fr}}</style>
 <style id="fleet-refine-style">
     #st, #st .st-line {
@@ -445,7 +450,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <div class="row strow"><span class="stats" id="st"></span></div>
 </header>
 <div class="wrap" id="out"></div>
-<div id="csvm" style="display:none"><div class="csvcard"><div class="csvtop"><b>Choose columns</b><button type="button" id="csvmx" aria-label="Close">&times;</button></div><div class="csvquick"><button type="button" id="csvall">All</button><button type="button" id="csvnone">None</button><span id="csvcnt"></span></div><div id="csvgrid" class="csvgrid"></div><button type="button" id="csvgo">Download CSV</button></div></div><div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
+<div id="csvm" style="display:none"><div class="csvcard"><div class="csvtop"><b>Choose columns</b><button type="button" id="csvmx" aria-label="Close">&times;</button></div><div class="csvscope" id="csvscope"><label><input type="radio" name="csvtarget" value="filtered" checked id="csvsc_all"> All matches (<span id="csvsc_fcnt">0</span>)</label><label><input type="radio" name="csvtarget" value="selected" id="csvsc_sel"> Selected only (<span id="csvsc_scnt">0</span>)</label></div><div class="csvquick"><button type="button" id="csvall">All</button><button type="button" id="csvcontacts">Contacts</button><button type="button" id="csvbooth">Booth</button><button type="button" id="csvnone">None</button><span id="csvcnt"></span></div><div id="csvgrid" class="csvgrid"></div><button type="button" id="csvgo">Download CSV</button></div></div><div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar">
 <div class="bartop"><span id="sc"></span><button class="bclear" id="um">Clear marks</button></div>
 <div class="btabs">
@@ -567,7 +572,7 @@ const fm=fams[r.s];if(f==='__none'&&fm)return false;if(f==='__any'&&!fm)return f
 if(q&&!(r.s+' '+r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')+' '+(lmk[r.s]||'')+' '+(cst[r.s]||'')+' '+(m.gt?'govt teacher teacher':m.t?'teacher':'')).toLowerCase().includes(q))return false;return true})}
 function mcard(r){
 const ck=sel.has(r.s)?'checked':'';
-const mobm=mob[r.s]?'<svg class="mico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> '+esc(mob[r.s]):'';
+const mobm=mob[r.s]?'<a class="moblink" href="tel:'+esc(mob[r.s])+'" onclick="event.stopPropagation()"><svg class="mico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> '+esc(mob[r.s])+'</a>':'';
 const famm=fams[r.s]?esc(fams[r.s]):'';
 const lmm=lmk[r.s]?'<span class="lmt">'+esc(lmk[r.s])+'</span>':'';
 const meta=[[r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'',famm].filter(Boolean).join(' · '),[r.h?'📍'+esc(r.h):'',lmm].filter(Boolean).join(' . '),[r.e?esc(r.e):'',mobm].filter(Boolean).join('  ')].filter(Boolean);
@@ -624,17 +629,52 @@ $('clr').onclick=()=>{sel.clear();render()};
 function dl(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click()}
 const ccols=[["s","SNo",r=>r.s],["n","Name",r=>r.n],["rt","RelationType",r=>r.rt||""],["rn","Relative",r=>r.rn||""],["a","Age",r=>r.a],["g","Gender",r=>r.g],["h","House",r=>r.h],["e","VoterID",r=>r.e],["fam","Family",r=>fams[r.s]||""],["pty","Party",r=>pty[r.s]||""],["cst","Caste",r=>cst[r.s]||""],["flg","Flags",r=>{const m=flg[r.s]||{};return[m.d?"Dead":"",m.u?"Duplicate":"",m.o?"Out of station":"",m.t?"Teacher":""].filter(Boolean).join(",")}],["tch","Teacher",r=>(flg[r.s]||{}).t?"Teacher":""],["oos","OOSPlace",r=>oos[r.s]||""],["mob","Mobile",r=>mob[r.s]||""],["lmk","HouseLandmark",r=>lmk[r.s]||""]];
 const csvm=$('csvm');
-function csvmSync(){const n=document.querySelectorAll('#csvgrid input:checked').length;$('csvcnt').textContent=n+' of '+ccols.length;$('csvgo').disabled=n===0}
+function csvmSaveCols(){try{const a=[];document.querySelectorAll('#csvgrid input').forEach((b,i)=>{if(b.checked)a.push(ccols[i][0])});localStorage.setItem('pamur_csvcols',JSON.stringify(a))}catch(e){}}
+function csvmLoadCols(){try{const s=localStorage.getItem('pamur_csvcols');if(!s)return null;const a=JSON.parse(s);return Array.isArray(a)?new Set(a):null}catch(e){return null}}
+function csvmSync(){const n=document.querySelectorAll('#csvgrid input:checked').length;$('csvcnt').textContent=n+' of '+ccols.length;$('csvgo').disabled=n===0;csvmSaveCols()}
 function csvmClose(){csvm.style.display='none'}
-function csvmOpen(){document.querySelectorAll('#csvgrid input').forEach(i=>i.checked=true);csvmSync();$('kmenu').style.display='none';csvm.style.display='flex'}
+function csvmOpen(){
+  $('kmenu').style.display='none';
+  const scBox=$('csvscope');
+  if(sel&&sel.size>0){
+    scBox.style.display='flex';
+    $('csvsc_fcnt').textContent=filt().length;
+    $('csvsc_scnt').textContent=sel.size;
+    $('csvsc_sel').checked=true;
+  } else {
+    scBox.style.display='none';
+    $('csvsc_all').checked=true;
+  }
+  const saved=csvmLoadCols();
+  if(saved){
+    document.querySelectorAll('#csvgrid input').forEach((b,i)=>{b.checked=saved.has(ccols[i][0])});
+  } else {
+    document.querySelectorAll('#csvgrid input').forEach(b=>b.checked=true);
+  }
+  csvmSync();
+  csvm.style.display='flex';
+}
+function csvmApplySet(keys){document.querySelectorAll('#csvgrid input').forEach((b,i)=>{b.checked=keys.includes(ccols[i][0])});csvmSync()}
 function csvmBuild(){const g=$('csvgrid');g.innerHTML='';ccols.forEach(c=>{const l=document.createElement('label');l.className='csvrow';const i=document.createElement('input');i.type='checkbox';i.checked=true;i.onchange=csvmSync;l.appendChild(i);l.appendChild(document.createTextNode(c[1]));g.appendChild(l)})}
 csvmBuild();
 $('csv').onclick=csvmOpen;
 $('csvall').onclick=()=>{document.querySelectorAll('#csvgrid input').forEach(i=>i.checked=true);csvmSync()};
 $('csvnone').onclick=()=>{document.querySelectorAll('#csvgrid input').forEach(i=>i.checked=false);csvmSync()};
+$('csvcontacts').onclick=()=>csvmApplySet(['s','n','h','mob','fam']);
+$('csvbooth').onclick=()=>csvmApplySet(['s','n','e','h','pty','flg']);
 $('csvmx').onclick=csvmClose;
 csvm.addEventListener('click',e=>{if(e.target===csvm)csvmClose()});
-$('csvgo').onclick=()=>{const boxes=document.querySelectorAll('#csvgrid input');const pick=ccols.filter((c,k)=>boxes[k].checked);if(!pick.length)return;const lines=[pick.map(c=>'"'+c[1]+'"').join(',')];filt().forEach(r=>{lines.push(pick.map(c=>'"'+String(c[2](r)??'').replace(/"/g,'""')+'"').join(','))});dl('pamur-ward'+9+'.csv','\ufeff'+lines.join('\n'),'text/csv');csvmClose()};
+$('csvgo').onclick=()=>{
+  const boxes=document.querySelectorAll('#csvgrid input');
+  const pick=ccols.filter((c,k)=>boxes[k].checked);
+  if(!pick.length)return;
+  const isSel=$('csvsc_sel')&&$('csvsc_sel').checked&&sel&&sel.size>0;
+  const targetRows=isSel?D.filter(r=>sel.has(r.s)):filt();
+  const lines=[pick.map(c=>'"'+c[1]+'"').join(',')];
+  targetRows.forEach(r=>{lines.push(pick.map(c=>'"'+String(c[2](r)??'').replace(/"/g,'""')+'"').join(','))});
+  dl('pamur-ward'+9+(isSel?'-selected':'')+'.csv','\ufeff'+lines.join('\n'),'text/csv');
+  csvmClose();
+};
 $('exp').onclick=()=>dl('pamur-ward9-data.json',JSON.stringify({fams,flg,pty,mob,oos,cst,lmk}),'application/json');
 const enc=s=>btoa(unescape(encodeURIComponent(s)));const dec=b=>decodeURIComponent(escape(atob(b)));
 $('shd').onclick=()=>{
