@@ -124,6 +124,23 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 
 #bar .bpanel .bchip{background:var(--card);border:1px solid var(--bd);border-radius:12px;color:var(--fg);font-weight:700}
 </style>
+<style id="csvcols-style">#csvm{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(4,23,16,.65);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px}
+.csvcard{background:#fff;border-radius:20px;max-width:420px;width:100%;max-height:88vh;overflow-y:auto;padding:18px 16px 16px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .22s ease both}
+.csvtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.csvtop b{font-size:16px;color:#0e2418}
+#csvmx{width:34px;height:34px;border:none;background:#eef4f0;border-radius:50%;font-size:18px;line-height:1;color:#5f7166;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.csvquick{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.csvquick button{height:31px;min-height:31px;padding:0 14px;border:1px solid #d3ded7;background:#fff;color:#0d7a4a;font:700 12px/1 system-ui,sans-serif;border-radius:999px;cursor:pointer}
+.csvquick button:active{transform:scale(.96)}
+#csvcnt{margin-left:auto;font-size:12px;font-weight:600;color:#5f7166}
+.csvgrid{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin-bottom:14px}
+.csvrow{display:flex;align-items:center;gap:8px;min-height:40px;padding:4px 8px;border-radius:10px;font-size:16px;color:#10241a;cursor:pointer;user-select:none}
+.csvrow:active{background:#eef4f0}
+.csvrow input{accent-color:#0d7a4a;width:19px;height:19px;flex:0 0 auto;font-size:16px}
+#csvgo{width:100%;height:44px;min-height:44px;border:none;background:linear-gradient(135deg,#12925a,#0a6b41);color:#fff;font:700 14px/1 system-ui,sans-serif;border-radius:12px;cursor:pointer;box-shadow:0 8px 20px rgba(18,146,90,.35)}
+#csvgo:disabled{background:#c9d6cf;box-shadow:none;cursor:not-allowed}
+#csvgo:active:not(:disabled){transform:scale(.97)}
+@media (max-width:480px){.csvgrid{grid-template-columns:1fr}}</style>
 <style id="fleet-refine-style">
     #st, #st .st-line {
       color: #000000 !important;
@@ -428,7 +445,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <div class="row strow"><span class="stats" id="st"></span></div>
 </header>
 <div class="wrap" id="out"></div>
-<div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
+<div id="csvm" style="display:none"><div class="csvcard"><div class="csvtop"><b>Choose columns</b><button type="button" id="csvmx" aria-label="Close">&times;</button></div><div class="csvquick"><button type="button" id="csvall">All</button><button type="button" id="csvnone">None</button><span id="csvcnt"></span></div><div id="csvgrid" class="csvgrid"></div><button type="button" id="csvgo">Download CSV</button></div></div><div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar">
 <div class="bartop"><span id="sc"></span><button class="bclear" id="um">Clear marks</button></div>
 <div class="btabs">
@@ -603,7 +620,19 @@ $('mk').onclick=()=>{const n=$('fname').value.trim();if(!n)return $('fname').foc
 $('ug').onclick=()=>{sel.forEach(s=>delete fams[s]);sel.clear();save();refreshFam();render()};
 $('clr').onclick=()=>{sel.clear();render()};
 function dl(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click()}
-$('csv').onclick=()=>{const rows=filt();const c=['SNo,Name,RelationType,Relative,Age,Gender,House,VoterID,Family,Party,Caste,Flags,Teacher,OOSPlace,Mobile,HouseLandmark'];rows.forEach(r=>{const m=flg[r.s]||{};const fl=[m.d?'Dead':'',m.u?'Duplicate':'',m.o?'Out of station':'',m.t?'Teacher':''].filter(Boolean).join(',');const tch=m.t?'Teacher':'';c.push([r.s,r.n,r.rt,r.rn,r.a,r.g,r.h,r.e,fams[r.s]||'',pty[r.s]||'',cst[r.s]||'',fl,tch,oos[r.s]||'',mob[r.s]||'',lmk[r.s]||''].map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(','))});dl('pamur-ward9.csv','\ufeff'+c.join('\n'),'text/csv')};
+const ccols=[["s","SNo",r=>r.s],["n","Name",r=>r.n],["rt","RelationType",r=>r.rt||""],["rn","Relative",r=>r.rn||""],["a","Age",r=>r.a],["g","Gender",r=>r.g],["h","House",r=>r.h],["e","VoterID",r=>r.e],["fam","Family",r=>fams[r.s]||""],["pty","Party",r=>pty[r.s]||""],["cst","Caste",r=>cst[r.s]||""],["flg","Flags",r=>{const m=flg[r.s]||{};return[m.d?"Dead":"",m.u?"Duplicate":"",m.o?"Out of station":"",m.t?"Teacher":""].filter(Boolean).join(",")}],["tch","Teacher",r=>(flg[r.s]||{}).t?"Teacher":""],["oos","OOSPlace",r=>oos[r.s]||""],["mob","Mobile",r=>mob[r.s]||""],["lmk","HouseLandmark",r=>lmk[r.s]||""]];
+const csvm=$('csvm');
+function csvmSync(){const n=document.querySelectorAll('#csvgrid input:checked').length;$('csvcnt').textContent=n+' of '+ccols.length;$('csvgo').disabled=n===0}
+function csvmClose(){csvm.style.display='none'}
+function csvmOpen(){document.querySelectorAll('#csvgrid input').forEach(i=>i.checked=true);csvmSync();$('kmenu').style.display='none';csvm.style.display='flex'}
+function csvmBuild(){const g=$('csvgrid');g.innerHTML='';ccols.forEach(c=>{const l=document.createElement('label');l.className='csvrow';const i=document.createElement('input');i.type='checkbox';i.checked=true;i.onchange=csvmSync;l.appendChild(i);l.appendChild(document.createTextNode(c[1]));g.appendChild(l)})}
+csvmBuild();
+$('csv').onclick=csvmOpen;
+$('csvall').onclick=()=>{document.querySelectorAll('#csvgrid input').forEach(i=>i.checked=true);csvmSync()};
+$('csvnone').onclick=()=>{document.querySelectorAll('#csvgrid input').forEach(i=>i.checked=false);csvmSync()};
+$('csvmx').onclick=csvmClose;
+csvm.addEventListener('click',e=>{if(e.target===csvm)csvmClose()});
+$('csvgo').onclick=()=>{const boxes=document.querySelectorAll('#csvgrid input');const pick=ccols.filter((c,k)=>boxes[k].checked);if(!pick.length)return;const lines=[pick.map(c=>'"'+c[1]+'"').join(',')];filt().forEach(r=>{lines.push(pick.map(c=>'"'+String(c[2](r)??'').replace(/"/g,'""')+'"').join(','))});dl('pamur-ward'+9+'.csv','\ufeff'+lines.join('\n'),'text/csv');csvmClose()};
 $('exp').onclick=()=>dl('pamur-ward9-data.json',JSON.stringify({fams,flg,pty,mob,oos,cst,lmk}),'application/json');
 const enc=s=>btoa(unescape(encodeURIComponent(s)));const dec=b=>decodeURIComponent(escape(atob(b)));
 $('shd').onclick=()=>{
