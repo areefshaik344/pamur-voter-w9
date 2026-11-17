@@ -518,6 +518,7 @@ const LMKSEED9 = {"7353":"నానాసాహెబ్ వీధి","7354":"�
 let fams = Object.assign({}, FSEED9 || {}), sel = new Set(), sortK = 's', sortD = 1;
 let flg = Object.assign({}, FLGSEED9 || {});
 let oos = Object.assign({}, OOSSEED9 || {});
+const postParent=()=>{try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'PAMUR_MARK_CHANGE',w:9},'*')}catch(e){}};
 const oosSave = () => { try { localStorage.setItem('pamur9oos', JSON.stringify(oos)); } catch(e){} };
 const flgSave = () => { try { localStorage.setItem('pamur9flags', JSON.stringify(flg)); } catch(e){} };
 let pty = Object.assign({}, PTYSEED9 || {});
@@ -565,7 +566,7 @@ function partyChip(s){const p=pty[s];if(!p)return'';const cls=['YCP','TDP','JSP'
 function casteChip(s){const c=cst[s];if(!c)return'';const cls=['Hindu','Muslim','Christian'].includes(c)?c:'Other';return '<span class="ct '+cls+'">'+esc(c)+'</span>'}
 function flagChips(s){const m=flg[s];if(!m)return'';let t='';if(m.d)t+='<span class="fl d">Dead</span>';if(m.u)t+='<span class="fl u">Dup</span>';if(m.o)t+='<span class="fl o">'+(oos[s]?esc(oos[s]):'OOS')+'</span>';return t}
 const $=id=>document.getElementById(id);
-const save=()=>{try{localStorage.setItem('pamur9fams',JSON.stringify(fams))}catch(e){}};
+const save=()=>{try{localStorage.setItem('pamur9fams',JSON.stringify(fams));postParent()}catch(e){}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function names(){return [...new Set(Object.values(fams))].sort()}
 function refreshFam(){const cur=$('fam').value;$('fam').innerHTML='<option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option>'+names().map(n=>`<option>${esc(n)}</option>`).join('');$('fam').value=cur;$('fl').innerHTML=names().map(n=>`<option value="${esc(n)}">`).join('')}
