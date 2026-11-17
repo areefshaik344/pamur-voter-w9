@@ -6,6 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Pamur W9 YCP">
 <title>YCP · Pamur Ward 9 Voter App - Team Snapshot</title>
+<script id="freshr">if(!/[?&]v=/.test(location.search))location.replace(location.pathname+"?v="+Date.now()+location.hash)</script>
 <style>
 :root{--bg:#f4f8f5;--fg:#10241a;--mut:#5f7166;--bd:#d3ded7;--ac:#0d7a4a;--card:#ffffff;--sel:#dff0e5}
 /* dark mode off - always clean light YCP theme */
@@ -448,9 +449,10 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <button type="button" id="imp">Load data</button>
 <button type="button" id="shd">Share data</button>
 <button type="button" id="clr">Clear</button>
+<button type="button" id="rel" onclick="location.replace(location.pathname+'?v='+Date.now()+location.hash)">Reload app (fresh)</button>
 </div>
 </div></div>
-<div class="row strow"><span class="stats" id="st"></span></div>
+<div class="row strow"><span class="stats" id="st"></span><span id="btag" style="font-size:10px;color:#9db0a5;font-weight:700;margin-left:6px" title="App build 20261117c - if this tag is missing your browser is still running an old cached copy. Use Reload app (fresh) in the menu or clear site data.">20261117c</span></div>
 </header>
 <div class="wrap" id="out"></div>
 <div id="csvm" style="display:none"><div class="csvcard"><div class="csvtop"><b>Choose columns</b><button type="button" id="csvmx" aria-label="Close">&times;</button></div><div class="csvscope" id="csvscope"><label><input type="radio" name="csvtarget" value="filtered" checked id="csvsc_all"> All matches (<span id="csvsc_fcnt">0</span>)</label><label><input type="radio" name="csvtarget" value="selected" id="csvsc_sel"> Selected only (<span id="csvsc_scnt">0</span>)</label></div><div class="csvquick"><button type="button" id="csvall">All</button><button type="button" id="csvcontacts">Contacts</button><button type="button" id="csvbooth">Booth</button><button type="button" id="csvnone">None</button><span id="csvcnt"></span></div><div id="csvgrid" class="csvgrid"></div><button type="button" id="csvgo">Download CSV</button></div></div><div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
