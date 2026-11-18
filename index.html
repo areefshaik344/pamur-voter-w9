@@ -127,6 +127,34 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 #bar .bchip:active{background:var(--sel)}
 
 #bar .bpanel .bchip{background:var(--card);border:1px solid var(--bd);border-radius:12px;color:var(--fg);font-weight:700}
+
+/* TOP FIELD PACK STYLES */
+.walink{display:inline-flex;align-items:center;justify-content:center;margin-left:5px;vertical-align:middle;text-decoration:none;padding:1px 3px;border-radius:4px;background:#e6f9ed}
+.walink:active{transform:scale(1.15)}
+.slipicon{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;font:700 11px system-ui,sans-serif;border-radius:6px;padding:2px 7px;cursor:pointer;margin-left:6px;vertical-align:middle}
+.slipicon:active{background:#dcfce7}
+.slipmodal{position:fixed;inset:0;background:rgba(14,36,26,.65);z-index:9995;display:flex;align-items:center;justify-content:center;padding:16px}
+.slipcard{background:#fff;border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.35);width:100%;max-width:440px;max-height:92vh;overflow-y:auto;display:flex;flex-direction:column;padding:18px 16px;box-sizing:border-box}
+.sliptop{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #12925a;padding-bottom:8px;margin-bottom:12px}
+.sliplogo{font-weight:900;font-size:14px;color:#0e2418;letter-spacing:.3px}
+.slipclose{background:none;border:none;font-size:24px;color:#6b7280;cursor:pointer;line-height:1;padding:0 4px}
+.slipbox{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.6;color:#1f2937}
+.sliprow{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #e5e7eb}
+.sliprow:last-child{border-bottom:none}
+.slipk{color:#4b5563;font-weight:600}
+.slipv{color:#111827;font-weight:800;text-align:right}
+.slipactions{display:flex;gap:10px;margin-top:14px}
+.slipbtn-print{flex:1;height:40px;border-radius:10px;border:1px solid #d1d5db;background:#fff;font:700 13px system-ui,sans-serif;color:#1f2937;cursor:pointer}
+.slipbtn-wa{flex:1.2;height:40px;border-radius:10px;border:none;background:#25d366;font:800 13px system-ui,sans-serif;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.slipbtn-wa:active{background:#1ebc59}
+@media print{
+  body *{visibility:hidden}
+  #slipm, #slipm *{visibility:visible}
+  #slipm{position:absolute;left:0;top:0;width:100%;background:#fff;padding:0}
+  .slipcard{box-shadow:none;border:2px solid #000;max-width:100%}
+  .slipactions, .slipclose{display:none !important}
+}
+
 </style>
 <style id="csvcols-style">#csvm{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(4,23,16,.65);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px}
 .csvcard{background:#fff;border-radius:20px;max-width:420px;width:100%;max-height:88vh;overflow-y:auto;padding:18px 16px 16px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .22s ease both}
@@ -448,6 +476,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <button type="button" id="exp">Save data</button>
 <button type="button" id="imp">Load data</button>
 <button type="button" id="shd">Share data</button>
+<button type="button" id="slipbtn">Voter slip</button>
 <button type="button" id="clr">Clear</button>
 <button type="button" id="rel" onclick="location.replace(location.pathname+'?v='+Date.now()+location.hash)">Reload app (fresh)</button>
 </div>
@@ -455,7 +484,21 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <div class="row strow"><span class="stats" id="st"></span></div>
 </header>
 <div class="wrap" id="out"></div>
-<div id="csvm" style="display:none"><div class="csvcard"><div class="csvtop"><b>Choose columns</b><button type="button" id="csvmx" aria-label="Close">&times;</button></div><div class="csvscope" id="csvscope"><label><input type="radio" name="csvtarget" value="filtered" checked id="csvsc_all"> All matches (<span id="csvsc_fcnt">0</span>)</label><label><input type="radio" name="csvtarget" value="selected" id="csvsc_sel"> Selected only (<span id="csvsc_scnt">0</span>)</label></div><div class="csvquick"><button type="button" id="csvall">All</button><button type="button" id="csvcontacts">Contacts</button><button type="button" id="csvbooth">Booth</button><button type="button" id="csvnone">None</button><span id="csvcnt"></span></div><div id="csvgrid" class="csvgrid"></div><button type="button" id="csvgo">Download CSV</button></div></div><div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
+<div id="csvm" style="display:none"><div class="csvcard"><div class="csvtop"><b>Choose columns</b><button type="button" id="csvmx" aria-label="Close">&times;</button></div><div class="csvscope" id="csvscope"><label><input type="radio" name="csvtarget" value="filtered" checked id="csvsc_all"> All matches (<span id="csvsc_fcnt">0</span>)</label><label><input type="radio" name="csvtarget" value="selected" id="csvsc_sel"> Selected only (<span id="csvsc_scnt">0</span>)</label></div><div class="csvquick"><button type="button" id="csvall">All</button><button type="button" id="csvcontacts">Contacts</button><button type="button" id="csvbooth">Booth</button><button type="button" id="csvnone">None</button><span id="csvcnt"></span></div><div id="csvgrid" class="csvgrid"></div><button type="button" id="csvgo">Download CSV</button></div></div>
+<div id="slipm" class="slipmodal" style="display:none">
+  <div class="slipcard">
+    <div class="sliptop">
+      <div class="sliplogo">పామూరు వార్డు 9 - ఓటరు స్లిప్</div>
+      <button type="button" id="slipx" class="slipclose">×</button>
+    </div>
+    <div id="slipbody" class="slipbox"></div>
+    <div class="slipactions">
+      <button type="button" id="slipprint" class="slipbtn-print">🖨️ ప్రింట్ / PDF</button>
+      <button type="button" id="slipwa" class="slipbtn-wa">📲 వాట్సాప్‌లో పంపు</button>
+    </div>
+  </div>
+</div>
+<div id="lb"><img id="lbi" alt=""><div id="lbt"></div></div>
 <div id="bar">
 <div class="bartop"><span id="sc"></span><button class="bclear" id="um">Clear marks</button></div>
 <div class="btabs">
@@ -573,10 +616,10 @@ return D.filter(r=>{
 const m=flg[r.s]||{};if(vv==='d'&&!m.d)return false;if(vv==='u'&&!m.u)return false;if(vv==='o'&&!m.o)return false;if(vv==='t'&&!m.t)return false;if(vv==='any'&&!(m.d||m.u||m.o||m.t))return false;if(vv==='none'&&(m.d||m.u||m.o||m.t))return false;
 const pv=pty[r.s];if(vv[0]==='p'){if(vv==='pHas'&&!pv)return false;if(vv==='pNone'&&pv)return false;if(vv!=='p'&&vv!=='pHas'&&vv!=='pNone'&&pv!==vv.slice(1))return false;}const cv=cst[r.s];if(vv[0]==='c'){if(vv==='cHas'&&!cv)return false;if(vv==='cNone'&&cv)return false;if(vv!=='c'&&vv!=='cHas'&&vv!=='cNone'&&cv!==vv.slice(1))return false;}
 const fm=fams[r.s];if(f==='__none'&&fm)return false;if(f==='__any'&&!fm)return false;if(f&&f[0]!=='_'&&fm!==f)return false;
-if(q&&!(r.s+' '+r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')+' '+(lmk[r.s]||'')+' '+(cst[r.s]||'')+' '+(m.gt?'govt teacher teacher':m.t?'teacher':'')).toLowerCase().includes(q))return false;return true})}
+if(q){const hay=(r.s+' '+r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')+' '+(lmk[r.s]||'')+' '+(cst[r.s]||'')+' '+(m.gt?'govt teacher teacher':m.t?'teacher':'')).toLowerCase();const tks=q.split(/\s+/).filter(Boolean);if(!tks.every(tk=>hay.includes(tk)))return false;}return true})}
 function mcard(r){
 const ck=sel.has(r.s)?'checked':'';
-const mobm=mob[r.s]?'<a class="moblink" href="tel:'+esc(mob[r.s])+'" onclick="event.stopPropagation()"><svg class="mico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> '+esc(mob[r.s])+'</a>':'';
+const _dm=(mob[r.s]||'').replace(/\D/g,'');const _wam=_dm.length>=10?'<a class="walink" href="https://wa.me/91'+_dm.slice(-10)+'" target="_blank" onclick="event.stopPropagation()" title="WhatsApp Chat" aria-label="WhatsApp"><svg viewBox="0 0 24 24" width="13" height="13" fill="#25d366"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg></a>':'';const mobm=mob[r.s]?'<a class="moblink" href="tel:'+esc(mob[r.s])+'" onclick="event.stopPropagation()"><svg class="mico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> '+esc(mob[r.s])+'</a>'+_wam:'';
 const famm=fams[r.s]?esc(fams[r.s]):'';
 const lmm=lmk[r.s]?'<span class="lmt">'+esc(lmk[r.s])+'</span>':'';
 const meta=[[r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'',famm].filter(Boolean).join(' · '),[r.h?'📍'+esc(r.h):'',lmm].filter(Boolean).join(' . '),[r.e?esc(r.e):'',mobm].filter(Boolean).join('  ')].filter(Boolean);
@@ -613,16 +656,16 @@ const _frst=$('frst');if(_frst)_frst.onclick=()=>{$('view').value='v';$('fam').v
 const _mbBtn=$('mbadge');if(_mbBtn)_mbBtn.onclick=()=>{const f=$('mkf');f.value=f.value==='cMuslim'?'':'cMuslim';render()};
 $('sall').onclick=()=>{const q=$('q').value.trim();const rows=q?filt():D;if(!rows.length)return alert('Nothing matches the search');rows.forEach(r=>sel.add(r.s));render();}
 function updSt(){let cd=0,cu=0,co=0,ct=0;for(const s in flg){const m=flg[s];if(m.d)cd++;if(m.u)cu++;if(m.o)co++;if(m.t)ct++}const md=$('md'),mu=$('mu'),mo=$('mo'),mt=$('mt');if(md)md.textContent='Dead '+cd;if(mu)mu.textContent='Duplicate '+cu;if(mo)mo.textContent='Out of station '+co;if(mt)mt.textContent='Teacher '+ct}
-function setFlag(k){if(!sel.size)return alert('Select voters first');const allHas=Array.from(sel).every(s=>flg[s]&&flg[s][k]);sel.forEach(s=>{const m=flg[s]||(flg[s]={});if(allHas){delete m[k];if(k==='o')delete oos[s];if(Object.keys(m).length===0)delete flg[s]}else{m[k]=1}});flgSave();if(k==='o')oosSave();render()}
+function setFlag(k){if(!sel.size)return alert('Select voters first');const lbl=k==='d'?'Dead':k==='u'?'Duplicate':k==='t'?'Teacher':'Out of station';withUndo(flg,()=>{const allHas=Array.from(sel).every(s=>flg[s]&&flg[s][k]);sel.forEach(s=>{const m=flg[s]||(flg[s]={});if(allHas){delete m[k];if(k==='o')delete oos[s];if(Object.keys(m).length===0)delete flg[s]}else{m[k]=1}})},()=>{flgSave();if(k==='o')oosSave()},'Flag → '+lbl)}
 function clearFlg(){if(!sel.size)return alert('Select voters first');sel.forEach(s=>{delete flg[s];delete oos[s]});flgSave();oosSave();sel.clear();render()}
 $('md').onclick=()=>setFlag('d');
 $('mu').onclick=()=>setFlag('u');
 $('mt').onclick=()=>setFlag('t');
 $('mo').onclick=()=>{if(!sel.size)return alert('Select voters first');const p=document.querySelector('.bpanel[data-tab="status"]');if(!p.classList.contains('show-oos')){p.classList.add('show-oos');setFlag('o');$('oos').focus()}else{const v=$('oos').value.trim();sel.forEach(s=>{if(v)oos[s]=v;else delete oos[s]});oosSave();p.classList.remove('show-oos');render()}};if(!window._oosKeySet){window._oosKeySet=true;$('oos').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=$('oos').value.trim();sel.forEach(s=>{if(v)oos[s]=v;else delete oos[s]});oosSave();const p=document.querySelector('.bpanel[data-tab="status"]');if(p)p.classList.remove('show-oos');render()}})}
 $('um').onclick=()=>clearFlg();
-document.querySelectorAll('#bar .bchip[data-p]').forEach(b=>{b.onclick=()=>{if(!sel.size)return alert('Select voters first');sel.forEach(s=>{pty[s]=b.dataset.p});ptySave();render()}});$('pcust').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=$('pcust').value.trim();if(!v||!sel.size)return alert(v?'Select voters first':'Type a party name');sel.forEach(s=>{pty[s]=v});ptySave();render();$('pcust').value=''}});
+document.querySelectorAll('#bar .bchip[data-p]').forEach(b=>{b.onclick=()=>{if(!sel.size)return alert('Select voters first');withUndo(pty,()=>sel.forEach(s=>{pty[s]=b.dataset.p}),ptySave,'Party → '+b.dataset.p)}});$('pcust').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=$('pcust').value.trim();if(!v||!sel.size)return alert(v?'Select voters first':'Type a party name');sel.forEach(s=>{pty[s]=v});ptySave();render();$('pcust').value=''}});
 $('pcrem').onclick=()=>{if(!sel.size)return;sel.forEach(s=>{delete pty[s]});ptySave();render()};
-document.querySelectorAll('#bar .bchip[data-c]').forEach(b=>{b.onclick=()=>{if(!sel.size)return alert('Select voters first');sel.forEach(s=>{cst[s]=b.dataset.c});cstSave();render()}});$('ccust').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=$('ccust').value.trim();if(!v||!sel.size)return alert(v?'Select voters first':'Type a caste name');sel.forEach(s=>{cst[s]=v});cstSave();render();$('ccust').value=''}});$('cclrem').onclick=()=>{if(!sel.size)return;sel.forEach(s=>{delete cst[s]});cstSave();render()};
+document.querySelectorAll('#bar .bchip[data-c]').forEach(b=>{b.onclick=()=>{if(!sel.size)return alert('Select voters first');withUndo(cst,()=>sel.forEach(s=>{cst[s]=b.dataset.c}),cstSave,'Caste → '+b.dataset.c)}});$('ccust').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=$('ccust').value.trim();if(!v||!sel.size)return alert(v?'Select voters first':'Type a caste name');sel.forEach(s=>{cst[s]=v});cstSave();render();$('ccust').value=''}});$('cclrem').onclick=()=>{if(!sel.size)return;sel.forEach(s=>{delete cst[s]});cstSave();render()};
 $('lmsave').onclick=()=>{if(!sel.size)return alert('Select voters first');const v=$('lmk').value.trim();sel.forEach(s=>{if(v)lmk[s]=v;else delete lmk[s]});lmkSave();$('lmk').value='';render()};
 document.querySelectorAll('.ixc').forEach(b=>{b.onclick=()=>{const i=b.parentElement.querySelector('input');if(!i)return;i.value='';i.dispatchEvent(new Event('input',{bubbles:true}));i.focus()}});
 $('msave').onclick=()=>{if(!sel.size)return alert('Select voters first');const v=$('mnum').value.trim();const d=v.replace(/\D/g,'');if(v&&d.length<10){alert('Enter a full 10-digit mobile number, or leave empty to clear');return}sel.forEach(s=>{if(v)mob[s]=v;else delete mob[s]});mobSave();$('mnum').value='';sel.clear();render()};
@@ -704,5 +747,118 @@ function kbDialog(){let g=document.getElementById('kbg');if(g)return g;g=documen
 function kbAsk(){const m=$('kmenu'),g=kbDialog(),inp=document.getElementById('kbgp'),err=document.getElementById('kbgeo');err.style.display='none';inp.value='';g.style.display='flex';setTimeout(()=>inp.focus(),30);const close=()=>{g.style.display='none';inp.onkeydown=null};const tryIt=()=>{if(inp.value.trim()==='areef777'){close();m.style.display='flex'}else{err.style.display='block';inp.value='';inp.focus()}};document.getElementById('kbgo').onclick=e=>{e.stopPropagation();tryIt()};document.getElementById('kbgn').onclick=e=>{e.stopPropagation();close()};inp.onkeydown=e=>{if(e.key==='Enter')tryIt()};g.onmousedown=e=>{if(e.target===g)close()}}
 document.addEventListener('click',e=>{const m=$('kmenu');if(m&&!e.target.closest('.kwrap'))m.style.display='none'});
 $('kmenu').addEventListener('click',()=>{$('kmenu').style.display='none'});
+
+/* TOP FIELD PACK JS ENGINE */
+
+/* --- One-Tap Undo Toast Engine --- */
+let _undoTimer = null, lastAction = null;
+function showToast(msg, undoFn) {
+  let t = document.getElementById('wtoast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'wtoast';
+    t.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--hh) + 12px);z-index:9999;background:#0e2418;color:#fff;padding:10px 16px;border-radius:12px;font:700 13px system-ui,sans-serif;display:flex;gap:12px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.35);white-space:nowrap';
+    document.body.appendChild(t);
+  }
+  t.innerHTML = '<span>' + esc(msg) + '</span>';
+  if (undoFn) {
+    const ub = document.createElement('button');
+    ub.type = 'button';
+    ub.textContent = 'Undo';
+    ub.style.cssText = 'background:#12925a;color:#fff;border:none;border-radius:8px;padding:5px 12px;font:800 12px system-ui,sans-serif;cursor:pointer';
+    ub.onclick = e => { e.stopPropagation(); undoFn(); t.style.display = 'none'; };
+    t.appendChild(ub);
+  }
+  t.style.display = 'flex';
+  clearTimeout(_undoTimer);
+  _undoTimer = setTimeout(() => { t.style.display = 'none'; }, 4500);
+}
+
+function withUndo(targetStore, mutateFn, saveFn, actionLabel) {
+  const voters = Array.from(sel);
+  if (!voters.length) return;
+  const prevMap = {};
+  voters.forEach(s => {
+    prevMap[s] = (typeof targetStore[s] === 'object' && targetStore[s] !== null)
+      ? Object.assign({}, targetStore[s])
+      : targetStore[s];
+  });
+  mutateFn();
+  saveFn();
+  render();
+  lastAction = { voters, prevMap, store: targetStore, save: saveFn };
+  showToast(actionLabel + ' (' + voters.length + ')', () => {
+    const act = lastAction;
+    if (!act) return;
+    act.voters.forEach(s => {
+      if (act.prevMap[s] === undefined) delete act.store[s];
+      else act.store[s] = act.prevMap[s];
+    });
+    act.save();
+    render();
+    showToast('Reverted: ' + actionLabel);
+    lastAction = null;
+  });
+}
+
+/* --- Digital Telugu Voter Slip Generator --- */
+function renderSlipContent(s) {
+  const r = D.find(x => x.s === s);
+  if (!r) return '';
+  const genStr = r.g === 'M' ? 'పురుషుడు' : r.g === 'F' ? 'స్త్రీ' : r.g;
+  const relStr = (r.rt && r.rt[0] ? r.rt[0] : 'బంధువు') + ': ' + esc(r.rn || '-');
+  const lmkStr = lmk[s] ? ' (' + esc(lmk[s]) + ')' : '';
+  const famStr = fams[s] ? esc(fams[s]) : '-';
+  const mobStr = mob[s] ? esc(mob[s]) : '-';
+
+  return '<div class="sliprow"><span class="slipk">వార్డు నంబర్:</span><span class="slipv">Ward 9</span></div>' +
+    '<div class="sliprow"><span class="slipk">క్రమ సంఖ్య (Serial #):</span><span class="slipv" style="font-size:15px;color:#12925a">#' + r.s + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">ఓటరు పేరు:</span><span class="slipv">' + esc(r.n) + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">వయస్సు / లింగం:</span><span class="slipv">' + (r.a || '-') + ' సం||, ' + genStr + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">' + relStr + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">ఇంటి నంబర్:</span><span class="slipv">' + esc(r.h || '-') + lmkStr + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">ఓటరు ID (EPIC):</span><span class="slipv" style="letter-spacing:1px">' + esc(r.e || '-') + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">కుటుంబం:</span><span class="slipv">' + famStr + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">మొబైల్:</span><span class="slipv">' + mobStr + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">పోలింగ్ కేంద్రం:</span><span class="slipv">పామూరు వార్డు 9 పోలింగ్ బూత్</span></div>';
+}
+
+function openSlip(s) {
+  window._slipSerial = s;
+  const m = $('slipm');
+  $('slipbody').innerHTML = renderSlipContent(s);
+  m.style.display = 'flex';
+}
+
+$('slipx').onclick = () => { $('slipm').style.display = 'none'; };
+$('slipm').onclick = e => { if (e.target === $('slipm')) $('slipm').style.display = 'none'; };
+
+$('slipprint').onclick = () => { window.print(); };
+
+$('slipwa').onclick = () => {
+  const s = window._slipSerial;
+  const r = D.find(x => x.s === s);
+  if (!r) return;
+  const txt = '🗳️ *పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026*\n' +
+    '*వార్డు:* Ward 9\n' +
+    '*క్రమ సంఖ్య (Serial):* #' + r.s + '\n' +
+    '*ఓటరు పేరు:* ' + r.n + ' (' + (r.a||'') + ' ' + r.g + ')\n' +
+    '*బంధువు:* ' + (r.rt||'') + ' ' + (r.rn||'') + '\n' +
+    '*ఇంటి నం:* ' + (r.h||'') + (lmk[s] ? ' (' + lmk[s] + ')' : '') + '\n' +
+    '*ఓటరు గుర్తింపు కార్డు (EPIC):* ' + (r.e||'') + '\n' +
+    '*పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ కేంద్రం';
+  window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+};
+
+const _sbtn = $('slipbtn');
+if (_sbtn) {
+  _sbtn.onclick = () => {
+    $('kmenu').style.display = 'none';
+    if (!sel.size) return alert('Select a voter to view their voter slip');
+    const first = Array.from(sel)[0];
+    openSlip(first);
+  };
+}
+
 
 </script></body></html>
