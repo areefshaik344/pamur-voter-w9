@@ -462,7 +462,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 })();
 </script>
 <header>
-<div class="row qonly"><div class="qwrap"><input type="search" id="q" placeholder="Search name / house / family / mobile / voter ID"><button type="button" id="qclr" aria-label="Clear search" title="Clear search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><button id="lo" title="Logout" aria-label="Logout"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M18.4 6.4a8 8 0 11-12.8 0"/></svg></button></div>
+<div class="row qonly"><div class="qwrap"><input type="search" id="q" placeholder="name / house / family / mobile / voter ID"><button type="button" id="qclr" aria-label="Clear search" title="Clear search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><button id="lo" title="Logout" aria-label="Logout"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M18.4 6.4a8 8 0 11-12.8 0"/></svg></button></div>
 <div class="row" id="chipsf">
 <select id="view"><option value="h" selected>By house</option><option value="f">By family</option></select>
 <select id="fam"><option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option></select>
@@ -819,18 +819,20 @@ function renderSlipContent(s) {
   const lmkStr = lmk[s] ? ' (' + esc(lmk[s]) + ')' : '';
   const famStr = fams[s] ? esc(fams[s]) : '-';
   const mobStr = mob[s] ? esc(mob[s]) : '-';
+  const candName = (window._candName || localStorage.getItem('pamur9cand') || '-');
+  const candSym = (window._candSym || localStorage.getItem('pamur9sym') || '-');
 
-  return '<div class="sliprow"><span class="slipk">వార్డు నంబర్:</span><span class="slipv">Ward 9</span></div>' +
-    '<div class="sliprow"><span class="slipk">పోలింగ్ తేదీ / సమయం:</span><span class="slipv" style="font-weight:700;color:#b91c1c">26/11/2026 | 7:00 AM - 5:00 PM</span></div>' +
-    '<div class="sliprow"><span class="slipk">క్రమ సంఖ్య (Serial #):</span><span class="slipv" style="font-size:15px;color:#12925a">#' + r.s + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">ఓటరు పేరు:</span><span class="slipv">' + esc(r.n) + '</span></div>' +
+  return '<div class="sliprow"><span class="slipk">పోలింగ్ కేంద్రం:</span><span class="slipv" style="font-weight:700">పామూరు వార్డు 9 పోలింగ్ బూత్</span></div>' +
+    '<div class="sliprow"><span class="slipk">అభ్యర్థి పేరు:</span><span class="slipv" id="slipcand" style="font-weight:700;cursor:pointer" title="అభ్యర్థి పేరు నమోదుకు క్లిక్ చేయండి">' + esc(candName) + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">పార్టీ గుర్తు:</span><span class="slipv" id="slipsym" style="font-weight:700;cursor:pointer" title="గుర్తు నమోదుకు క్లిక్ చేయండి (ఉదా: Ring, Fan, Cycle)">' + esc(candSym) + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">క్రమ సంఖ్య:</span><span class="slipv" style="font-size:15px;color:#12925a;font-weight:700">#' + r.s + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">ఓటరు పేరు:</span><span class="slipv" style="font-weight:700">' + esc(r.n) + '</span></div>' +
     '<div class="sliprow"><span class="slipk">వయస్సు / లింగం:</span><span class="slipv">' + (r.a || '-') + ' సం||, ' + genStr + '</span></div>' +
     '<div class="sliprow"><span class="slipk">' + relStr + '</span></div>' +
     '<div class="sliprow"><span class="slipk">ఇంటి నంబర్:</span><span class="slipv">' + esc(r.h || '-') + lmkStr + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">ఓటరు ID (EPIC):</span><span class="slipv" style="letter-spacing:1px">' + esc(r.e || '-') + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">ఓటరు ID (EPIC):</span><span class="slipv" style="letter-spacing:1px;font-weight:700">' + esc(r.e || '-') + '</span></div>' +
     '<div class="sliprow"><span class="slipk">కుటుంబం:</span><span class="slipv">' + famStr + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">మొబైల్:</span><span class="slipv">' + mobStr + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">పోలింగ్ కేంద్రం:</span><span class="slipv">పామూరు వార్డు 9 పోలింగ్ బూత్</span></div>';
+    '<div class="sliprow"><span class="slipk">మొబైల్:</span><span class="slipv">' + mobStr + '</span></div>';
 }
 
 function openSlip(s) {
@@ -838,8 +840,31 @@ function openSlip(s) {
   const m = $('slipm');
   $('slipbody').innerHTML = renderSlipContent(s);
   m.style.display = 'flex';
-}
 
+  const candEl = $('slipcand');
+  if (candEl) {
+    candEl.onclick = () => {
+      const cur = localStorage.getItem('pamur9cand') || '';
+      const val = prompt('అభ్యర్థి పేరు నమోదు చేయండి (Enter Candidate Name):', cur);
+      if (val !== null) {
+        localStorage.setItem('pamur9cand', val.trim());
+        $('slipbody').innerHTML = renderSlipContent(window._slipSerial);
+      }
+    };
+  }
+
+  const symEl = $('slipsym');
+  if (symEl) {
+    symEl.onclick = () => {
+      const cur = localStorage.getItem('pamur9sym') || '';
+      const val = prompt('పార్టీ గుర్తు నమోదు చేయండి (Enter Party Symbol, e.g. Ring, Fan, Cycle):', cur);
+      if (val !== null) {
+        localStorage.setItem('pamur9sym', val.trim());
+        $('slipbody').innerHTML = renderSlipContent(window._slipSerial);
+      }
+    };
+  }
+}
 $('slipx').onclick = () => { $('slipm').style.display = 'none'; };
 $('slipm').onclick = e => { if (e.target === $('slipm')) $('slipm').style.display = 'none'; };
 
@@ -849,15 +874,18 @@ $('slipwa').onclick = () => {
   const s = window._slipSerial;
   const r = D.find(x => x.s === s);
   if (!r) return;
-  const txt = '🗳️ *పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026*\n' +
-    '📅 *పోలింగ్ తేదీ:* 26/11/2026\n' +
-    '*వార్డు:* Ward 9\n' +
-    '*క్రమ సంఖ్య (Serial):* #' + r.s + '\n' +
-    '*ఓటరు పేరు:* ' + r.n + ' (' + (r.a||'') + ' ' + r.g + ')\n' +
-    '*బంధువు:* ' + (r.rt||'') + ' ' + (r.rn||'') + '\n' +
-    '*ఇంటి నం:* ' + (r.h||'') + (lmk[s] ? ' (' + lmk[s] + ')' : '') + '\n' +
-    '*ఓటరు గుర్తింపు కార్డు (EPIC):* ' + (r.e||'') + '\n' +
-    '*పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ కేంద్రం';
+  const candName = (window._candName || localStorage.getItem('pamur9cand') || '-');
+  const candSym = (window._candSym || localStorage.getItem('pamur9sym') || '-');
+  const txt = '🗳️ *పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026*' + String.fromCharCode(10) +
+    '📅 *పోలింగ్:* 26/11/2026 | 7:00 AM - 5:00 PM' + String.fromCharCode(10) +
+    '🏛️ *పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ బూత్' + String.fromCharCode(10) +
+    '👤 *అభ్యర్థి పేరు:* ' + candName + String.fromCharCode(10) +
+    '🗳️ *పార్టీ గుర్తు:* ' + candSym + String.fromCharCode(10) +
+    '*క్రమ సంఖ్య:* #' + r.s + String.fromCharCode(10) +
+    '*ఓటరు పేరు:* ' + r.n + ' (' + (r.a||'') + ' ' + r.g + ')' + String.fromCharCode(10) +
+    '*బంధువు:* ' + (r.rt||'') + ' ' + (r.rn||'') + String.fromCharCode(10) +
+    '*ఇంటి నం:* ' + (r.h||'') + (lmk[s] ? ' (' + lmk[s] + ')' : '') + String.fromCharCode(10) +
+    '*ఓటరు గుర్తింపు కార్డు (EPIC):* ' + (r.e||'');
   window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
 };
 
