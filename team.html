@@ -464,7 +464,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <header>
 <div class="row qonly"><div class="qwrap"><input type="search" id="q" placeholder="Search name / house / family / mobile / voter ID"><button type="button" id="qclr" aria-label="Clear search" title="Clear search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><button id="lo" title="Logout" aria-label="Logout"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M18.4 6.4a8 8 0 11-12.8 0"/></svg></button></div>
 <div class="row" id="chipsf">
-<select id="view"><option value="v">Voters</option><option value="h">By house</option><option value="f">By family</option></select>
+<select id="view"><option value="h" selected>By house</option><option value="f">By family</option></select>
 <select id="fam"><option value="">All families</option><option value="__none">Ungrouped</option><option value="__any">In a family</option></select>
 <select id="mkf"><option value="">All statuses</option><optgroup label="Status"><option value="d">Dead</option><option value="u">Duplicate</option><option value="o">Out of station</option><option value="t">Teacher</option><option value="any">Any marked</option><option value="none">Unmarked only</option></optgroup><optgroup label="Party"><option value="p">All parties</option><option value="pYCP">YCP</option><option value="pTDP">TDP</option><option value="pJSP">JSP</option><option value="pOthers">Others</option><option value="pHas">Has a party</option><option value="pNone">No party yet</option></optgroup><optgroup label="Caste"><option value="cMuslim">Muslim</option><option value="cHindu">Hindu</option><option value="cChristian">Christian</option><option value="cOther">Other</option><option value="cHas">Has a caste</option><option value="cNone">No caste yet</option></optgroup></select>
 <button type="button" id="frst" aria-label="Reset filters" title="Reset filters"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></button>
@@ -653,8 +653,8 @@ document.addEventListener('change',e=>{const box=e.target.closest('label[data-gs
 const ids=D.filter(r=>(vk==='h'?(r.h||'(none)'):(fams[r.s]||'(ungrouped)'))===key&&filt().some(f=>f.s===r.s)).map(r=>r.s);
 ids.forEach(s=>on?sel.add(s):sel.delete(s));render()});
 $('lo').onclick=()=>{try{sessionStorage.removeItem('pamur9unlocked')}catch(e){}location.reload()};
-function clearFilters(){$('q').value='';$('mkf').value='';$('fam').value='';$('view').value='v';$('qclr').style.display='none';render()}
-const _frst=$('frst');if(_frst)_frst.onclick=()=>{$('view').value='v';$('fam').value='';$('mkf').value='';$('qclr').style.display='none';render()};
+function clearFilters(){$('q').value='';$('mkf').value='';$('fam').value='';$('view').value='h';$('qclr').style.display='none';render()}
+const _frst=$('frst');if(_frst)_frst.onclick=()=>{$('view').value='h';$('fam').value='';$('mkf').value='';$('qclr').style.display='none';render()};
 const _mbBtn=$('mbadge');if(_mbBtn)_mbBtn.onclick=()=>{const f=$('mkf');f.value=f.value==='cMuslim'?'':'cMuslim';render()};
 $('sall').onclick=()=>{const q=$('q').value.trim();const rows=q?filt():D;if(!rows.length)return alert('Nothing matches the search');rows.forEach(r=>sel.add(r.s));render();}
 function updSt(){let cd=0,cu=0,co=0,ct=0;for(const s in flg){const m=flg[s];if(m.d)cd++;if(m.u)cu++;if(m.o)co++;if(m.t)ct++}const md=$('md'),mu=$('mu'),mo=$('mo'),mt=$('mt');if(md)md.textContent='Dead '+cd;if(mu)mu.textContent='Duplicate '+cu;if(mo)mo.textContent='Out of station '+co;if(mt)mt.textContent='Teacher '+ct}
