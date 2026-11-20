@@ -488,7 +488,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <div id="slipm" class="slipmodal" style="display:none">
   <div class="slipcard">
     <div class="sliptop">
-      <div class="sliplogo">పామూరు వార్డు 9 - ఓటరు స్లిప్<div style="font-size:12px;font-weight:700;color:#b91c1c;margin-top:2px">పోలింగ్ తేదీ: 26/11/2026</div></div>
+      <div class="sliplogo">పామూరు వార్డు 9 - ఓటరు స్లిప్<div style="font-size:12px;font-weight:700;color:#b91c1c;margin-top:2px">పోలింగ్: 26/11/2026 | 7:00 AM - 5:00 PM</div></div>
       <button type="button" id="slipx" class="slipclose">×</button>
     </div>
     <div id="slipbody" class="slipbox"></div>
@@ -812,7 +812,7 @@ function renderSlipContent(s) {
   const mobStr = mob[s] ? esc(mob[s]) : '-';
 
   return '<div class="sliprow"><span class="slipk">వార్డు నంబర్:</span><span class="slipv">Ward 9</span></div>' +
-    '<div class="sliprow"><span class="slipk">పోలింగ్ తేదీ:</span><span class="slipv" style="font-weight:700;color:#b91c1c">26/11/2026</span></div>' +
+    '<div class="sliprow"><span class="slipk">పోలింగ్ తేదీ / సమయం:</span><span class="slipv" style="font-weight:700;color:#b91c1c">26/11/2026 | 7:00 AM - 5:00 PM</span></div>' +
     '<div class="sliprow"><span class="slipk">క్రమ సంఖ్య (Serial #):</span><span class="slipv" style="font-size:15px;color:#12925a">#' + r.s + '</span></div>' +
     '<div class="sliprow"><span class="slipk">ఓటరు పేరు:</span><span class="slipv">' + esc(r.n) + '</span></div>' +
     '<div class="sliprow"><span class="slipk">వయస్సు / లింగం:</span><span class="slipv">' + (r.a || '-') + ' సం||, ' + genStr + '</span></div>' +
