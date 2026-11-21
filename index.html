@@ -633,8 +633,8 @@ const _dm=(mob[r.s]||'').replace(/\D/g,'');const _wam=_dm.length>=10?'<a class="
 const famm=fams[r.s]?esc(fams[r.s]):'';
 const lmm=lmk[r.s]?'<span class="lmt">'+esc(lmk[r.s])+'</span>':'';
 const meta=[[r.rt[0]?esc(r.rt[0])+' '+esc(r.rn):'',famm].filter(Boolean).join(' · '),[r.h?'📍'+esc(r.h):'',lmm].filter(Boolean).join(' . '),[r.e?esc(r.e)+'<button type="button" class="slipicon" onclick="event.stopPropagation();openSlip('+r.s+')" title="Voter slip">Slip</button>':'',mobm].filter(Boolean).join('  ')].filter(Boolean);
-return `<div class="mcard${sel.has(r.s)?' sel':''}" data-s="${r.s}"><input type="checkbox" ${ck}><div class="phcol"><img loading="lazy" class="av s" data-ph="${r.s}" src="${PH(r.s)}" alt=""><span class="sr">${r.s}</span></div><div class="mcol"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag'+(cst[r.s]==='Muslim'?' agm':cst[r.s]==='Hindu'?' agh':'')+'">'+r.a+'</span>':''}${flg[r.s]&&flg[r.s].t?'<svg class="tchic" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M6 10.5V15c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.5"/></svg>':''}</div><div class="ms">${meta.map(x=>'<div class="ml">' + x + '</div>').join("")}</div><div class="mc">${partyChip(r.s)}${flagChips(r.s)}</div></div></div>`}
-function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="${PH(r.s)}" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${esc(mob[r.s])}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${r.h?'📍'+esc(r.h):''}${lmk[r.s]?' . <span class="lms">'+esc(lmk[r.s])+'</span>':''}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${casteChip(r.s)}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
+return `<div class="mcard${sel.has(r.s)?' sel':''}" data-s="${r.s}"><input type="checkbox" ${ck}><div class="phcol"><img loading="lazy" class="av s" data-ph="${r.s}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 88 117' fill='%23e6ede8'/%3E" alt=""><span class="sr">${r.s}</span></div><div class="mcol"><div class="mi">${esc(r.n)}${r.a!=null&&r.a!==''?'<span class="ag'+(cst[r.s]==='Muslim'?' agm':cst[r.s]==='Hindu'?' agh':'')+'">'+r.a+'</span>':''}${flg[r.s]&&flg[r.s].t?'<svg class="tchic" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M6 10.5V15c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.5"/></svg>':''}</div><div class="ms">${meta.map(x=>'<div class="ml">' + x + '</div>').join("")}</div><div class="mc">${partyChip(r.s)}${flagChips(r.s)}</div></div></div>`}
+function row(r){return `<tr data-s="${r.s}" class="${sel.has(r.s)?'sel':''}"><td><input type="checkbox" ${sel.has(r.s)?'checked':''}></td><td>${r.s}</td><td><img loading="lazy" class="av" data-ph="${r.s}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 88 117' fill='%23e6ede8'/%3E" alt=""> ${esc(r.n)}${mob[r.s]?`<div class="mobsub">${esc(mob[r.s])}</div>`:''}</td><td>${r.rt[0]||''}: ${esc(r.rn)}</td><td>${r.a??''}</td><td>${r.g}</td><td>${r.h?'📍'+esc(r.h):''}${lmk[r.s]?' . <span class="lms">'+esc(lmk[r.s])+'</span>':''}</td><td>${esc(r.e)}</td><td>${fams[r.s]?`<span class="tag">${esc(fams[r.s])}</span>`:''}${casteChip(r.s)}${partyChip(r.s)}${flagChips(r.s)}</td></tr>`}
 function render(){const rows=filt(),v=$('view').value;
 const _mc=rows.filter(r=>cst[r.s]==='Muslim').length,_tm=D.filter(r=>cst[r.s]==='Muslim').length;
 const _mPill=_tm>0?' · <button type="button" class="ag agm stm'+($('mkf').value==='cMuslim'?' active':'')+'" id="mbadge" title="Filter">'+(rows.length===D.length?_tm:(_mc+'/'+_tm))+'</button>':'';
@@ -648,7 +648,26 @@ const ks=Object.keys(m).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))
 h=ks.map(x=>{const gm=m[x];const allCk=gm.length>0&&gm.every(r=>sel.has(r.s));const ind=!allCk&&gm.some(r=>sel.has(r.s));const _fbtn=(v==='f'&&x!=='(ungrouped)')?`<button type="button" class="fslipbtn" onclick="event.stopPropagation();openFamilySlip('${esc(x)}')">👨‍👩‍👧‍👦 స్లిప్పులు (${gm.length})</button>`:'';
 const head=`<div class="hcard"><h3><label class="gall" data-gsel="${esc(x)}"><input type="checkbox" data-ind="${ind?1:0}"${allCk?' checked':''}> ${v==='h'?'House ':'Family: '}${esc(x)}</label><span class="stats">${_fbtn}${gm.length} voters</span></h3>`;const body=gm.map(mcard).join('');return head+body+'</div>'}).join('')}
 if(!rows.length)h='<div class="empty">No voters match the current filters.<br><button class="mb" id="rstf">Reset filters</button></div>';
-const _oi={};document.querySelectorAll('#out img[data-ph]').forEach(im=>{if(im.complete&&im.naturalWidth>0)_oi[im.dataset.ph]=im});$('out').innerHTML=h;document.querySelectorAll('#out img[data-ph]').forEach(nn=>{const o=_oi[nn.dataset.ph];if(o&&o!==nn)nn.replaceWith(o)});document.querySelectorAll('input[data-ind="1"]').forEach(i=>i.indeterminate=true);bar();updSt();hh();
+$('out').innerHTML=h;
+if(window._phObs)window._phObs.disconnect();
+if('IntersectionObserver' in window){
+  window._phObs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const im=e.target;
+        const s=+im.dataset.ph;
+        if(s&&im.dataset.loaded!=='1'){
+          im.src=PH(s);
+          im.dataset.loaded='1';
+        }
+        window._phObs.unobserve(im);
+      }
+    });
+  },{rootMargin:'250px 0px'});
+  document.querySelectorAll('#out img[data-ph]').forEach(im=>window._phObs.observe(im));
+}else{
+  document.querySelectorAll('#out img[data-ph]').forEach(im=>{const s=+im.dataset.ph;if(s)im.src=PH(s);});
+}document.querySelectorAll('input[data-ind="1"]').forEach(i=>i.indeterminate=true);bar();updSt();hh();
 const _al=$('all');if(_al){_al.checked=rows.length>0&&rows.every(r=>sel.has(r.s));_al.indeterminate=rows.some(r=>sel.has(r.s))&&!_al.checked;_al.addEventListener('change',e=>{const on=e.target.checked;rows.forEach(r=>on?sel.add(r.s):sel.delete(r.s));render()});}
 const _rf=$('rstf');if(_rf)_rf.onclick=clearFilters;
 }
