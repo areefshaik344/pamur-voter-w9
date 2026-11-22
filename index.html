@@ -932,8 +932,27 @@ function openFamilySlip(famName) {
 $('slipx').onclick = () => { $('slipm').style.display = 'none'; };
 $('slipm').onclick = e => { if (e.target === $('slipm')) $('slipm').style.display = 'none'; };
 
+function openWaLink(url) {
+  var opened = null;
+  try {
+    if (typeof window.open === 'function') opened = window.open(url, '_blank');
+  } catch(e){}
+  if (!opened) {
+    try {
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { try { a.remove(); } catch(e){} }, 200);
+    } catch(e) {
+      window.location.href = url;
+    }
+  }
+}
+
 $('slipwa').onclick = () => {
-  const candName = (window._candName || localStorage.getItem('pamur9cand') || '-');
   const candSym = (window._candSym || localStorage.getItem('pamur9sym') || '-');
   const LF = String.fromCharCode(10);
 
@@ -954,9 +973,8 @@ $('slipwa').onclick = () => {
     let txt = '🗳️ *పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026*' + LF +
       '📅 *పోలింగ్:* 26/11/2026 | 7:00 AM - 1:00 PM' + LF +
       '🏛️ *పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ బూత్' + LF +
-      
       '*సర్పంచ్ గుర్తు (Pink):* ✂️' + LF +
-      '*వార్డు గుర్తు (White):* ' + candSym + LF +
+      '*వార్డు గుర్తు (White):* ' + candSym + '' + LF +
       '👨‍👩‍👧‍👦 *కుటుంబం:* ' + famName + ' (' + fvoters.length + ' మంది ఓటర్లు)' + LF +
       '━━━━━━━━━━━━━━━━━━━━━' + LF;
 
@@ -971,10 +989,17 @@ $('slipwa').onclick = () => {
       if (idx < fvoters.length - 1) txt += '─────────────────────' + LF;
     });
 
+    txt += '━━━━━━━━━━━━━━━━━━━━━' + LF +
+      'ℹ️ *ఎన్నికల ముఖ్య సమాచారం:*' + LF +
+      '• ⏰ *7 am – 1 pm* (Polling hours)' + LF +
+      '• 🗳️ *2 votes* (Sarpanch + ward member)' + LF +
+      '• 🎟️ *Pink: ✂️ | White: ' + candSym + ''* + LF +
+      '• 📊 *Same day* (Counting from 2 pm)';
+
     const sendUrl = (targetMob.length >= 10)
       ? 'https://wa.me/91' + targetMob.slice(-10) + '?text=' + encodeURIComponent(txt)
       : 'https://wa.me/?text=' + encodeURIComponent(txt);
-    window.open(sendUrl, '_blank');
+    openWaLink(sendUrl);
     return;
   }
 
@@ -982,41 +1007,33 @@ $('slipwa').onclick = () => {
   const s = window._slipSerial;
   const r = D.find(x => x.s === s);
   if (!r) return;
-  const txt = '🗳️ *పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026*' + LF +
+
+  const rawMob = (mob[r.s] || '').replace(/\D/g, '');
+  const genStr = r.g === 'M' ? 'పురుషుడు' : r.g === 'F' ? 'స్త్రీ' : r.g;
+  let txt = '🗳️ *పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026*' + LF +
     '📅 *పోలింగ్:* 26/11/2026 | 7:00 AM - 1:00 PM' + LF +
     '🏛️ *పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ బూత్' + LF +
-    
     '*సర్పంచ్ గుర్తు (Pink):* ✂️' + LF +
-      '*వార్డు గుర్తు (White):* ' + candSym + LF +
+    '*వార్డు గుర్తు (White):* ' + candSym + '' + LF +
     '*క్రమ సంఖ్య:* #' + r.s + LF +
-    '*ఓటరు పేరు:* ' + r.n + ' (' + (r.a||'') + ' ' + r.g + ')' + LF +
+    '*ఓటరు పేరు:* ' + r.n + ' (' + (r.a||'') + ' సం||, ' + genStr + ')' + LF +
     '*బంధువు:* ' + (r.rt||'') + ' ' + (r.rn||'') + LF +
-    '*ఇంటి నం:* ' + (r.h||'') + (lmk[s] ? ' (' + lmk[s] + ')' : '') + LF +
-    '*ఓటరు గుర్తింపు కార్డు (EPIC):* ' + (r.e||'');
-  window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+    '*ఇంటి నం:* ' + (r.h||'') + (lmk[r.s] ? ' (' + lmk[r.s] + ')' : '') + LF +
+    '*ఓటరు ID (EPIC):* ' + (r.e||'') + LF +
+    '━━━━━━━━━━━━━━━━━━━━━' + LF +
+    'ℹ️ *ఎన్నికల ముఖ్య సమాచారం:*' + LF +
+    '• ⏰ *7 am – 1 pm* (Polling hours)' + LF +
+    '• 🗳️ *2 votes* (Sarpanch + ward member)' + LF +
+    '• 🎟️ *Pink: ✂️ | White: ' + candSym + ''* + LF +
+    '• 📊 *Same day* (Counting from 2 pm)';
+
+  const sendUrl = (rawMob.length >= 10)
+    ? 'https://wa.me/91' + rawMob.slice(-10) + '?text=' + encodeURIComponent(txt)
+    : 'https://wa.me/?text=' + encodeURIComponent(txt);
+  openWaLink(sendUrl);
 };
 
 $('slipprint').onclick = () => { window.print(); };
-
-$('slipwa').onclick = () => {
-  const s = window._slipSerial;
-  const r = D.find(x => x.s === s);
-  if (!r) return;
-  const candName = (window._candName || localStorage.getItem('pamur9cand') || '-');
-  const candSym = (window._candSym || localStorage.getItem('pamur9sym') || '-');
-  const txt = '🗳️ *పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026*' + String.fromCharCode(10) +
-    '📅 *పోలింగ్:* 26/11/2026 | 7:00 AM - 1:00 PM' + String.fromCharCode(10) +
-    '🏛️ *పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ బూత్' + String.fromCharCode(10) +
-    
-    '*సర్పంచ్ గుర్తు (Pink):* ✂️' + String.fromCharCode(10) +
-    '*వార్డు గుర్తు (White):* ' + candSym + String.fromCharCode(10) +
-    '*క్రమ సంఖ్య:* #' + r.s + String.fromCharCode(10) +
-    '*ఓటరు పేరు:* ' + r.n + ' (' + (r.a||'') + ' ' + r.g + ')' + String.fromCharCode(10) +
-    '*బంధువు:* ' + (r.rt||'') + ' ' + (r.rn||'') + String.fromCharCode(10) +
-    '*ఇంటి నం:* ' + (r.h||'') + (lmk[s] ? ' (' + lmk[s] + ')' : '') + String.fromCharCode(10) +
-    '*ఓటరు గుర్తింపు కార్డు (EPIC):* ' + (r.e||'');
-  window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
-};
 
 const _sbtn = $('slipbtn');
 if (_sbtn) {
