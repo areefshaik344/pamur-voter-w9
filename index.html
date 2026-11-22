@@ -507,6 +507,10 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
     <div class="slipbadges">
       <div class="slipbadge"><div class="sb-val">7 am – 1 pm</div><div class="sb-lbl">Polling hours</div></div>
       <div class="slipbadge"><div class="sb-val">2 votes</div><div class="sb-lbl">Sarpanch + ward member</div></div>
+      <div class="slipbadge" style="background:#fdf2f8;border-color:#fbcfe8"><div class="sb-val" style="color:#be185d">Pink: కత్తెర</div><div class="sb-lbl" style="color:#9d174d">సర్పంచ్ గుర్తు</div></div>
+      <div class="slipbadge"><div class="sb-val" style="color:#1e293b">White: వార్డు బ్యాలెట్</div><div class="sb-lbl" style="color:#334155">వార్డు సభ్యుడు గుర్తు</div></div>
+    </div>
+      <div class="slipbadge"><div class="sb-val">2 votes</div><div class="sb-lbl">Sarpanch + ward member</div></div>
       <div class="slipbadge" style="background:#fdf2f8;border-color:#fbcfe8"><div class="sb-val" style="color:#be185d">🌸 Pink: ✂️ Scissors</div><div class="sb-lbl" style="color:#9d174d">సర్పంచ్ గుర్తు: కత్తెర</div></div>
       <div class="slipbadge"><div class="sb-val" style="color:#1e293b">⚪ White: Ward ballot</div><div class="sb-lbl" style="color:#334155">వార్డు సభ్యుడు గుర్తు</div></div>
     </div>
@@ -846,41 +850,14 @@ function renderSingleSlipHtml(r, num, total) {
   const lmkStr = lmk[r.s] ? ' (' + esc(lmk[r.s]) + ')' : '';
   const famStr = fams[r.s] ? esc(fams[r.s]) : '-';
   const mobStr = mob[r.s] ? esc(mob[r.s]) : '-';
-  const candName = (window._candName || localStorage.getItem('pamur9cand') || '-');
   const candSym = (window._candSym || localStorage.getItem('pamur9sym') || '-');
 
   const divHeader = (total && total > 1) ? '<div class="fdivider"><span>సభ్యుడు ' + num + ' / ' + total + '</span><span>#' + r.s + '</span></div>' : '';
 
   return divHeader +
     '<div class="sliprow"><span class="slipk">పోలింగ్ కేంద్రం:</span><span class="slipv" style="font-weight:700">పామూరు వార్డు 9 పోలింగ్ బూత్</span></div>' +
-    '<div class="sliprow"><span class="slipk">అభ్యర్థి పేరు:</span><span class="slipv" id="slipcand" style="font-weight:700;cursor:pointer" title="అభ్యర్థి పేరు నమోదుకు క్లిక్ చేయండి">' + esc(candName) + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">🌸 సర్పంచ్ గుర్తు (Pink):</span><span class="slipv" style="font-weight:700;color:#be185d">✂️ కత్తెర (Scissors)</span></div>' +
-    '<div class="sliprow"><span class="slipk">⚪ వార్డు గుర్తు (White):</span><span class="slipv" id="slipsym" style="font-weight:700;cursor:pointer" title="వార్డు అభ్యర్థి గుర్తు నమోదుకు క్లిక్ చేయండి">' + esc(candSym) + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">క్రమ సంఖ్య:</span><span class="slipv" style="font-size:15px;color:#12925a;font-weight:700">#' + r.s + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">ఓటరు పేరు:</span><span class="slipv" style="font-weight:700">' + esc(r.n) + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">వయస్సు / లింగం:</span><span class="slipv">' + (r.a || '-') + ' సం||, ' + genStr + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">' + relStr + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">ఇంటి నంబర్:</span><span class="slipv">' + esc(r.h || '-') + lmkStr + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">ఓటరు ID (EPIC):</span><span class="slipv" style="letter-spacing:1px;font-weight:700">' + esc(r.e || '-') + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">కుటుంబం:</span><span class="slipv">' + famStr + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">మొబైల్:</span><span class="slipv">' + mobStr + '</span></div>';
-}
-
-function renderSingleSlipHtml(r, num, total) {
-  const genStr = r.g === 'M' ? 'పురుషుడు' : r.g === 'F' ? 'స్త్రీ' : r.g;
-  const relStr = (r.rt && r.rt[0] ? r.rt[0] : 'బంధువు') + ': ' + esc(r.rn || '-');
-  const lmkStr = lmk[r.s] ? ' (' + esc(lmk[r.s]) + ')' : '';
-  const famStr = fams[r.s] ? esc(fams[r.s]) : '-';
-  const mobStr = mob[r.s] ? esc(mob[r.s]) : '-';
-  const candName = (window._candName || localStorage.getItem('pamur9cand') || '-');
-  const candSym = (window._candSym || localStorage.getItem('pamur9sym') || '-');
-
-  const divHeader = (total && total > 1) ? '<div class="fdivider"><span>సభ్యుడు ' + num + ' / ' + total + '</span><span>#' + r.s + '</span></div>' : '';
-
-  return divHeader +
-    '<div class="sliprow"><span class="slipk">పోలింగ్ కేంద్రం:</span><span class="slipv" style="font-weight:700">పామూరు వార్డు 9 పోలింగ్ బూత్</span></div>' +
-    '<div class="sliprow"><span class="slipk">అభ్యర్థి పేరు:</span><span class="slipv" id="slipcand" style="font-weight:700;cursor:pointer" title="అభ్యర్థి పేరు నమోదుకు క్లిక్ చేయండి">' + esc(candName) + '</span></div>' +
-    '<div class="sliprow"><span class="slipk">పార్టీ గుర్తు:</span><span class="slipv" id="slipsym" style="font-weight:700;cursor:pointer" title="గుర్తు నమోదుకు క్లిక్ చేయండి (ఉదా: Ring, Fan, Cycle)">' + esc(candSym) + '</span></div>' +
+    '<div class="sliprow"><span class="slipk">సర్పంచ్ గుర్తు (Pink):</span><span class="slipv" style="font-weight:700;color:#be185d">కత్తెర</span></div>' +
+    '<div class="sliprow"><span class="slipk">వార్డు గుర్తు (White):</span><span class="slipv" id="slipsym" style="font-weight:700;cursor:pointer" title="వార్డు అభ్యర్థి గుర్తు నమోదుకు క్లిక్ చేయండి">' + esc(candSym) + '</span></div>' +
     '<div class="sliprow"><span class="slipk">క్రమ సంఖ్య:</span><span class="slipv" style="font-size:15px;color:#12925a;font-weight:700">#' + r.s + '</span></div>' +
     '<div class="sliprow"><span class="slipk">ఓటరు పేరు:</span><span class="slipv" style="font-weight:700">' + esc(r.n) + '</span></div>' +
     '<div class="sliprow"><span class="slipk">వయస్సు / లింగం:</span><span class="slipv">' + (r.a || '-') + ' సం||, ' + genStr + '</span></div>' +
@@ -981,9 +958,9 @@ $('slipwa').onclick = () => {
     let txt = '🗳️ *పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026*' + LF +
       '📅 *పోలింగ్:* 26/11/2026 | 7:00 AM - 1:00 PM' + LF +
       '🏛️ *పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ బూత్' + LF +
-      '👤 *అభ్యర్థి పేరు:* ' + candName + LF +
-      '🌸 *సర్పంచ్ గుర్తు (Pink):* ✂️ కత్తెర (Scissors)' + LF +
-      '⚪ *వార్డు గుర్తు (White):* ' + candSym + LF +
+      
+      '*సర్పంచ్ గుర్తు (Pink):* కత్తెర' + LF +
+      '*వార్డు గుర్తు (White):* ' + candSym + LF +
       '👨‍👩‍👧‍👦 *కుటుంబం:* ' + famName + ' (' + fvoters.length + ' మంది ఓటర్లు)' + LF +
       '━━━━━━━━━━━━━━━━━━━━━' + LF;
 
@@ -1012,9 +989,9 @@ $('slipwa').onclick = () => {
   const txt = '🗳️ *పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026*' + LF +
     '📅 *పోలింగ్:* 26/11/2026 | 7:00 AM - 1:00 PM' + LF +
     '🏛️ *పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ బూత్' + LF +
-    '👤 *అభ్యర్థి పేరు:* ' + candName + LF +
-    '🌸 *సర్పంచ్ గుర్తు (Pink):* ✂️ కత్తెర (Scissors)' + LF +
-      '⚪ *వార్డు గుర్తు (White):* ' + candSym + LF +
+    
+    '*సర్పంచ్ గుర్తు (Pink):* కత్తెర' + LF +
+      '*వార్డు గుర్తు (White):* ' + candSym + LF +
     '*క్రమ సంఖ్య:* #' + r.s + LF +
     '*ఓటరు పేరు:* ' + r.n + ' (' + (r.a||'') + ' ' + r.g + ')' + LF +
     '*బంధువు:* ' + (r.rt||'') + ' ' + (r.rn||'') + LF +
@@ -1034,9 +1011,9 @@ $('slipwa').onclick = () => {
   const txt = '🗳️ *పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026*' + String.fromCharCode(10) +
     '📅 *పోలింగ్:* 26/11/2026 | 7:00 AM - 1:00 PM' + String.fromCharCode(10) +
     '🏛️ *పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ బూత్' + String.fromCharCode(10) +
-    '👤 *అభ్యర్థి పేరు:* ' + candName + String.fromCharCode(10) +
-    '🌸 *సర్పంచ్ గుర్తు (Pink):* ✂️ కత్తెర (Scissors)' + String.fromCharCode(10) +
-    '⚪ *వార్డు గుర్తు (White):* ' + candSym + String.fromCharCode(10) +
+    
+    '*సర్పంచ్ గుర్తు (Pink):* కత్తెర' + String.fromCharCode(10) +
+    '*వార్డు గుర్తు (White):* ' + candSym + String.fromCharCode(10) +
     '*క్రమ సంఖ్య:* #' + r.s + String.fromCharCode(10) +
     '*ఓటరు పేరు:* ' + r.n + ' (' + (r.a||'') + ' ' + r.g + ')' + String.fromCharCode(10) +
     '*బంధువు:* ' + (r.rt||'') + ' ' + (r.rn||'') + String.fromCharCode(10) +
