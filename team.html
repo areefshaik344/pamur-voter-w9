@@ -498,7 +498,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <div class="row strow"><span class="stats" id="st"></span></div>
 </header>
 <div class="wrap" id="out"></div>
-<div id="csvm" style="display:none"><div class="csvcard"><div class="csvtop"><b>Choose columns</b><button type="button" id="csvmx" aria-label="Close">&times;</button></div><div class="csvscope" id="csvscope"><label><input type="radio" name="csvtarget" value="filtered" checked id="csvsc_all"> All matches (<span id="csvsc_fcnt">0</span>)</label><label><input type="radio" name="csvtarget" value="selected" id="csvsc_sel"> Selected only (<span id="csvsc_scnt">0</span>)</label></div><div class="csvquick"><button type="button" id="csvall">All</button><button type="button" id="csvcontacts">Contacts</button><button type="button" id="csvbooth">Booth</button><button type="button" id="csvnone">None</button><span id="csvcnt"></span></div><div id="csvgrid" class="csvgrid"></div><button type="button" id="csvgo">Download CSV</button></div></div>
+<div id="csvm" style="display:none"><div class="csvcard"><div class="csvtop"><b>Choose columns</b><button type="button" id="csvmx" aria-label="Close">&times;</button></div><div class="csvscope" id="csvscope"><label><input type="radio" name="csvtarget" value="filtered" checked id="csvsc_all"> All matches (<span id="csvsc_fcnt">0</span>)</label><label><input type="radio" name="csvtarget" value="selected" id="csvsc_sel"> Selected only (<span id="csvsc_scnt">0</span>)</label></div><div class="csvquick"><button type="button" id="csvall">All</button><button type="button" id="csvcontacts">Contacts</button><button type="button" id="csvbooth">Booth</button><button type="button" id="csvnone">None</button><span id="csvcnt"></span></div><div id="csvgrid" class="csvgrid"></div><button type="button" id="csvgo">Download Excel (All 5 Sheets)</button><button type="button" id="csvplain" style="margin-top:8px;background:none;border:none;color:#15803d;font:700 12px system-ui;cursor:pointer;text-decoration:underline">or Download plain CSV</button></div></div>
 <div id="slipm" class="slipmodal" style="display:none">
   <div class="slipcard">
     <div class="sliptop">
@@ -729,6 +729,84 @@ $('mk').onclick=()=>{const n=$('fname').value.trim();if(!n)return $('fname').foc
 $('ug').onclick=()=>{sel.forEach(s=>delete fams[s]);sel.clear();save();refreshFam();render()};
 $('clr').onclick=()=>{sel.clear();render()};
 function dl(name,txt,type){const b=new Blob([txt],{type});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();setTimeout(()=>{try{a.remove();URL.revokeObjectURL(u)}catch(e){}},1200)}
+function makeXlsx(sheets){
+  function crc32(b){
+    let c=0xFFFFFFFF;
+    if(!window._crcT){
+      window._crcT=[];
+      for(let n=0;n<256;n++){
+        let v=n;
+        for(let k=0;k<8;k++)v=(v&1)?(0xEDB88320^(v>>>1)):(v>>>1);
+        window._crcT[n]=v>>>0;
+      }
+    }
+    const T=window._crcT;
+    for(let i=0;i<b.length;i++)c=T[(c^b[i])&0xFF]^(c>>>8);
+    return(c^0xFFFFFFFF)>>>0;
+  }
+  function concat(arrs){
+    let t=0;for(let i=0;i<arrs.length;i++)t+=arrs[i].length;
+    const r=new Uint8Array(t);let o=0;
+    for(let i=0;i<arrs.length;i++){r.set(arrs[i],o);o+=arrs[i].length;}
+    return r;
+  }
+  function makeZip(files){
+    const enc=(typeof TextEncoder!=='undefined')?new TextEncoder():{encode:s=>Buffer.from(s,'utf8')};
+    const lc=[],cc=[];let off=0;
+    files.forEach(f=>{
+      const nb=enc.encode(f.name);
+      const db=(f.data instanceof Uint8Array)?f.data:enc.encode(f.data);
+      const crc=crc32(db),sz=db.length;
+      const lh=new Uint8Array(30);const dl=new DataView(lh.buffer);
+      dl.setUint32(0,0x04034b50,true);dl.setUint16(4,20,true);dl.setUint16(6,0x0800,true);
+      dl.setUint32(14,crc,true);dl.setUint32(18,sz,true);dl.setUint32(22,sz,true);
+      dl.setUint16(26,nb.length,true);
+      lc.push(lh,nb,db);
+      const cd=new Uint8Array(46);const dc=new DataView(cd.buffer);
+      dc.setUint32(0,0x02014b50,true);dc.setUint16(4,20,true);dc.setUint16(6,20,true);dc.setUint16(8,0x0800,true);
+      dc.setUint32(16,crc,true);dc.setUint32(20,sz,true);dc.setUint32(24,sz,true);
+      dc.setUint16(28,nb.length,true);dc.setUint32(42,off,true);
+      cc.push(cd,nb);
+      off+=30+nb.length+sz;
+    });
+    const cdo=off;let cds=0;cc.forEach(b=>cds+=b.length);
+    const eo=new Uint8Array(22);const de=new DataView(eo.buffer);
+    de.setUint32(0,0x06054b50,true);de.setUint16(8,files.length,true);de.setUint16(10,files.length,true);
+    de.setUint32(12,cds,true);de.setUint32(16,cdo,true);
+    return concat([...lc,...cc,eo]);
+  }
+  function esc(s){
+    return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  const files=[];
+  let ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">\n<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>\n<Default Extension="xml" ContentType="application/xml"/>\n<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>\n';
+  sheets.forEach((_,i)=>{ct+='<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>\n';});
+  ct+='</Types>';
+  files.push({name:'[Content_Types].xml',data:ct});
+  files.push({name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">\n<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>\n</Relationships>'});
+  let wbr='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">\n';
+  sheets.forEach((_,i)=>{wbr+='<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>\n';});
+  wbr+='</Relationships>';
+  files.push({name:'xl/_rels/workbook.xml.rels',data:wbr});
+  let wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">\n<sheets>\n';
+  sheets.forEach((s,i)=>{wb+='<sheet name="'+esc(s.name)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>\n';});
+  wb+='</sheets>\n</workbook>';
+  files.push({name:'xl/workbook.xml',data:wb});
+  sheets.forEach((s,i)=>{
+    let ws='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">\n<sheetData>\n<row r="1">\n';
+    s.cols.forEach(cn=>{ws+='<c t="inlineStr"><is><t>'+esc(cn)+'</t></is></c>';});
+    ws+='</row>\n';
+    s.rows.forEach((r,ri)=>{
+      ws+='<row r="'+(ri+2)+'">\n';
+      r.forEach(v=>{ws+='<c t="inlineStr"><is><t>'+esc(v)+'</t></is></c>';});
+      ws+='</row>\n';
+    });
+    ws+='</sheetData>\n</worksheet>';
+    files.push({name:'xl/worksheets/sheet'+(i+1)+'.xml',data:ws});
+  });
+  return makeZip(files);
+}
+
 const ccols=[["s","SNo",r=>r.s],["n","Name",r=>r.n],["rt","RelationType",r=>r.rt||""],["rn","Relative",r=>r.rn||""],["a","Age",r=>r.a],["g","Gender",r=>r.g],["h","House",r=>r.h],["e","VoterID",r=>r.e],["fam","Family",r=>fams[r.s]||""],["pty","Party",r=>pty[r.s]||""],["cst","Caste",r=>cst[r.s]||""],["flg","Flags",r=>{const m=flg[r.s]||{};return[m.d?"Dead":"",m.u?"Duplicate":"",m.o?"Out of station":"",m.t?"Teacher":""].filter(Boolean).join(",")}],["tch","Teacher",r=>(flg[r.s]||{}).t?"Teacher":""],["oos","OOSPlace",r=>oos[r.s]||""],["mob","Mobile",r=>mob[r.s]||""],["lmk","HouseLandmark",r=>lmk[r.s]||""]];
 const csvm=$('csvm');
 function csvmSaveCols(){try{const a=[];document.querySelectorAll('#csvgrid input').forEach((b,i)=>{if(b.checked)a.push(ccols[i][0])});localStorage.setItem('pamur_csvcols',JSON.stringify(a))}catch(e){}}
@@ -768,16 +846,50 @@ $('csvcontacts').onclick=()=>csvmApplySet(['s','n','h','mob','fam']);
 $('csvbooth').onclick=()=>csvmApplySet(['s','n','e','h','pty','flg']);
 $('csvmx').onclick=csvmClose;
 csvm.addEventListener('click',e=>{if(e.target===csvm)csvmClose()});
-$('csvgo').onclick=()=>{
+function getCsvRows(targetRows, pick){
+  return targetRows.map(r=>pick.map(c=>String(c[2](r)??'')));
+}
+function exportMultiSheet(isSel){
   const boxes=document.querySelectorAll('#csvgrid input');
   const pick=ccols.filter((c,k)=>boxes[k].checked);
   if(!pick.length)return;
-  const isSel=$('csvsc_sel')&&$('csvsc_sel').checked&&sel&&sel.size>0;
+  const targetRows=isSel?D.filter(r=>sel.has(r.s)):filt();
+  const colNames=pick.map(c=>c[1]);
+
+  const deadRows=targetRows.filter(r=>flg[r.s]&&flg[r.s].d);
+  const teacherRows=targetRows.filter(r=>flg[r.s]&&flg[r.s].t);
+  const dupRows=targetRows.filter(r=>flg[r.s]&&flg[r.s].u);
+  const oosRows=targetRows.filter(r=>flg[r.s]&&flg[r.s].o);
+
+  const sheets=[
+    {name:'All Voters ('+targetRows.length+')',cols:colNames,rows:getCsvRows(targetRows,pick)},
+    {name:'Dead ('+deadRows.length+')',cols:colNames,rows:getCsvRows(deadRows,pick)},
+    {name:'Teacher ('+teacherRows.length+')',cols:colNames,rows:getCsvRows(teacherRows,pick)},
+    {name:'Duplicate ('+dupRows.length+')',cols:colNames,rows:getCsvRows(dupRows,pick)},
+    {name:'Out of Station ('+oosRows.length+')',cols:colNames,rows:getCsvRows(oosRows,pick)}
+  ];
+
+  const xlsxBuf=makeXlsx(sheets);
+  dl('pamur-ward'+9+(isSel?'-selected':'')+'.xlsx',xlsxBuf,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  setTimeout(csvmClose,150);
+}
+function exportPlainCsv(isSel){
+  const boxes=document.querySelectorAll('#csvgrid input');
+  const pick=ccols.filter((c,k)=>boxes[k].checked);
+  if(!pick.length)return;
   const targetRows=isSel?D.filter(r=>sel.has(r.s)):filt();
   const lines=[pick.map(c=>'"'+c[1]+'"').join(',')];
   targetRows.forEach(r=>{lines.push(pick.map(c=>'"'+String(c[2](r)??'').replace(/"/g,'""')+'"').join(','))});
   dl('pamur-ward'+9+(isSel?'-selected':'')+'.csv','\ufeff'+lines.join('\n'),'text/csv');
   setTimeout(csvmClose,150);
+}
+$('csvgo').onclick=()=>{
+  const isSel=$('csvsc_sel')&&$('csvsc_sel').checked&&sel&&sel.size>0;
+  exportMultiSheet(isSel);
+};
+if($('csvplain'))$('csvplain').onclick=()=>{
+  const isSel=$('csvsc_sel')&&$('csvsc_sel').checked&&sel&&sel.size>0;
+  exportPlainCsv(isSel);
 };
 $('exp').onclick=()=>dl('pamur-ward9-data.json',JSON.stringify({fams,flg,pty,mob,oos,cst,lmk}),'application/json');
 const enc=s=>btoa(unescape(encodeURIComponent(s)));const dec=b=>decodeURIComponent(escape(atob(b)));
