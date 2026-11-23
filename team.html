@@ -268,11 +268,36 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
     border-top: 1.5px dashed #64748b !important;
     padding-top: 8px !important;
   }
+  
+  .fslipsummary { background: #f0fdf4 !important; border: 1px solid #bbf7d0 !important; margin-bottom: 8px !important; padding: 6px 10px !important; font-size: 11.5px !important; }
+  .fslipsymrow { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 6px !important; margin-bottom: 8px !important; }
+  .fslipsymcol { border: 1px solid #cbd5e1 !important; padding: 4px 8px !important; font-size: 11px !important; }
+  .fmembercard { page-break-inside: avoid !important; break-inside: avoid !important; border: 1px solid #cbd5e1 !important; border-radius: 8px !important; padding: 6px 10px !important; margin-bottom: 6px !important; }
+  .fmemtop { border-bottom: 1px solid #e2e8f0 !important; padding-bottom: 3px !important; }
+  .fmemname { font-size: 13px !important; margin-top: 1px !important; }
+  .fmemmeta { font-size: 11px !important; margin-top: 1px !important; }
+  .fslipguide { margin-top: 6px !important; padding: 6px 8px !important; font-size: 11px !important; }
+
   .slipactions, .slipclose, #slipphonebox {
     display: none !important;
   }
 }
 
+
+
+.fslipsummary{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:8px 12px;margin-bottom:8px;font-size:12.5px;color:#065f46;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.fslipsymrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.fslipsymcol{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.fmembercard{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:8px 12px;margin-bottom:8px;box-shadow:0 1px 2px rgba(0,0,0,0.03);display:flex;flex-direction:column;gap:3px;page-break-inside:avoid;break-inside:avoid}
+.fmembercard:last-child{margin-bottom:0}
+.fmemtop{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f1f5f9;padding-bottom:4px;font-size:12px}
+.fmemnum{font-weight:800;color:#047857}
+.fmemsr{font-weight:800;color:#15803d;font-size:13px}
+.fmemepic{font-weight:700;color:#475569;font-family:monospace;font-size:12px}
+.fmemname{font-weight:800;color:#0f172a;font-size:13.5px;margin-top:2px}
+.fmemage{font-weight:600;color:#475569;font-size:12px}
+.fmemmeta{display:flex;flex-wrap:wrap;gap:8px 14px;color:#475569;font-size:12px;line-height:1.3;margin-top:2px}
+.fslipguide{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;margin-top:10px;text-align:center;font-size:11.5px;color:#166534;font-weight:700}
 
 .fslipbtn{background:#047857;color:#fff;border:none;border-radius:6px;padding:3px 9px;font:700 11px system-ui,sans-serif;cursor:pointer;margin-right:8px;vertical-align:middle;display:inline-flex;align-items:center;gap:3px}
 .fslipbtn:active{transform:scale(0.96)}
@@ -1546,6 +1571,46 @@ function openSlip(s) { if (flg[s] && flg[s].d) return alert("మరణించ�
   bindSlipEditHandlers();
 }
 
+
+function renderFamilySlipHtml(fvoters, famName) {
+  const W = 9;
+  const symSvg = '<svg viewBox="0 0 64 64" width="22" height="22" fill="none" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;display:inline-block"><path d="M16 24h32v28c0 2-2 4-4 4H20c-2 0-4-2-4-4V24z" fill="#f1f5f9"/><path d="M12 16h40v8H12z" fill="#e2e8f0"/><rect x="24" y="18" width="16" height="4" fill="#1e293b"/></svg>';
+  const pinkSvg = '<svg viewBox="0 0 64 64" width="20" height="20" fill="none" stroke="#be185d" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;display:inline-block"><circle cx="16" cy="18" r="8" fill="#fdf2f8"/><circle cx="16" cy="46" r="8" fill="#fdf2f8"/><path d="M22 23L54 49"/><path d="M22 41L54 15"/><circle cx="34" cy="32" r="2.5" fill="#be185d"/></svg>';
+
+  let out = '<div class="fslipsummary">' +
+    '<span>👨‍👩‍👧‍👦 కుటుంబం: <b>' + esc(famName) + '</b> (' + fvoters.length + ' మంది ఓటర్లు)</span>' +
+    '<span>🏛️ పోలింగ్ బూత్: పామూరు వార్డు ' + W + '</span>' +
+    '</div>' +
+    '<div class="fslipsymrow">' +
+    '<div class="fslipsymcol"><span class="fslipk" style="color:#9d174d;font-weight:700">సర్పంచ్ గుర్తు (Pink):</span> <span class="fslipv">' + pinkSvg + '</span></div>' +
+    '<div class="fslipsymcol"><span class="fslipk" style="color:#1e293b;font-weight:700">వార్డు గుర్తు (White):</span> <span class="fslipv">' + symSvg + '</span></div>' +
+    '</div>';
+
+  fvoters.forEach((r, idx) => {
+    const genStr = r.g === 'M' ? 'పురుషుడు' : r.g === 'F' ? 'స్త్రీ' : r.g;
+    const relStr = (r.rt && r.rt[0] ? r.rt[0] : 'బంధువు') + ': ' + esc(r.rn || '-');
+    const lmkStr = lmk[r.s] ? ' (' + esc(lmk[r.s]) + ')' : '';
+    const mobStr = mob[r.s] ? esc(mob[r.s]) : '-';
+
+    out += '<div class="fmembercard">' +
+      '<div class="fmemtop">' +
+        '<span class="fmemnum">సభ్యుడు ' + (idx + 1) + ' / ' + fvoters.length + '</span>' +
+        '<span class="fmemsr">#' + r.s + '</span>' +
+        '<span class="fmemepic">EPIC: ' + esc(r.e || '-') + '</span>' +
+      '</div>' +
+      '<div class="fmemname">' + esc(r.n) + ' <span class="fmemage">(' + (r.a || '-') + ' సం||, ' + genStr + ')</span></div>' +
+      '<div class="fmemmeta">' +
+        '<span><b>బంధువు:</b> ' + relStr + '</span>' +
+        '<span><b>ఇంటి నం:</b> ' + esc(r.h || '-') + lmkStr + '</span>' +
+        (mobStr !== '-' ? '<span><b>మొబైల్:</b> ' + mobStr + '</span>' : '') +
+      '</div>' +
+    '</div>';
+  });
+
+  out += '<div class="fslipguide">🎟️ పింక్ బ్యాలెట్: ✂️ (సర్పంచ్)   |   తెల్ల బ్యాలెట్: ' + symSvg + ' (' + W + 'వ వార్డు)</div>';
+  return out;
+}
+
 function openFamilySlip(famName) {
   window._slipMode = 'family';
   window._slipFamily = famName;
@@ -1561,7 +1626,7 @@ function openFamilySlip(famName) {
   }
 
   $('slipwa').innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="#ffffff" style="vertical-align:middle;display:inline-block"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg> వాట్సాప్‌లో పంపు (' + fvoters.length + ' స్లిప్పులు)';
-  $('slipbody').innerHTML = fvoters.map((r, i) => renderSingleSlipHtml(r, i + 1, fvoters.length)).join('');
+  $('slipbody').innerHTML = renderFamilySlipHtml(fvoters, famName);
   $('slipm').style.display = 'flex';
   bindSlipEditHandlers();
 }
