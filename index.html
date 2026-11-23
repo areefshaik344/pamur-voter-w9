@@ -153,6 +153,7 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 .slipbtn-img{height:40px;border-radius:10px;border:none;background:#0284c7;font:700 12.5px system-ui,sans-serif;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
 .slipbtn-wa{grid-column:1 / -1;height:44px;border-radius:10px;border:none;background:#25d366;font:800 14px system-ui,sans-serif;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 8px rgba(37,211,102,.3)}
 .slipbtn-wa:active{background:#1ebc59}
+.slipbtn-print:active,.slipbtn-img:active{transform:scale(0.96);opacity:0.85}
 @media print {
   @page {
     size: A4 portrait;
@@ -626,7 +627,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
     <div id="slipphonebox" class="fphonebox" style="display:none"><span class="fphonelbl">వాట్సాప్ నంబర్:</span><input type="tel" id="sliptargetmob" class="fphoneinp" placeholder="10 అంకెల మొబైల్ నంబర్" maxlength="10"></div>
     <div id="slipbody" class="slipbox"></div>
     <div class="slipactions">
-      <button type="button" id="slipprint" class="slipbtn-print"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> ప్రింట్ / PDF</button>
+      <button type="button" id="slipprint" class="slipbtn-print"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> PDF డౌన్‌లోడ్</button>
       <button type="button" id="slipimgbtn" class="slipbtn-img"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> స్లిప్ షేర్ (Share)</button>
       <button type="button" id="slipwa" class="slipbtn-wa">📲 వాట్సాప్‌లో పంపు</button>
     </div>
@@ -1102,10 +1103,95 @@ function drawWardSymbol(ctx, x, y, scale) {
   ctx.restore();
 }
 
+
+function buildPdfBlobFromCanvas(canvas) {
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
+  const base64 = dataUrl.split(",")[1];
+  const binStr = atob(base64);
+  const len = binStr.length;
+  const jpegBytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    jpegBytes[i] = binStr.charCodeAt(i);
+  }
+
+  const width = canvas.width;
+  const height = canvas.height;
+  const a4W = 595.28;
+  const a4H = 841.89;
+  const margin = 28;
+  const maxW = a4W - margin * 2;
+  const maxH = a4H - margin * 2;
+
+  let drawW = maxW;
+  let drawH = (height / width) * drawW;
+  if (drawH > maxH) {
+    drawH = maxH;
+    drawW = (width / height) * drawH;
+  }
+  const drawX = (a4W - drawW) / 2;
+  const drawY = (a4H - drawH) / 2;
+
+  const header = "%PDF-1.4\n";
+  const body = [];
+  const xref = [];
+  let offset = header.length;
+
+  function addObj(content) {
+    xref.push(offset);
+    const str = xref.length + " 0 obj\n" + content + "\nendobj\n";
+    body.push(str);
+    offset += str.length;
+  }
+
+  addObj("<< /Type /Catalog /Pages 2 0 R >>");
+  addObj("<< /Type /Pages /Kids [3 0 R] /Count 1 >>");
+  addObj("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 " + a4W + " " + a4H + "] /Contents 4 0 R /Resources << /XObject << /Im1 5 0 R >> >> >>");
+
+  const streamContent = "q\n" + drawW.toFixed(2) + " 0 0 " + drawH.toFixed(2) + " " + drawX.toFixed(2) + " " + drawY.toFixed(2) + " cm\n/Im1 Do\nQ\n";
+  addObj("<< /Length " + streamContent.length + " >>\nstream\n" + streamContent + "endstream");
+
+  xref.push(offset);
+  const obj5Prefix = "5 0 obj\n<< /Type /XObject /Subtype /Image /Width " + width + " /Height " + height + " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " + len + " >>\nstream\n";
+  const imgFooter = "\nendstream\nendobj\n";
+  offset += obj5Prefix.length + len + imgFooter.length;
+
+  const xrefOffset = offset;
+  let xrefTable = "xref\n0 " + (xref.length + 1) + "\n0000000000 65535 f \n";
+  for (let i = 0; i < xref.length; i++) {
+    xrefTable += String(xref[i]).padStart(10, "0") + " 00000 n \n";
+  }
+  const trailer = "trailer\n<< /Size " + (xref.length + 1) + " /Root 1 0 R >>\nstartxref\n" + xrefOffset + "\n%%EOF\n";
+
+  const enc = new TextEncoder();
+  const part1 = enc.encode(header + body.join(""));
+  const part2 = enc.encode(obj5Prefix);
+  const part4 = enc.encode(imgFooter + xrefTable + trailer);
+
+  return new Blob([part1, part2, jpegBytes, part4], { type: "application/pdf" });
+}
+
+function getActiveSlipCanvas() {
+  if (window._slipMode === 'family') {
+    const famName = window._slipFamily;
+    const fvoters = D.filter(r => fams[r.s] === famName && !(flg[r.s] && flg[r.s].d)).sort((a,b) => a.s - b.s);
+    if (!fvoters.length) return null;
+    return renderFamilySlipCardCanvas(fvoters, famName);
+  } else {
+    const s = window._slipSerial;
+    const r = D.find(x => x.s === s);
+    if (!r) return null;
+    return renderSlipCardCanvas(r);
+  }
+}
+
 function makeSlipCardBlob(r) {
-  return new Promise((resolve) => {
-    try {
-      const width = 640;
+  const canvas = renderSlipCardCanvas(r);
+  return new Promise(resolve => canvas ? canvas.toBlob(blob => resolve(blob), "image/png") : resolve(null));
+}
+
+function renderSlipCardCanvas(r) {
+  try {
+    const width = 640;
       const height = 820;
       const canvas = document.createElement("canvas");
       canvas.width = width;
@@ -1254,17 +1340,20 @@ function makeSlipCardBlob(r) {
       ctx.fillStyle = "#64748b";
       ctx.fillText("గమనిక: పోలింగ్ కేంద్రానికి వెళ్ళేటప్పుడు ఏదైనా గుర్తింపు కార్డు వెంట తీసుకెళ్ళండి.", width / 2, fY + 76);
 
-      canvas.toBlob(blob => resolve(blob), "image/png");
-    } catch(err) {
-      resolve(null);
-    }
-  });
+      return canvas;
+  } catch(err) {
+    return null;
+  }
 }
 
 function makeFamilySlipCardBlob(fvoters, famName) {
-  return new Promise((resolve) => {
-    try {
-      const width = 640;
+  const canvas = renderFamilySlipCardCanvas(fvoters, famName);
+  return new Promise(resolve => canvas ? canvas.toBlob(blob => resolve(blob), "image/png") : resolve(null));
+}
+
+function renderFamilySlipCardCanvas(fvoters, famName) {
+  try {
+    const width = 640;
       const voterBlockH = 110;
       const headerH = 110;
       const badgesH = 90;
@@ -1401,11 +1490,10 @@ function makeFamilySlipCardBlob(fvoters, famName) {
       ctx.fillStyle = "#64748b";
       ctx.fillText("పోలింగ్ కేంద్రానికి వెళ్ళేటప్పుడు ఏదైనా గుర్తింపు కార్డు వెంట తీసుకెళ్ళండి.", width / 2, curY + 64);
 
-      canvas.toBlob(blob => resolve(blob), "image/png");
-    } catch(err) {
-      resolve(null);
-    }
-  });
+      return canvas;
+  } catch(err) {
+    return null;
+  }
 }
 
 function bindSlipEditHandlers() {
@@ -1638,7 +1726,60 @@ $('slipwa').onclick = async () => {
   openWaLink(sendUrl);
 };
 
-$('slipprint').onclick = () => { window.print(); };
+$('slipprint').onclick = async () => {
+  const origHtml = $('slipprint').innerHTML;
+  $('slipprint').innerHTML = '⏳ PDF సిద్ధమవుతోంది...';
+
+  try {
+    const canvas = getActiveSlipCanvas();
+    if (!canvas) {
+      $('slipprint').innerHTML = origHtml;
+      try { window.print(); } catch(e){}
+      return;
+    }
+
+    const pdfBlob = buildPdfBlobFromCanvas(canvas);
+    let fileName = (window._slipMode === 'family')
+      ? 'family-slips-ward9.pdf'
+      : 'voter-slip-9-' + (window._slipSerial || 'slip') + '.pdf';
+
+    const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+    // 1. Try mobile Web Share if available
+    if (typeof navigator !== 'undefined' && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+      try {
+        await navigator.share({ title: 'పామూరు వార్డు 9 ఓటరు స్లిప్ (PDF)', files: [pdfFile] });
+        $('slipprint').innerHTML = origHtml;
+        return;
+      } catch(e) {
+        if (e.name === 'AbortError') {
+          $('slipprint').innerHTML = origHtml;
+          return;
+        }
+      }
+    }
+
+    // 2. Download the real PDF file
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(pdfBlob);
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { try { a.remove(); } catch(e){} }, 300);
+
+    // 3. Also trigger desktop print dialog if user is on desktop
+    try {
+      if (!('ontouchstart' in window) && typeof window.print === 'function') {
+        window.print();
+      }
+    } catch(e){}
+  } catch(err) {
+    console.error('PDF generation error:', err);
+    try { window.print(); } catch(e){}
+  } finally {
+    setTimeout(() => { $('slipprint').innerHTML = origHtml; }, 1500);
+  }
+};
 
 const _sbtn = $('slipbtn');
 if (_sbtn) {
