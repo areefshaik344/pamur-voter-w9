@@ -515,6 +515,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
     <div id="slipbody" class="slipbox"></div>
     <div class="slipactions">
       <button type="button" id="slipprint" class="slipbtn-print">🖨️ ప్రింట్ / PDF</button>
+      <button type="button" id="slipimgbtn" style="background:#0284c7;color:#fff;border:none;border-radius:10px;padding:10px 14px;font:700 13px system-ui;cursor:pointer">🖼️ స్లిప్ ఇమేజ్</button>
       <button type="button" id="slipwa" class="slipbtn-wa">📲 వాట్సాప్‌లో పంపు</button>
     </div>
   </div>
@@ -978,6 +979,333 @@ function renderSlipContent(s) {
   return renderSingleSlipHtml(r);
 }
 
+
+function drawWardSymbol(ctx, x, y, scale) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scale, scale);
+  // Official Ballot Box icon
+  ctx.fillStyle = "#f1f5f9";
+  ctx.strokeStyle = "#1e293b";
+  ctx.lineWidth = 2.8;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.stroke(new Path2D("M16 24h32v28c0 2-2 4-4 4H20c-2 0-4-2-4-4V24z"));
+  ctx.fill(new Path2D("M16 24h32v28c0 2-2 4-4 4H20c-2 0-4-2-4-4V24z"));
+  ctx.fillStyle = "#e2e8f0";
+  ctx.stroke(new Path2D("M12 16h40v8H12z"));
+  ctx.fill(new Path2D("M12 16h40v8H12z"));
+  ctx.fillStyle = "#1e293b";
+  ctx.fillRect(24, 18, 16, 4);
+  ctx.restore();
+}
+
+function makeSlipCardBlob(r) {
+  return new Promise((resolve) => {
+    try {
+      const width = 640;
+      const height = 820;
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "#f8fafc";
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.roundRect(20, 20, width - 40, height - 40, 24);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#14532d";
+      ctx.beginPath();
+      ctx.roundRect(20, 20, width - 40, 84, [24, 24, 0, 0]);
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 24px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026", width / 2, 58);
+      ctx.font = "600 15px system-ui, sans-serif";
+      ctx.fillStyle = "#bbf7d0";
+      ctx.fillText("పామూరు వార్డు 9 - ఓటరు స్లిప్", width / 2, 86);
+
+      const bY = 124, bW = 140, bH = 64, gap = 12;
+      const bXStart = (width - (4 * bW + 3 * gap)) / 2;
+
+      ctx.fillStyle = "#f0fdf4";
+      ctx.strokeStyle = "#bbf7d0";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(bXStart, bY, bW, bH, 12);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#14532d";
+      ctx.font = "bold 15px system-ui";
+      ctx.fillText("7 am – 1 pm", bXStart + bW/2, bY + 28);
+      ctx.font = "500 11px system-ui";
+      ctx.fillStyle = "#166534";
+      ctx.fillText("26/11/2026 (Polling)", bXStart + bW/2, bY + 48);
+
+      const b2X = bXStart + bW + gap;
+      ctx.fillStyle = "#f0fdf4";
+      ctx.beginPath();
+      ctx.roundRect(b2X, bY, bW, bH, 12);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#14532d";
+      ctx.font = "bold 15px system-ui";
+      ctx.fillText("2 votes", b2X + bW/2, bY + 28);
+      ctx.font = "500 11px system-ui";
+      ctx.fillStyle = "#166534";
+      ctx.fillText("Sarpanch + ward", b2X + bW/2, bY + 48);
+
+      const b3X = b2X + bW + gap;
+      ctx.fillStyle = "#fdf2f8";
+      ctx.strokeStyle = "#fbcfe8";
+      ctx.beginPath();
+      ctx.roundRect(b3X, bY, bW, bH, 12);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#be185d";
+      ctx.font = "bold 22px system-ui";
+      ctx.fillText("✂️", b3X + bW/2, bY + 30);
+      ctx.font = "600 11px system-ui";
+      ctx.fillText("Pink (సర్పంచ్)", b3X + bW/2, bY + 50);
+
+      const b4X = b3X + bW + gap;
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.beginPath();
+      ctx.roundRect(b4X, bY, bW, bH, 12);
+      ctx.fill(); ctx.stroke();
+      drawWardSymbol(ctx, b4X + 44, bY + 6, 0.8);
+      ctx.fillStyle = "#334155";
+      ctx.font = "600 11px system-ui";
+      ctx.fillText("White (9వ వార్డు)", b4X + bW/2, bY + 52);
+
+      const tY = 210;
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(40, tY, width - 80, 440, 16);
+      ctx.fill(); ctx.stroke();
+
+      const genStr = r.g === "M" ? "పురుషుడు" : r.g === "F" ? "స్త్రీ" : r.g;
+      const rows = [
+        ["ఓటరు క్రమ సంఖ్య (Serial)", "#" + r.s],
+        ["సర్పంచ్ గుర్తు (Pink)", "✂️ కత్తెర"],
+        ["వార్డు గుర్తు (White)", "తెల్ల బ్యాలెట్ (White Ballot)"],
+        ["ఓటరు పేరు (Name)", r.n + " (" + (r.a||"") + " సం||, " + genStr + ")"],
+        ["బంధువు పేరు (Relative)", (r.rt||"") + " " + (r.rn||"")],
+        ["ఇంటి నంబర్ (House)", (r.h||"") + (lmk[r.s] ? " (" + lmk[r.s] + ")" : "")],
+        ["ఓటరు ID (EPIC)", r.e || "-"],
+        ["కుటుంబం (Family)", fams[r.s] || "-"],
+        ["పోలింగ్ కేంద్రం (Booth)", "పామూరు వార్డు 9 పోలింగ్ కేంద్రం"]
+      ];
+
+      let curY = tY + 36;
+      rows.forEach(([k, v], idx) => {
+        ctx.textAlign = "left";
+        ctx.font = "600 14px system-ui";
+        ctx.fillStyle = "#64748b";
+        ctx.fillText(k + ":", 60, curY);
+
+        ctx.textAlign = "right";
+        ctx.font = "bold 15px system-ui";
+        ctx.fillStyle = (idx === 0) ? "#166534" : (idx === 1) ? "#be185d" : (idx === 2) ? "#0f172a" : "#1e293b";
+        ctx.fillText(v, width - 60, curY);
+
+        if (idx === 2) {
+          drawWardSymbol(ctx, width - 265, curY - 22, 0.55);
+        }
+
+        if (idx < rows.length - 1) {
+          ctx.strokeStyle = "#f1f5f9";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(56, curY + 12);
+          ctx.lineTo(width - 56, curY + 12);
+          ctx.stroke();
+        }
+        curY += 46;
+      });
+
+      const fY = 670;
+      ctx.fillStyle = "#f0fdf4";
+      ctx.strokeStyle = "#bbf7d0";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(40, fY, width - 80, 90, 14);
+      ctx.fill(); ctx.stroke();
+
+      ctx.textAlign = "center";
+      ctx.font = "bold 15px system-ui";
+      ctx.fillStyle = "#15803d";
+      ctx.fillText("ఓటు వేసే విధానం (Ballot Guide)", width / 2, fY + 28);
+      ctx.font = "600 13px system-ui";
+      ctx.fillStyle = "#334155";
+      ctx.fillText("🎟️ పింక్ బ్యాలెట్ (సర్పంచ్) ✂️ కత్తెర  |  🎟️ తెల్ల బ్యాలెట్ (వార్డు) తెల్ల బ్యాలెట్ (White Ballot)", width / 2, fY + 54);
+      ctx.font = "500 11px system-ui";
+      ctx.fillStyle = "#64748b";
+      ctx.fillText("గమనిక: పోలింగ్ కేంద్రానికి వెళ్ళేటప్పుడు ఏదైనా గుర్తింపు కార్డు వెంట తీసుకెళ్ళండి.", width / 2, fY + 76);
+
+      canvas.toBlob(blob => resolve(blob), "image/png");
+    } catch(err) {
+      resolve(null);
+    }
+  });
+}
+
+function makeFamilySlipCardBlob(fvoters, famName) {
+  return new Promise((resolve) => {
+    try {
+      const width = 640;
+      const voterBlockH = 110;
+      const headerH = 110;
+      const badgesH = 90;
+      const footerH = 100;
+      const totalH = headerH + badgesH + (fvoters.length * voterBlockH) + footerH + 40;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = totalH;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "#f8fafc";
+      ctx.fillRect(0, 0, width, totalH);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.roundRect(16, 16, width - 32, totalH - 32, 20);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#14532d";
+      ctx.beginPath();
+      ctx.roundRect(16, 16, width - 32, 84, [20, 20, 0, 0]);
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 22px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("పామూరు గ్రామ పంచాయతీ ఎన్నికలు - 2026", width / 2, 50);
+      ctx.font = "600 14px system-ui, sans-serif";
+      ctx.fillStyle = "#bbf7d0";
+      ctx.fillText("పామూరు వార్డు 9 - కుటుంబ ఓటరు స్లిప్పులు (" + fvoters.length + " మంది)", width / 2, 78);
+
+      const bY = 116, bW = 142, bH = 62, gap = 10;
+      const bXStart = (width - (4 * bW + 3 * gap)) / 2;
+
+      ctx.fillStyle = "#f0fdf4"; ctx.strokeStyle = "#bbf7d0"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.roundRect(bXStart, bY, bW, bH, 10); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#14532d"; ctx.font = "bold 14px system-ui";
+      ctx.fillText("7 am – 1 pm", bXStart + bW/2, bY + 26);
+      ctx.font = "500 10.5px system-ui"; ctx.fillStyle = "#166534";
+      ctx.fillText("26/11/2026 (Polling)", bXStart + bW/2, bY + 46);
+
+      const b2X = bXStart + bW + gap;
+      ctx.fillStyle = "#f0fdf4"; ctx.beginPath(); ctx.roundRect(b2X, bY, bW, bH, 10); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#14532d"; ctx.font = "bold 14px system-ui";
+      ctx.fillText("2 votes", b2X + bW/2, bY + 26);
+      ctx.font = "500 10.5px system-ui"; ctx.fillStyle = "#166534";
+      ctx.fillText("Sarpanch + ward", b2X + bW/2, bY + 46);
+
+      const b3X = b2X + bW + gap;
+      ctx.fillStyle = "#fdf2f8"; ctx.strokeStyle = "#fbcfe8";
+      ctx.beginPath(); ctx.roundRect(b3X, bY, bW, bH, 10); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#be185d"; ctx.font = "bold 20px system-ui";
+      ctx.fillText("✂️", b3X + bW/2, bY + 28);
+      ctx.font = "600 10.5px system-ui";
+      ctx.fillText("Pink (సర్పంచ్)", b3X + bW/2, bY + 48);
+
+      const b4X = b3X + bW + gap;
+      ctx.fillStyle = "#ffffff"; ctx.strokeStyle = "#cbd5e1";
+      ctx.beginPath(); ctx.roundRect(b4X, bY, bW, bH, 10); ctx.fill(); ctx.stroke();
+      drawWardSymbol(ctx, b4X + 46, bY + 6, 0.75);
+      ctx.fillStyle = "#334155"; ctx.font = "600 10.5px system-ui";
+      ctx.fillText("White (9వ వార్డు)", b4X + bW/2, bY + 50);
+
+      let curY = 196;
+      ctx.fillStyle = "#ecfdf5";
+      ctx.strokeStyle = "#a7f3d0";
+      ctx.beginPath();
+      ctx.roundRect(30, curY, width - 60, 36, 8);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#065f46";
+      ctx.font = "bold 13px system-ui";
+      ctx.textAlign = "left";
+      ctx.fillText("👨‍👩‍👧‍👦 కుటుంబం: " + famName + "  ·  పోలింగ్ కేంద్రం: పామూరు వార్డు 9", 42, curY + 23);
+      curY += 46;
+
+      const emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
+      fvoters.forEach((r, idx) => {
+        const vY = curY;
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#e2e8f0";
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.roundRect(30, vY, width - 60, voterBlockH - 12, 10);
+        ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = "#15803d";
+        ctx.font = "bold 15px system-ui";
+        ctx.textAlign = "left";
+        ctx.fillText((emojis[idx] || (idx+1)+"️⃣") + "  క్రమ సంఖ్య: #" + r.s, 44, vY + 26);
+
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#475569";
+        ctx.font = "bold 13px monospace";
+        ctx.fillText("EPIC: " + (r.e || "-"), width - 44, vY + 26);
+
+        ctx.strokeStyle = "#f1f5f9";
+        ctx.beginPath();
+        ctx.moveTo(42, vY + 36);
+        ctx.lineTo(width - 42, vY + 36);
+        ctx.stroke();
+
+        ctx.textAlign = "left";
+        const genStr = r.g === "M" ? "పురుషుడు" : r.g === "F" ? "స్త్రీ" : r.g;
+        ctx.font = "bold 15px system-ui";
+        ctx.fillStyle = "#0f172a";
+        ctx.fillText(r.n + "  (" + (r.a || "") + " సం||, " + genStr + ")", 44, vY + 58);
+
+        ctx.font = "500 13px system-ui";
+        ctx.fillStyle = "#64748b";
+        ctx.fillText("బంధువు: " + (r.rt || "") + " " + (r.rn || "") + "   |   ఇంటి నం: " + (r.h || "") + (lmk[r.s] ? " (" + lmk[r.s] + ")" : ""), 44, vY + 80);
+
+        curY += voterBlockH;
+      });
+
+      ctx.fillStyle = "#f0fdf4";
+      ctx.strokeStyle = "#bbf7d0";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(30, curY, width - 60, 76, 12);
+      ctx.fill(); ctx.stroke();
+
+      ctx.textAlign = "center";
+      ctx.font = "bold 13px system-ui";
+      ctx.fillStyle = "#15803d";
+      ctx.fillText("ఓటు వేసే విధానం (Ballot Guide)", width / 2, curY + 24);
+      ctx.font = "600 12px system-ui";
+      ctx.fillStyle = "#334155";
+      ctx.fillText("🎟️ పింక్ బ్యాలెట్ (సర్పంచ్) ✂️ కత్తెర   |   🎟️ తెల్ల బ్యాలెట్ (9వ వార్డు) తెల్ల బ్యాలెట్ (White Ballot)", width / 2, curY + 46);
+      ctx.font = "500 10.5px system-ui";
+      ctx.fillStyle = "#64748b";
+      ctx.fillText("పోలింగ్ కేంద్రానికి వెళ్ళేటప్పుడు ఏదైనా గుర్తింపు కార్డు వెంట తీసుకెళ్ళండి.", width / 2, curY + 64);
+
+      canvas.toBlob(blob => resolve(blob), "image/png");
+    } catch(err) {
+      resolve(null);
+    }
+  });
+}
+
 function bindSlipEditHandlers() {
   const candEl = $('slipcand');
   if (candEl) {
@@ -1060,7 +1388,45 @@ function openWaLink(url) {
   }
 }
 
-$('slipwa').onclick = () => {
+
+if ($("slipimgbtn")) {
+  $("slipimgbtn").onclick = async () => {
+    let blob = null;
+    let fileName = "";
+    let shareTitle = "";
+
+    if (window._slipMode === 'family') {
+      const famName = window._slipFamily;
+      const fvoters = D.filter(r => fams[r.s] === famName && !(flg[r.s] && flg[r.s].d)).sort((a,b) => a.s - b.s);
+      if (!fvoters.length) return alert("కుటుంబ వివరాలు లభించలేదు");
+      blob = await makeFamilySlipCardBlob(fvoters, famName);
+      fileName = 'family-slips-ward9-' + fvoters.length + '.png';
+      shareTitle = 'పామూరు వార్డు 9 కుటుంబ ఓటరు స్లిప్పులు (' + fvoters.length + ' మంది)';
+    } else {
+      const s = window._slipSerial;
+      const r = D.find(x => x.s === s);
+      if (!r) return alert("ఓటరు వివరాలు లభించలేదు");
+      blob = await makeSlipCardBlob(r);
+      fileName = 'voter-slip-' + r.s + '.png';
+      shareTitle = 'పామూరు వార్డు 9 ఓటరు స్లిప్ #' + r.s;
+    }
+
+    if (!blob) return alert("స్లిప్ ఇమేజ్ రూపొందించడంలో లోపం జరిగింది");
+    const file = new File([blob], fileName, { type: "image/png" });
+    if (typeof navigator !== 'undefined' && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ title: shareTitle, files: [file] });
+        return;
+      } catch(e){}
+    }
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
+  };
+}
+
+$('slipwa').onclick = async () => {
   const candSym = (window._candSym || localStorage.getItem('pamur9sym') || '-');
   const LF = String.fromCharCode(10);
 
@@ -1154,4 +1520,5 @@ if (_sbtn) {
 }
 
 
-</script></body></html>
+</script><script>if(typeof navigator !== 'undefined' && 'serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}</script>
+</body></html>
