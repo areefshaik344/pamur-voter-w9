@@ -1071,10 +1071,10 @@ function makeSlipCardBlob(r) {
       ctx.beginPath();
       ctx.roundRect(b4X, bY, bW, bH, 12);
       ctx.fill(); ctx.stroke();
-      drawWardSymbol(ctx, b4X + 44, bY + 6, 0.8);
+      drawWardSymbol(ctx, b4X + 54, bY + 4, 0.54);
       ctx.fillStyle = "#334155";
       ctx.font = "600 11px system-ui";
-      ctx.fillText("White (9వ వార్డు)", b4X + bW/2, bY + 52);
+      ctx.fillText("White (9వ వార్డు)", b4X + bW/2, bY + 50);
 
       const tY = 210;
       ctx.fillStyle = "#ffffff";
@@ -1087,8 +1087,8 @@ function makeSlipCardBlob(r) {
       const genStr = r.g === "M" ? "పురుషుడు" : r.g === "F" ? "స్త్రీ" : r.g;
       const rows = [
         ["ఓటరు క్రమ సంఖ్య (Serial)", "#" + r.s],
-        ["సర్పంచ్ గుర్తు (Pink)", "✂️ కత్తెర"],
-        ["వార్డు గుర్తు (White)", "తెల్ల బ్యాలెట్ (White Ballot)"],
+        ["సర్పంచ్ గుర్తు (Pink)", "✂️"],
+        ["వార్డు గుర్తు (White)", ""],
         ["ఓటరు పేరు (Name)", r.n + " (" + (r.a||"") + " సం||, " + genStr + ")"],
         ["బంధువు పేరు (Relative)", (r.rt||"") + " " + (r.rn||"")],
         ["ఇంటి నంబర్ (House)", (r.h||"") + (lmk[r.s] ? " (" + lmk[r.s] + ")" : "")],
@@ -1110,7 +1110,7 @@ function makeSlipCardBlob(r) {
         ctx.fillText(v, width - 60, curY);
 
         if (idx === 2) {
-          drawWardSymbol(ctx, width - 265, curY - 22, 0.55);
+          drawWardSymbol(ctx, width - 92, curY - 20, 0.52);
         }
 
         if (idx < rows.length - 1) {
@@ -1138,7 +1138,7 @@ function makeSlipCardBlob(r) {
       ctx.fillText("ఓటు వేసే విధానం (Ballot Guide)", width / 2, fY + 28);
       ctx.font = "600 13px system-ui";
       ctx.fillStyle = "#334155";
-      ctx.fillText("🎟️ పింక్ బ్యాలెట్ (సర్పంచ్) ✂️ కత్తెర  |  🎟️ తెల్ల బ్యాలెట్ (వార్డు) తెల్ల బ్యాలెట్ (White Ballot)", width / 2, fY + 54);
+      ctx.fillText("పింక్ బ్యాలెట్: ✂️ (సర్పంచ్)   |   తెల్ల బ్యాలెట్ (9వ వార్డు)", width / 2, fY + 48);
       ctx.font = "500 11px system-ui";
       ctx.fillStyle = "#64748b";
       ctx.fillText("గమనిక: పోలింగ్ కేంద్రానికి వెళ్ళేటప్పుడు ఏదైనా గుర్తింపు కార్డు వెంట తీసుకెళ్ళండి.", width / 2, fY + 76);
@@ -1217,9 +1217,9 @@ function makeFamilySlipCardBlob(fvoters, famName) {
       const b4X = b3X + bW + gap;
       ctx.fillStyle = "#ffffff"; ctx.strokeStyle = "#cbd5e1";
       ctx.beginPath(); ctx.roundRect(b4X, bY, bW, bH, 10); ctx.fill(); ctx.stroke();
-      drawWardSymbol(ctx, b4X + 46, bY + 6, 0.75);
+      drawWardSymbol(ctx, b4X + 55, bY + 4, 0.54);
       ctx.fillStyle = "#334155"; ctx.font = "600 10.5px system-ui";
-      ctx.fillText("White (9వ వార్డు)", b4X + bW/2, bY + 50);
+      ctx.fillText("White (9వ వార్డు)", b4X + bW/2, bY + 48);
 
       let curY = 196;
       ctx.fillStyle = "#ecfdf5";
@@ -1285,7 +1285,7 @@ function makeFamilySlipCardBlob(fvoters, famName) {
       ctx.fillText("ఓటు వేసే విధానం (Ballot Guide)", width / 2, curY + 24);
       ctx.font = "600 12px system-ui";
       ctx.fillStyle = "#334155";
-      ctx.fillText("🎟️ పింక్ బ్యాలెట్ (సర్పంచ్) ✂️ కత్తెర   |   🎟️ తెల్ల బ్యాలెట్ (9వ వార్డు) తెల్ల బ్యాలెట్ (White Ballot)", width / 2, curY + 46);
+      ctx.fillText("పింక్ బ్యాలెట్: ✂️ (సర్పంచ్)   |   తెల్ల బ్యాలెట్ (9వ వార్డు)", width / 2, curY + 46);
       ctx.font = "500 10.5px system-ui";
       ctx.fillStyle = "#64748b";
       ctx.fillText("పోలింగ్ కేంద్రానికి వెళ్ళేటప్పుడు ఏదైనా గుర్తింపు కార్డు వెంట తీసుకెళ్ళండి.", width / 2, curY + 64);
