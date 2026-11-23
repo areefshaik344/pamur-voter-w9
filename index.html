@@ -153,12 +153,123 @@ header .row button{border-radius:999px;padding:8px 12px;font-size:13px;font-weig
 .slipbtn-img{height:40px;border-radius:10px;border:none;background:#0284c7;font:700 12.5px system-ui,sans-serif;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
 .slipbtn-wa{grid-column:1 / -1;height:44px;border-radius:10px;border:none;background:#25d366;font:800 14px system-ui,sans-serif;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 8px rgba(37,211,102,.3)}
 .slipbtn-wa:active{background:#1ebc59}
-@media print{
-  body *{visibility:hidden}
-  #slipm, #slipm *{visibility:visible}
-  #slipm{position:absolute;left:0;top:0;width:100%;background:#fff;padding:0}
-  .slipcard{box-shadow:none;border:2px solid #000;max-width:100%}
-  .slipactions, .slipclose{display:none !important}
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 10mm;
+  }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  #gate, #top, #vmeta, #wrap, #list, #bar, #kmenu, #lb, #wtoast, .hwrap, .tbar, body > *:not(#slipm) {
+    display: none !important;
+  }
+  #slipm {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .slipcard {
+    position: static !important;
+    width: 100% !important;
+    max-width: 520px !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin: 0 auto !important;
+    padding: 16px 20px !important;
+    border: 2px solid #14532d !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .sliptop {
+    border-bottom: 2px solid #12925a !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 8px !important;
+  }
+  .sliplogo {
+    font-size: 16px !important;
+    font-weight: 900 !important;
+    color: #0e2418 !important;
+  }
+  .slipbadges {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+  }
+  .slipbadge {
+    border: 1px solid #bbf7d0 !important;
+    border-radius: 8px !important;
+    padding: 6px !important;
+    min-height: 54px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .slipbox {
+    display: block !important;
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    flex: none !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    background: #f8fafc !important;
+    padding: 12px 14px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .sliprow {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 6px 0 !important;
+    border-bottom: 1px dashed #cbd5e1 !important;
+    font-size: 13px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  .sliprow:last-child {
+    border-bottom: none !important;
+  }
+  .slipk {
+    color: #334155 !important;
+    font-weight: 600 !important;
+  }
+  .slipv {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+  }
+  .fdivider {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin: 16px 0 10px 0 !important;
+    border-top: 1.5px dashed #64748b !important;
+    padding-top: 8px !important;
+  }
+  .slipactions, .slipclose, #slipphonebox {
+    display: none !important;
+  }
 }
 
 
@@ -516,7 +627,7 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
     <div id="slipbody" class="slipbox"></div>
     <div class="slipactions">
       <button type="button" id="slipprint" class="slipbtn-print"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> ప్రింట్ / PDF</button>
-      <button type="button" id="slipimgbtn" class="slipbtn-img"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> స్లిప్ ఇమేజ్</button>
+      <button type="button" id="slipimgbtn" class="slipbtn-img"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> స్లిప్ షేర్ (Share)</button>
       <button type="button" id="slipwa" class="slipbtn-wa">📲 వాట్సాప్‌లో పంపు</button>
     </div>
   </div>
@@ -1385,31 +1496,60 @@ if ($("slipimgbtn")) {
     let blob = null;
     let fileName = "";
     let shareTitle = "";
+    let shareText = "";
+    const LF = String.fromCharCode(10);
 
-    if (window._slipMode === 'family') {
+    if (window._slipMode === "family") {
       const famName = window._slipFamily;
       const fvoters = D.filter(r => fams[r.s] === famName && !(flg[r.s] && flg[r.s].d)).sort((a,b) => a.s - b.s);
       if (!fvoters.length) return alert("ఈ కుటుంబంలో జీవించి ఉన్న ఓటర్లు లేరు (మరణించిన ఓటర్లకు స్లిప్ జారీ చేయబడదు).");
       blob = await makeFamilySlipCardBlob(fvoters, famName);
-      fileName = 'family-slips-ward9-' + fvoters.length + '.png';
-      shareTitle = 'పామూరు వార్డు 9 కుటుంబ ఓటరు స్లిప్పులు (' + fvoters.length + ' మంది)';
+      fileName = "family-slips-ward" + 9 + "-" + fvoters.length + ".png";
+      shareTitle = "పామూరు వార్డు " + 9 + " కుటుంబ ఓటరు స్లిప్పులు (" + fvoters.length + " మంది)";
+      shareText = "పామూరు వార్డు " + 9 + " కుటుంబ ఓటరు స్లిప్పులు (" + fvoters.length + " మంది)" + LF +
+        "కుటుంబం: " + famName + LF +
+        "పోలింగ్: 26/11/2026 (7:00 AM - 1:00 PM)" + LF +
+        "సర్పంచ్ గుర్తు: ✂️ | వార్డు గుర్తు: 🗳️";
     } else {
       const s = window._slipSerial;
       const r = D.find(x => x.s === s);
       if (!r) return alert("ఓటరు వివరాలు లభించలేదు");
       blob = await makeSlipCardBlob(r);
-      fileName = 'voter-slip-' + r.s + '.png';
-      shareTitle = 'పామూరు వార్డు 9 ఓటరు స్లిప్ #' + r.s;
+      fileName = "voter-slip-" + 9 + "-" + r.s + ".png";
+      shareTitle = "పామూరు వార్డు " + 9 + " ఓటరు స్లిప్ #" + r.s;
+      const genStr = r.g === "M" ? "పురుషుడు" : r.g === "F" ? "స్త్రీ" : r.g;
+      shareText = "🗳️ పామూరు వార్డు " + 9 + " ఓటరు స్లిప్ #" + r.s + LF +
+        "ఓటరు: " + r.n + " (" + (r.a||"") + " సం||, " + genStr + ")" + LF +
+        "బంధువు: " + (r.rt||"") + " " + (r.rn||"") + LF +
+        "ఇంటి నం: " + (r.h||"-") + (lmk[r.s] ? " (" + lmk[r.s] + ")" : "") + LF +
+        "ఓటరు ID: " + (r.e||"-") + LF +
+        "సర్పంచ్ గుర్తు (Pink): ✂️ | వార్డు గుర్తు (White): 🗳️";
     }
 
     if (!blob) return alert("స్లిప్ ఇమేజ్ రూపొందించడంలో లోపం జరిగింది");
     const file = new File([blob], fileName, { type: "image/png" });
-    if (typeof navigator !== 'undefined' && navigator.canShare && navigator.canShare({ files: [file] })) {
+
+    // 1. Try native Web Share with image file + text
+    if (typeof navigator !== "undefined" && navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
-        await navigator.share({ title: shareTitle, files: [file] });
+        await navigator.share({ title: shareTitle, text: shareText, files: [file] });
         return;
-      } catch(e){}
+      } catch(e) {
+        if (e.name === "AbortError") return;
+      }
     }
+
+    // 2. Fallback to native Web Share with text details
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title: shareTitle, text: shareText });
+        return;
+      } catch(e) {
+        if (e.name === "AbortError") return;
+      }
+    }
+
+    // 3. Fallback to image download
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = fileName;
@@ -1439,7 +1579,7 @@ $('slipwa').onclick = async () => {
       '📅 *పోలింగ్:* 26/11/2026 | 7:00 AM - 1:00 PM' + LF +
       '🏛️ *పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ బూత్' + LF +
       '*సర్పంచ్ గుర్తు (Pink):* ✂️' + LF +
-      '*వార్డు గుర్తు (White):* ' + candSym + '' + LF +
+    '*వార్డు గుర్తు (White):* 🗳️' + LF +
       '👨‍👩‍👧‍👦 *కుటుంబం:* ' + famName + ' (' + fvoters.length + ' మంది ఓటర్లు)' + LF +
       '━━━━━━━━━━━━━━━━━━━━━' + LF;
 
@@ -1458,7 +1598,7 @@ $('slipwa').onclick = async () => {
       'ℹ️ *ఎన్నికల ముఖ్య సమాచారం:*' + LF +
       '• ⏰ *7 am – 1 pm* (Polling hours)' + LF +
       '• 🗳️ *2 votes* (Sarpanch + ward member)' + LF +
-      '• 🎟️ *Pink: ✂️ | White: ' + candSym + ''* + LF +
+    '• 🎟️ *Pink: ✂️ | White: 🗳️*' + LF +
       '• 📊 *Same day* (Counting from 2 pm)';
 
     const sendUrl = (targetMob.length >= 10)
@@ -1479,7 +1619,7 @@ $('slipwa').onclick = async () => {
     '📅 *పోలింగ్:* 26/11/2026 | 7:00 AM - 1:00 PM' + LF +
     '🏛️ *పోలింగ్ కేంద్రం:* పామూరు వార్డు 9 పోలింగ్ బూత్' + LF +
     '*సర్పంచ్ గుర్తు (Pink):* ✂️' + LF +
-    '*వార్డు గుర్తు (White):* ' + candSym + '' + LF +
+    '*వార్డు గుర్తు (White):* 🗳️' + LF +
     '*క్రమ సంఖ్య:* #' + r.s + LF +
     '*ఓటరు పేరు:* ' + r.n + ' (' + (r.a||'') + ' సం||, ' + genStr + ')' + LF +
     '*బంధువు:* ' + (r.rt||'') + ' ' + (r.rn||'') + LF +
@@ -1489,7 +1629,7 @@ $('slipwa').onclick = async () => {
     'ℹ️ *ఎన్నికల ముఖ్య సమాచారం:*' + LF +
     '• ⏰ *7 am – 1 pm* (Polling hours)' + LF +
     '• 🗳️ *2 votes* (Sarpanch + ward member)' + LF +
-    '• 🎟️ *Pink: ✂️ | White: ' + candSym + ''* + LF +
+    '• 🎟️ *Pink: ✂️ | White: 🗳️*' + LF +
     '• 📊 *Same day* (Counting from 2 pm)';
 
   const sendUrl = (rawMob.length >= 10)
