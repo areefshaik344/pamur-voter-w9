@@ -14,12 +14,12 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then((res) => res || fetch(e.request).then((fRes) => {
+    caches.match(e.request, { ignoreSearch: true }).then((res) => res || fetch(e.request).then((fRes) => {
       if (fRes.status === 200 && (e.request.url.includes('/photos/') || e.request.url.includes('.html') || e.request.url.includes('.json'))) {
         const clone = fRes.clone();
         caches.open(CACHE_NAME).then((c) => c.put(e.request, clone));
       }
       return fRes;
-    })).catch(() => caches.match(e.request))
+    })).catch(() => caches.match(e.request, { ignoreSearch: true }))
   );
 });

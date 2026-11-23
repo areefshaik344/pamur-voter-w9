@@ -649,7 +649,7 @@ return D.filter(r=>{
 const m=flg[r.s]||{};if(vv==='d'&&!m.d)return false;if(vv==='u'&&!m.u)return false;if(vv==='o'&&!m.o)return false;if(vv==='t'&&!m.t)return false;if(vv==='any'&&!(m.d||m.u||m.o||m.t))return false;if(vv==='none'&&(m.d||m.u||m.o||m.t))return false;
 const pv=pty[r.s];if(vv[0]==='p'){if(vv==='pHas'&&!pv)return false;if(vv==='pNone'&&pv)return false;if(vv!=='p'&&vv!=='pHas'&&vv!=='pNone'&&pv!==vv.slice(1))return false;}const cv=cst[r.s];if(vv[0]==='c'){if(vv==='cHas'&&!cv)return false;if(vv==='cNone'&&cv)return false;if(vv!=='c'&&vv!=='cHas'&&vv!=='cNone'&&cv!==vv.slice(1))return false;}
 const fm=fams[r.s];if(f==='__none'&&fm)return false;if(f==='__any'&&!fm)return false;if(f&&f[0]!=='_'&&fm!==f)return false;
-if(q){const hay=(r.s+' '+r.n+' '+r.rn+' '+r.h+' '+r.e+' '+(fm||'')+' '+(mob[r.s]||'')+' '+(lmk[r.s]||'')+' '+(cst[r.s]||'')+' '+(m.gt?'govt teacher teacher':m.t?'teacher':'')).toLowerCase();const tks=q.split(/\s+/).filter(Boolean);if(!tks.every(tk=>hay.includes(tk)))return false;}return true})}
+if(q){const _hVar = r.h ? (r.h + ' ' + r.h.replace(/[\/-]/g, ' ') + ' ' + r.h.replace(/\//g, '-') + ' ' + r.h.replace(/-/g, '/')) : ''; const _mVar = mob[r.s] ? (mob[r.s] + ' ' + mob[r.s].replace(/\D/g, '')) : ''; const hay=(r.s+' '+r.n+' '+r.rn+' '+_hVar+' '+r.e+' '+(fm||'')+' '+_mVar+' '+(lmk[r.s]||'')+' '+(cst[r.s]||'')+' '+(m.gt?'govt teacher teacher':m.t?'teacher':'')).toLowerCase();const tks=q.split(/\s+/).filter(Boolean);if(!tks.every(tk=>hay.includes(tk)))return false;}return true})}
 function mcard(r){
 const ck=sel.has(r.s)?'checked':'';
 const _dm=(mob[r.s]||'').replace(/\D/g,'');const _wam=_dm.length>=10?'<a class="walink" href="https://wa.me/91'+_dm.slice(-10)+'" target="_blank" onclick="event.stopPropagation()" title="WhatsApp Chat" aria-label="WhatsApp"><svg viewBox="0 0 24 24" width="13" height="13" fill="#25d366"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg></a>':'';const mobm=mob[r.s]?'<a class="moblink" href="tel:'+esc(mob[r.s])+'" onclick="event.stopPropagation()"><svg class="mico" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> '+esc(mob[r.s])+'</a>'+_wam:'';
@@ -758,7 +758,7 @@ function makeXlsx(sheets){
     return concat([...lc,...cc,eo]);
   }
   function esc(s){
-    return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s??'').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
   const files=[];
   let ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">\n<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>\n<Default Extension="xml" ContentType="application/xml"/>\n<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>\n';
@@ -1398,7 +1398,7 @@ if ($("slipimgbtn")) {
     if (window._slipMode === 'family') {
       const famName = window._slipFamily;
       const fvoters = D.filter(r => fams[r.s] === famName && !(flg[r.s] && flg[r.s].d)).sort((a,b) => a.s - b.s);
-      if (!fvoters.length) return alert("కుటుంబ వివరాలు లభించలేదు");
+      if (!fvoters.length) return alert("ఈ కుటుంబంలో జీవించి ఉన్న ఓటర్లు లేరు (మరణించిన ఓటర్లకు స్లిప్ జారీ చేయబడదు).");
       blob = await makeFamilySlipCardBlob(fvoters, famName);
       fileName = 'family-slips-ward9-' + fvoters.length + '.png';
       shareTitle = 'పామూరు వార్డు 9 కుటుంబ ఓటరు స్లిప్పులు (' + fvoters.length + ' మంది)';
