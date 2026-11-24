@@ -948,6 +948,14 @@ function csvmOpen(e){
   if(e&&e.stopPropagation)e.stopPropagation();
   if(e&&e.preventDefault)e.preventDefault();
   $('kmenu').style.display='none';
+  if(typeof prompt==='function'){
+    const pw=prompt('Enter password for Export CSV:');
+    if(pw===null)return;
+    if(pw.trim()!=='pas344'){
+      alert('Invalid password');
+      return;
+    }
+  }
   const scBox=$('csvscope');
   if(sel&&sel.size>0){
     scBox.style.display='flex';
