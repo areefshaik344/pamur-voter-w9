@@ -633,7 +633,6 @@ setTimeout(function(){try{var p=gEl("gpin");if(p)p.focus()}catch(e){}},80)}
 <button type="button" id="csv">Export CSV</button>
 <button type="button" id="exp">Save data</button>
 <button type="button" id="imp">Load data</button>
-<button type="button" id="shd">Share data</button>
 <button type="button" id="slipbtn">Voter slip</button>
 <button type="button" id="clr">Clear</button>
 <button type="button" id="rel" onclick="location.replace(location.pathname+'?v='+Date.now()+location.hash)">Reload app (fresh)</button>
@@ -1021,7 +1020,7 @@ if($('csvplain'))$('csvplain').onclick=()=>{
 };
 $('exp').onclick=()=>dl('pamur-ward9-data.json',JSON.stringify({fams,flg,pty,mob,oos,cst,lmk}),'application/json');
 const enc=s=>btoa(unescape(encodeURIComponent(s)));const dec=b=>decodeURIComponent(escape(atob(b)));
-$('shd').onclick=()=>{
+if($('shd'))$('shd').onclick=()=>{
   const s=JSON.stringify({fams,flg,pty,mob,oos,cst,lmk});
   const url=location.origin+location.pathname+'#d='+enc(s);
   const wa='https://wa.me/?text='+encodeURIComponent('Pamur Ward 9 voter list (with saved marks). Open in Safari/Chrome, enter the access password, marks load automatically: '+url);
